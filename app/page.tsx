@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MousePointer2, GitBranch } from "lucide-react";
 import ModeToggle from "./components/ModeToggle";
 import TabBar from "./components/TabBar";
 import StatusBar from "./components/StatusBar";
@@ -35,6 +34,7 @@ export default function Page() {
   const [toast, setToast] = useState("");
   const [clock, setClock] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const [hasPlayedGUIBoot, setHasPlayedGUIBoot] = useState(false);
 
   // Clock
   useEffect(() => {
@@ -64,6 +64,10 @@ export default function Page() {
   const toggleMode = useCallback(() => {
     setMode((m) => (m === "gui" ? "cli" : "gui"));
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleGUIBootComplete = useCallback(() => {
+    setHasPlayedGUIBoot(true);
   }, []);
 
   const executeCommand = useCallback(() => {
@@ -151,10 +155,10 @@ export default function Page() {
             {/* GUI Header */}
             <header
               className={
-                "sticky top-0 z-30 transition-colors duration-200 " +
+                "sticky top-0 transition-colors duration-200 " +
                 (scrolled
                   ? "bg-[#0a0a0b]/90 backdrop-blur border-b border-[#16161a]"
-                  : "bg-transparent")
+                  : "bg-[#0a0a0b]")
               }
             >
               <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
@@ -172,12 +176,23 @@ export default function Page() {
             </header>
 
             <main>
-              <GUIHome />
+              <GUIHome
+                showBootSequence={!hasPlayedGUIBoot}
+                onBootSequenceComplete={handleGUIBootComplete}
+              />
             </main>
 
             {/* GUI Footer */}
-            <footer className="border-t border-[#16161a] mt-24 py-10">
-              <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 text-[13px] text-[#4a4a52]">
+            <footer className="relative mt-24 overflow-visible border-t border-[#16161a] py-10">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-1/2 top-[-56px] hidden -translate-x-1/2 md:flex"
+              >
+                <div className="select-none whitespace-nowrap font-['Press_Start_2P',cursive] text-[72px] font-bold uppercase leading-none text-[#ffddc0]/[0.12]">
+                  Design. Develop. Deliver.
+                </div>
+              </div>
+              <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 text-[13px] text-[#4a4a52]">
                 <span>© 2026 {personal.fullName} — Built with Next.js</span>
                 <div className="flex items-center gap-5">
                   {socials.map((s) => (
@@ -206,7 +221,7 @@ export default function Page() {
             className="flex flex-col min-h-dvh"
           >
             {/* CLI Header */}
-            <header className="px-8 pt-6 pb-4 flex items-start justify-between">
+            <header className="px-8 pt-6 pb-4 flex items-start justify-between bg-[#0a0a0b]">
               <div className="flex items-start gap-10">
                 <pre className="text-[11px] text-[#e8e8ea] leading-[1.05] font-medium">
                   {asciiLogo}
@@ -225,26 +240,7 @@ export default function Page() {
                   ))}
                 </div>
               </div>
-              <div className="flex items-start gap-5 text-[12px] pt-1">
-                <button
-                  onClick={() => setMode("gui")}
-                  className="text-[#7c7c85] hover:text-[#e8e8ea] flex items-center gap-1.5 transition-colors"
-                  title="Switch to GUI mode (~)"
-                >
-                  <MousePointer2 size={12} /> GUI mode
-                  <span className="ml-1 text-[10px] bg-[#1d1d22] border border-[#242428] px-1 text-[#7c7c85]">
-                    ~
-                  </span>
-                </button>
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#7c7c85] hover:text-[#e8e8ea] flex items-center gap-1.5 transition-colors"
-                >
-                  <GitBranch size={12} /> Github
-                </a>
-              </div>
+              <ModeToggle mode="cli" onToggle={toggleMode} />
             </header>
 
             <TabBar

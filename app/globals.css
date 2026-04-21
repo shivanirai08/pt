@@ -87,7 +87,10 @@ body::after {
   pointer-events: none;
   z-index: 9999;
 }
-
+/* Headers above scanlines */
+header {
+  z-index: 10000 !important;
+}
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;

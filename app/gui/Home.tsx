@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -49,12 +49,30 @@ const CONNECTION_LINES = [
   { text: "Connection established.", delay: 1200, color: "#3fb950" },
 ];
 
-export default function GUIHome() {
-  const [bootPhase, setBootPhase] = useState(0);
+type GUIHomeProps = {
+  showBootSequence: boolean;
+  onBootSequenceComplete: () => void;
+};
+
+type SectionCommandRevealProps = {
+  id: string;
+  command: string;
+  className: string;
+  innerClassName?: string;
+  children: React.ReactNode;
+};
+
+export default function GUIHome({
+  showBootSequence,
+  onBootSequenceComplete,
+}: GUIHomeProps) {
+  const [bootPhase, setBootPhase] = useState(showBootSequence ? 0 : 5);
   const [bootWordCounts, setBootWordCounts] = useState<number[]>(
-    BOOT_WORDS.map(() => 0)
+    showBootSequence
+      ? BOOT_WORDS.map(() => 0)
+      : BOOT_WORDS.map((words) => words.length)
   );
-  const [showBootOverlay, setShowBootOverlay] = useState(true);
+  const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
   const [contactLines, setContactLines] = useState(0);
   const [contactAnimated, setContactAnimated] = useState(false);
   const [skillsVisible, setSkillsVisible] = useState(false);
@@ -62,6 +80,7 @@ export default function GUIHome() {
 
   // Boot sequence
   useEffect(() => {
+    if (!showBootSequence) return;
     const timers: ReturnType<typeof setTimeout>[] = [];
     let currentDelay = 200;
 
@@ -93,9 +112,10 @@ export default function GUIHome() {
     timers.push(setTimeout(() => setBootPhase(3), introStartAt));
     timers.push(setTimeout(() => setBootPhase(4), introDockAt));
     timers.push(setTimeout(() => setBootPhase(5), heroRevealAt));
+    timers.push(setTimeout(() => onBootSequenceComplete(), heroRevealAt));
 
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [onBootSequenceComplete, showBootSequence]);
 
   // Contact SSH animation
   useEffect(() => {
@@ -304,20 +324,12 @@ export default function GUIHome() {
       </section>
 
       {/* ════════ ABOUT — full viewport ════════ */}
-      <section id="about" className="min-h-screen py-20 md:py-24 xl:py-32">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
-          <div className="flex flex-col gap-2.5">
-            <div className="text-[12px] text-[#333] reveal-section">
-              {"// ─────────────────────────────────────────────────────────"}
-            </div>
-            <div className="text-[13px] text-[#555] text-center reveal-section">
-              {personal.name.toUpperCase()}(7)
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Developer
-              Manual&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {personal.name.toUpperCase()}(7)
-            </div>
-          </div>
-
+      <SectionCommandReveal
+        id="about"
+        command="❯ man shivani"
+        className="min-h-screen py-20 md:py-24 xl:py-32"
+        innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
+      >
           <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-16 xl:gap-20">
             {/* Left — man page content */}
             <div className="flex-1 space-y-10">
@@ -457,21 +469,15 @@ export default function GUIHome() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+      </SectionCommandReveal>
 
       {/* ════════ PROJECTS — full viewport ════════ */}
-      <section id="projects" className="min-h-screen py-20 md:py-24 xl:py-32">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
-          <div className="flex flex-col gap-2.5">
-            <div className="text-[12px] text-[#333] reveal-section">
-              {"// ─────────────────────────────────────────────────────────"}
-            </div>
-            <div className="text-[16px] text-[#ffddc0] reveal-section">
-              ❯ git log --oneline --graph ~/projects
-            </div>
-          </div>
-
+      <SectionCommandReveal
+        id="projects"
+        command="❯ git log --oneline --graph ~/projects"
+        className="min-h-screen py-20 md:py-24 xl:py-32"
+        innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
+      >
           <div className="relative">
             {projects.slice(0, 4).map((project, i) => {
               const isExpanded = i < 2;
@@ -603,21 +609,15 @@ export default function GUIHome() {
               );
             })}
           </div>
-        </div>
-      </section>
+      </SectionCommandReveal>
 
       {/* ════════ EXPERIENCE — full viewport ════════ */}
-      <section id="experience" className="min-h-screen py-20 md:py-24 xl:py-32">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
-          <div className="flex flex-col gap-2.5">
-            <div className="text-[12px] text-[#333] reveal-section">
-              {"// ─────────────────────────────────────────────────────────"}
-            </div>
-            <div className="text-[16px] text-[#ffddc0] reveal-section">
-              ❯ cat CHANGELOG.md
-            </div>
-          </div>
-
+      <SectionCommandReveal
+        id="experience"
+        command="❯ cat CHANGELOG.md"
+        className="min-h-screen py-20 md:py-24 xl:py-32"
+        innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
+      >
           <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-12 xl:gap-16">
             {/* Timeline */}
             <div className="flex-1">
@@ -713,24 +713,17 @@ export default function GUIHome() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+      </SectionCommandReveal>
 
       {/* ════════ CONTACT — full viewport ════════ */}
-      <section id="contact" className="min-h-screen py-20 md:py-24 xl:py-32">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
-          <div className="flex flex-col gap-2.5">
-            <div className="text-[12px] text-[#333] reveal-section">
-              {"// ─────────────────────────────────────────────────────────"}
-            </div>
-          </div>
-
+      <SectionCommandReveal
+        id="contact"
+        command="❯ ssh connect@shivani.dev"
+        className="min-h-screen py-20 md:py-24 xl:py-32"
+        innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
+      >
           <div className="flex items-center justify-center min-h-[560px]">
             <div className="max-w-[680px] w-full text-center">
-              <div className="text-[16px] text-[#ffddc0] mb-8 reveal-section">
-                ❯ ssh connect@shivani.dev
-              </div>
-
               {/* Terminal connection animation */}
               <div
                 id="contact-terminal"
@@ -814,8 +807,97 @@ export default function GUIHome() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+      </SectionCommandReveal>
     </div>
+  );
+}
+
+function SectionCommandReveal({
+  id,
+  command,
+  className,
+  innerClassName,
+  children,
+}: SectionCommandRevealProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isActivated, setIsActivated] = useState(false);
+  const [typedLength, setTypedLength] = useState(0);
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsActivated(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -18% 0px",
+      }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isActivated) return;
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    for (let index = 0; index < command.length; index += 1) {
+      timers.push(
+        setTimeout(() => {
+          setTypedLength(index + 1);
+        }, index * 26)
+      );
+    }
+
+    const revealTimer = setTimeout(() => {
+      setShowContent(true);
+      ScrollTrigger.refresh();
+    }, command.length * 26 + 180);
+
+    return () => {
+      timers.forEach(clearTimeout);
+      if (revealTimer) clearTimeout(revealTimer);
+    };
+  }, [command, isActivated]);
+
+  return (
+    <section id={id} ref={sectionRef} className={className}>
+      <div className={innerClassName}>
+        <div className="min-h-[38px]">
+          <div
+            className={`text-[16px] text-[#ffddc0] transition-opacity duration-300 ${
+              isActivated ? "opacity-100" : "opacity-45"
+            }`}
+          >
+            {isActivated ? command.slice(0, typedLength) : command}
+            {isActivated && typedLength < command.length ? (
+              <span className="ml-1 inline-block h-[16px] w-[9px] animate-pulse bg-[#ffddc0] align-[-2px]" />
+            ) : null}
+          </div>
+        </div>
+
+        <motion.div
+          initial={false}
+          animate={
+            showContent
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: 28 }
+          }
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className={showContent ? "pointer-events-auto" : "pointer-events-none"}
+        >
+          {children}
+        </motion.div>
+      </div>
+    </section>
   );
 }
