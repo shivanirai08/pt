@@ -10,7 +10,7 @@ type Props = {
 
 export default function TabBar({ activeTab, onTabChange }: Props) {
   return (
-    <div className="flex items-center gap-1 px-8 pt-1 pb-5 text-[13px] border-b border-[#161619]">
+    <div className="flex items-center gap-2 px-8 pt-2 pb-5 text-[13px] border-b border-[#161619]">
       {tabs.map((t) => {
         const active = t.key === activeTab;
         return (
@@ -18,7 +18,7 @@ export default function TabBar({ activeTab, onTabChange }: Props) {
             key={t.key}
             onClick={() => onTabChange(t.key)}
             className={
-              "relative px-3 py-1 transition-colors duration-150 " +
+              "relative px-4 py-2 transition-colors duration-150 " +
               (active
                 ? "text-[#0a0a0b]"
                 : "text-[#a8a8ad] hover:text-[#e8e8ea]")

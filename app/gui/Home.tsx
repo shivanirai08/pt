@@ -195,17 +195,17 @@ export default function GUIHome({
           >
             <h1 className="pixel-headline leading-[1.3] tracking-wide">
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
-                <span className="bg-[#1a1a1a] px-2 py-1 inline-block mb-2">
+                <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block mb-2">
                   I TURN DESIGN FILES
                 </span>
               </span>
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
-                <span className="bg-[#1a1a1a] px-2 py-1 inline-block mb-2">
+                <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block mb-2">
                   INTO LIVING
                 </span>
               </span>
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-[#ffddc0]">
-                <span className="bg-[#1a1a1a] px-2 py-1 inline-block">
+                <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block">
                   INTERFACES.
                 </span>
               </span>
@@ -223,10 +223,10 @@ export default function GUIHome({
             <p className="text-[16px] text-[#888] leading-[1.8] mb-10 max-w-[760px]">
               {personal.intro}
             </p>
-            <div className="flex items-center gap-7 text-[14px]">
+            <div className="flex items-center gap-7 text-[15px]">
               <a
                 href="#contact"
-                className="text-[#ffddc0] border border-[#ffddc0] px-6 py-2.5 hover:bg-[#ffddc0] hover:text-[#0a0a0a] transition-all duration-200 inline-flex items-center gap-2"
+                className="text-[#ffddc0] border border-[#ffddc0] px-9 py-3.5 hover:bg-[#ffddc0] hover:text-[#0a0a0a] transition-all duration-200 inline-flex items-center gap-2"
               >
                 Get in touch <ArrowUpRight size={13} />
               </a>
@@ -393,7 +393,7 @@ export default function GUIHome({
                 </div>
               </div>
 
-              <div className="border border-[#222] p-5 reveal-item">
+              <div className="border border-[#222] p-7 reveal-item">
                 <div className="text-[13px] text-[#888] mb-4">
                   ALSO PROFICIENT IN
                 </div>
@@ -465,7 +465,7 @@ export default function GUIHome({
                         {project.date}
                       </span>
                       {project.head && (
-                        <span className="text-[12px] px-2 py-[2px] border text-[#3fb950] border-[#3fb95044] bg-[#1a1a2e]">
+                        <span className="text-[12px] px-3 py-1 border text-[#3fb950] border-[#3fb95044] bg-[#1a1a2e]">
                           HEAD
                         </span>
                       )}
@@ -478,7 +478,7 @@ export default function GUIHome({
                     {isExpanded ? (
                       <div className="flex flex-col xl:flex-row gap-7">
                         {/* Screenshot placeholder */}
-                        <div className="flex-1 h-[170px] bg-[#111] border border-[#222] flex items-center justify-center px-4">
+                        <div className="flex-1 h-[170px] bg-[#111] border border-[#222] flex items-center justify-center p-6">
                           <div className="text-center">
                             <div className="text-[18px] text-[#1a1a2e]">
                               {project.name.replace("feat: ", "")}
@@ -495,7 +495,7 @@ export default function GUIHome({
                             {project.stack.map((tag) => (
                               <span
                                 key={tag}
-                                className="text-[#c3c7f4] text-[13px] border border-[#333] px-2 py-[2px]"
+                                className="text-[#c3c7f4] text-[13px] border border-[#333] px-3 py-1"
                               >
                                 [{tag}]
                               </span>
@@ -529,7 +529,7 @@ export default function GUIHome({
                           {project.stack.map((tag) => (
                             <span
                               key={tag}
-                              className="text-[#c3c7f4] text-[13px] border border-[#333] px-2 py-[2px]"
+                              className="text-[#c3c7f4] text-[13px] border border-[#333] px-3 py-1"
                             >
                               [{tag}]
                             </span>
@@ -618,7 +618,7 @@ export default function GUIHome({
 
             {/* Stats sidebar */}
             <div className="w-full lg:w-[320px] shrink-0 space-y-6">
-              <div className="bg-[#111] border border-[#222] p-6 reveal-item">
+              <div className="bg-[#111] border border-[#222] p-7 reveal-item">
                 <div className="text-[13px] text-[#555] mb-6">
                   ❯ wc --career
                 </div>
@@ -650,7 +650,7 @@ export default function GUIHome({
                 </div>
               </div>
 
-              <div className="bg-[#111] border border-[#222] p-6 reveal-item">
+              <div className="bg-[#111] border border-[#222] p-7 reveal-item">
                 <div className="text-[13px] text-[#555] mb-3">
                   CERTIFICATIONS
                 </div>
@@ -681,7 +681,7 @@ export default function GUIHome({
               {/* Terminal connection animation */}
               <div
                 id="contact-terminal"
-                className="bg-[#0d0d0d] border border-[#222] p-7 sm:p-9 text-left text-[14px] leading-loose mb-10 reveal-section"
+                className="bg-[#0d0d0d] border border-[#222] p-9 sm:p-11 text-left text-[14px] leading-loose mb-10 reveal-section"
               >
                 {CONNECTION_LINES.map((line, i) => (
                   <div
@@ -729,13 +729,13 @@ export default function GUIHome({
               <div className="flex flex-col sm:flex-row gap-5 justify-center mb-7 reveal-section">
                 <a
                   href={`mailto:${personal.email}`}
-                  className="inline-flex items-center justify-center gap-1.5 bg-[#ffddc0] text-[#0a0a0a] font-bold text-[14px] px-9 py-3.5 hover:bg-white transition-colors duration-200"
+                  className="inline-flex items-center justify-center gap-1.5 bg-[#ffddc0] text-[#0a0a0a] font-bold text-[15px] px-11 py-4 hover:bg-white transition-colors duration-200"
                 >
                   <Mail size={14} /> Send Email →
                 </a>
                 <a
                   href="#"
-                  className="inline-flex items-center justify-center gap-1.5 border border-[#333] text-[#c3c7f4] text-[14px] px-9 py-3.5 hover:border-[#c3c7f4] transition-colors duration-200"
+                  className="inline-flex items-center justify-center gap-1.5 border border-[#333] text-[#c3c7f4] text-[15px] px-11 py-4 hover:border-[#c3c7f4] transition-colors duration-200"
                 >
                   <FileText size={14} /> View Resume
                 </a>
