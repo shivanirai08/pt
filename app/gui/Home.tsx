@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Mail, FileText } from "lucide-react";
@@ -43,11 +42,7 @@ const CONNECTION_LINES = [
   { text: "Connection established.", delay: 1200, color: "#3fb950" },
 ];
 
-export default function GUIHome({
-  onSwitchToCLI,
-}: {
-  onSwitchToCLI: () => void;
-}) {
+export default function GUIHome() {
   const [bootPhase, setBootPhase] = useState(0);
   const [visibleBootLines, setVisibleBootLines] = useState(0);
   const [contactLines, setContactLines] = useState(0);
@@ -156,7 +151,7 @@ export default function GUIHome({
           <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[radial-gradient(ellipse,rgba(255,221,192,0.03)_0%,transparent_70%)]" />
         </div>
 
-        <div className="gui-shell relative pt-24 pb-8">
+        <div className="relative mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-16 pt-24 pb-8">
           {/* Boot lines */}
           <div className="mb-12 min-h-[86px]">
             {BOOT_LINES.map((line, i) => (
@@ -193,7 +188,7 @@ export default function GUIHome({
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <h1 className="pixel-headline leading-[1.3] tracking-wide">
+            <h1 className="font-['Press_Start_2P',cursive] leading-[1.3] tracking-wide [text-shadow:0_0_20px_rgba(255,221,192,0.15),0_0_40px_rgba(255,221,192,0.05)]">
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
                 <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block mb-2">
                   I TURN DESIGN FILES
@@ -223,10 +218,10 @@ export default function GUIHome({
             <p className="text-[16px] text-[#888] leading-[1.8] mb-10 max-w-[760px]">
               {personal.intro}
             </p>
-            <div className="flex items-center gap-7 text-[15px]">
+            <div className="flex flex-wrap items-center gap-5 md:gap-7 text-[15px]">
               <a
                 href="#contact"
-                className="text-[#ffddc0] border border-[#ffddc0] px-9 py-3.5 hover:bg-[#ffddc0] hover:text-[#0a0a0a] transition-all duration-200 inline-flex items-center gap-2"
+                className="inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap border border-[#ffddc0] px-11 py-4 leading-none text-[#ffddc0] transition-all duration-200 hover:bg-[#ffddc0] hover:text-[#0a0a0a]"
               >
                 Get in touch <ArrowUpRight size={13} />
               </a>
@@ -258,17 +253,18 @@ export default function GUIHome({
       </section>
 
       {/* ════════ ABOUT — full viewport ════════ */}
-      <section id="about" className="min-h-screen py-32">
-        <div className="gui-shell">
-          {/* Section divider */}
-          <div className="text-[12px] text-[#333] mb-2 reveal-section">
-            // ─────────────────────────────────────────────────────────
-          </div>
-          <div className="text-[13px] text-[#555] mb-12 text-center reveal-section">
-            {personal.name.toUpperCase()}(7)
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Developer
-            Manual&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {personal.name.toUpperCase()}(7)
+      <section id="about" className="min-h-screen py-20 md:py-24 xl:py-32">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[12px] text-[#333] reveal-section">
+              {"// ─────────────────────────────────────────────────────────"}
+            </div>
+            <div className="text-[13px] text-[#555] text-center reveal-section">
+              {personal.name.toUpperCase()}(7)
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Developer
+              Manual&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {personal.name.toUpperCase()}(7)
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-16 xl:gap-20">
@@ -393,7 +389,7 @@ export default function GUIHome({
                 </div>
               </div>
 
-              <div className="border border-[#222] p-7 reveal-item">
+              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
                 <div className="text-[13px] text-[#888] mb-4">
                   ALSO PROFICIENT IN
                 </div>
@@ -414,13 +410,15 @@ export default function GUIHome({
       </section>
 
       {/* ════════ PROJECTS — full viewport ════════ */}
-      <section id="projects" className="min-h-screen py-32">
-        <div className="gui-shell">
-          <div className="text-[12px] text-[#333] mb-2 reveal-section">
-            // ─────────────────────────────────────────────────────────
-          </div>
-          <div className="text-[16px] text-[#ffddc0] mb-12 reveal-section">
-            ❯ git log --oneline --graph ~/projects
+      <section id="projects" className="min-h-screen py-20 md:py-24 xl:py-32">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[12px] text-[#333] reveal-section">
+              {"// ─────────────────────────────────────────────────────────"}
+            </div>
+            <div className="text-[16px] text-[#ffddc0] reveal-section">
+              ❯ git log --oneline --graph ~/projects
+            </div>
           </div>
 
           <div className="relative">
@@ -478,7 +476,7 @@ export default function GUIHome({
                     {isExpanded ? (
                       <div className="flex flex-col xl:flex-row gap-7">
                         {/* Screenshot placeholder */}
-                        <div className="flex-1 h-[170px] bg-[#111] border border-[#222] flex items-center justify-center p-6">
+                        <div className="flex h-[170px] flex-1 items-center justify-center border border-[#222] bg-[#111] p-6 md:p-7">
                           <div className="text-center">
                             <div className="text-[18px] text-[#1a1a2e]">
                               {project.name.replace("feat: ", "")}
@@ -558,13 +556,15 @@ export default function GUIHome({
       </section>
 
       {/* ════════ EXPERIENCE — full viewport ════════ */}
-      <section id="experience" className="min-h-screen py-32">
-        <div className="gui-shell">
-          <div className="text-[12px] text-[#333] mb-2 reveal-section">
-            // ─────────────────────────────────────────────────────────
-          </div>
-          <div className="text-[16px] text-[#ffddc0] mb-12 reveal-section">
-            ❯ cat CHANGELOG.md
+      <section id="experience" className="min-h-screen py-20 md:py-24 xl:py-32">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[12px] text-[#333] reveal-section">
+              {"// ─────────────────────────────────────────────────────────"}
+            </div>
+            <div className="text-[16px] text-[#ffddc0] reveal-section">
+              ❯ cat CHANGELOG.md
+            </div>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-12 xl:gap-16">
@@ -618,7 +618,7 @@ export default function GUIHome({
 
             {/* Stats sidebar */}
             <div className="w-full lg:w-[320px] shrink-0 space-y-6">
-              <div className="bg-[#111] border border-[#222] p-7 reveal-item">
+              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
                 <div className="text-[13px] text-[#555] mb-6">
                   ❯ wc --career
                 </div>
@@ -650,7 +650,7 @@ export default function GUIHome({
                 </div>
               </div>
 
-              <div className="bg-[#111] border border-[#222] p-7 reveal-item">
+              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
                 <div className="text-[13px] text-[#555] mb-3">
                   CERTIFICATIONS
                 </div>
@@ -666,10 +666,12 @@ export default function GUIHome({
       </section>
 
       {/* ════════ CONTACT — full viewport ════════ */}
-      <section id="contact" className="min-h-screen py-32">
-        <div className="gui-shell">
-          <div className="text-[12px] text-[#333] mb-2 reveal-section">
-            // ─────────────────────────────────────────────────────────
+      <section id="contact" className="min-h-screen py-20 md:py-24 xl:py-32">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16">
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[12px] text-[#333] reveal-section">
+              {"// ─────────────────────────────────────────────────────────"}
+            </div>
           </div>
 
           <div className="flex items-center justify-center min-h-[560px]">
@@ -681,7 +683,7 @@ export default function GUIHome({
               {/* Terminal connection animation */}
               <div
                 id="contact-terminal"
-                className="bg-[#0d0d0d] border border-[#222] p-9 sm:p-11 text-left text-[14px] leading-loose mb-10 reveal-section"
+                className="mb-10 border border-[#222] bg-[#0d0d0d] p-6 md:p-7 text-left text-[14px] leading-loose reveal-section xl:p-11"
               >
                 {CONNECTION_LINES.map((line, i) => (
                   <div
@@ -729,13 +731,13 @@ export default function GUIHome({
               <div className="flex flex-col sm:flex-row gap-5 justify-center mb-7 reveal-section">
                 <a
                   href={`mailto:${personal.email}`}
-                  className="inline-flex items-center justify-center gap-1.5 bg-[#ffddc0] text-[#0a0a0a] font-bold text-[15px] px-11 py-4 hover:bg-white transition-colors duration-200"
+                  className="inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap bg-[#ffddc0] px-11 py-4 text-[15px] font-bold leading-none text-[#0a0a0a] transition-colors duration-200 hover:bg-white"
                 >
                   <Mail size={14} /> Send Email →
                 </a>
                 <a
                   href="#"
-                  className="inline-flex items-center justify-center gap-1.5 border border-[#333] text-[#c3c7f4] text-[15px] px-11 py-4 hover:border-[#c3c7f4] transition-colors duration-200"
+                  className="inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap border border-[#333] px-11 py-4 text-[15px] leading-none text-[#c3c7f4] transition-colors duration-200 hover:border-[#c3c7f4]"
                 >
                   <FileText size={14} /> View Resume
                 </a>

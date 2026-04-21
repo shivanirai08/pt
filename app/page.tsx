@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MousePointer2, FileText, GitBranch } from "lucide-react";
+import { MousePointer2, GitBranch } from "lucide-react";
 import ModeToggle from "./components/ModeToggle";
 import TabBar from "./components/TabBar";
 import StatusBar from "./components/StatusBar";
@@ -157,7 +157,7 @@ export default function Page() {
                   : "bg-transparent")
               }
             >
-              <div className="gui-shell h-[68px] flex items-center justify-between">
+              <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
                 <span className="text-[#e8e8ea] font-bold tracking-tight text-[16px]">
                   {personal.initials}.
                 </span>
@@ -172,12 +172,12 @@ export default function Page() {
             </header>
 
             <main>
-              <GUIHome onSwitchToCLI={() => setMode("cli")} />
+              <GUIHome />
             </main>
 
             {/* GUI Footer */}
             <footer className="border-t border-[#16161a] mt-24 py-10">
-              <div className="gui-shell flex items-center justify-between text-[13px] text-[#4a4a52]">
+              <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 text-[13px] text-[#4a4a52]">
                 <span>© 2026 {personal.fullName} — Built with Next.js</span>
                 <div className="flex items-center gap-5">
                   {socials.map((s) => (
@@ -286,4 +286,3 @@ export default function Page() {
     </div>
   );
 }
-

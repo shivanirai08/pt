@@ -119,13 +119,13 @@ export default function CLIContact() {
       <motion.div variants={fadeUp} className="flex items-center gap-3 mb-10">
         <a
           href={`mailto:${personal.email}`}
-          className="flex-1 border-2 border-[#FFFFFF] bg-transparent text-[#FFFFFF] text-[14px] font-medium px-6 py-3 hover:bg-[#FFFFFF] hover:text-[#000000] transition-colors inline-flex items-center justify-center gap-2"
+          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 border-2 border-[#FFFFFF] bg-transparent px-6 py-3 text-[14px] font-medium leading-none text-[#FFFFFF] transition-colors hover:bg-[#FFFFFF] hover:text-[#000000]"
         >
           <Mail size={14} /> Send Email →
         </a>
         <a
           href="#"
-          className="flex-1 border-2 border-[#FFFFFF] bg-transparent text-[#FFFFFF] text-[14px] px-6 py-3 hover:bg-[#FFFFFF] hover:text-[#000000] transition-colors inline-flex items-center justify-center gap-2"
+          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 border-2 border-[#FFFFFF] bg-transparent px-6 py-3 text-[14px] leading-none text-[#FFFFFF] transition-colors hover:bg-[#FFFFFF] hover:text-[#000000]"
         >
           <FileText size={14} /> View Resume
         </a>

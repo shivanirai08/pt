@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-
 type Props = {
   mode: "gui" | "cli";
   onToggle: () => void;
@@ -17,8 +15,8 @@ export default function ModeToggle({ mode, onToggle }: Props) {
         onClick={() => mode === "cli" && onToggle()}
         className={
           mode === "gui"
-            ? "px-4 py-1.5 bg-[#d4b483] text-[#0a0a0b] transition-colors duration-150"
-            : "px-4 py-1.5 text-[#7c7c85] hover:text-[#e8e8ea] transition-colors duration-150"
+            ? "inline-flex min-h-9 items-center justify-center px-4 py-2 leading-none bg-[#d4b483] text-[#0a0a0b] transition-colors duration-150"
+            : "inline-flex min-h-9 items-center justify-center px-4 py-2 leading-none text-[#7c7c85] hover:text-[#e8e8ea] transition-colors duration-150"
         }
       >
         GUI
@@ -27,8 +25,8 @@ export default function ModeToggle({ mode, onToggle }: Props) {
         onClick={() => mode === "gui" && onToggle()}
         className={
           mode === "cli"
-            ? "px-4 py-1.5 bg-[#d4b483] text-[#0a0a0b] transition-colors duration-150"
-            : "px-4 py-1.5 text-[#7c7c85] hover:text-[#e8e8ea] transition-colors duration-150"
+            ? "inline-flex min-h-9 items-center justify-center px-4 py-2 leading-none bg-[#d4b483] text-[#0a0a0b] transition-colors duration-150"
+            : "inline-flex min-h-9 items-center justify-center px-4 py-2 leading-none text-[#7c7c85] hover:text-[#e8e8ea] transition-colors duration-150"
         }
       >
         CLI

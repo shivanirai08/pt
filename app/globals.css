@@ -27,8 +27,6 @@
 }
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -36,8 +34,23 @@ body {
   background: var(--color-bg-dark);
   color: var(--color-text);
   font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 ::selection {
@@ -54,33 +67,6 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #323232;
   border-radius: 3px;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-.caret::after {
-  content: '█';
-  animation: blink 1s step-end infinite;
-  color: var(--color-accent);
-}
-
-@keyframes cursor-blink {
-  0%, 100% { border-color: var(--color-accent); }
-  50% { border-color: transparent; }
-}
-.typing-cursor {
-  border-right: 2px solid var(--color-accent);
-  animation: cursor-blink 1s step-end infinite;
-}
-
-/* Pixel headline font */
-.pixel-headline {
-  font-family: 'Press Start 2P', cursive;
-  text-shadow:
-    0 0 20px rgba(255, 221, 192, 0.15),
-    0 0 40px rgba(255, 221, 192, 0.05);
 }
 
 /* Scanline overlay */
@@ -105,11 +91,4 @@ body::after {
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
-}
-
-/* Shared GUI content shell to enforce balanced side gutters */
-.gui-shell {
-  width: min(1440px, 100%);
-  margin-inline: auto;
-  padding-inline: clamp(20px, 3.5vw, 64px);
 }
