@@ -157,11 +157,11 @@ export default function Page() {
                   : "bg-transparent")
               }
             >
-              <div className="max-w-[1200px] mx-auto px-6 h-[58px] flex items-center justify-between">
-                <span className="text-[#e8e8ea] font-bold tracking-tight text-[14px]">
+              <div className="gui-shell h-[68px] flex items-center justify-between">
+                <span className="text-[#e8e8ea] font-bold tracking-tight text-[16px]">
                   {personal.initials}.
                 </span>
-                <nav className="hidden md:flex items-center gap-7 text-[12.5px] text-[#a8a8ad]">
+                <nav className="hidden md:flex items-center gap-8 text-[14px] text-[#a8a8ad]">
                   <a href="#about" className="hover:text-[#e8e8ea] transition-colors">about</a>
                   <a href="#projects" className="hover:text-[#e8e8ea] transition-colors">projects</a>
                   <a href="#experience" className="hover:text-[#e8e8ea] transition-colors">experience</a>
@@ -176,8 +176,8 @@ export default function Page() {
             </main>
 
             {/* GUI Footer */}
-            <footer className="border-t border-[#16161a] mt-20 py-8">
-              <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between text-[11.5px] text-[#4a4a52]">
+            <footer className="border-t border-[#16161a] mt-24 py-10">
+              <div className="gui-shell flex items-center justify-between text-[13px] text-[#4a4a52]">
                 <span>© 2026 {personal.fullName} — Built with Next.js</span>
                 <div className="flex items-center gap-5">
                   {socials.map((s) => (
