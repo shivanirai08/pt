@@ -80,9 +80,9 @@ body::after {
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(255, 255, 255, 0.012) 2px,
-    rgba(255, 255, 255, 0.012) 4px
+    transparent 6px,
+    rgba(255, 255, 255, 0.02) 8px,
+    rgba(255, 255, 255, 0.02) 12px
   );
   pointer-events: none;
   z-index: 9999;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Mail, FileText } from "lucide-react";
@@ -18,10 +19,16 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const BOOT_LINES = [
-  { text: "[BOOT] Initializing portfolio...", color: "#333" },
-  { text: "[LOAD] Loading modules..............", color: "#333" },
+  { text: "[BOOT] Initializing portfolio...", color: "#3f3f3f" },
+  { text: "[LOAD] Loading modules..............", color: "#3f3f3f" },
   { text: "[DONE] All systems operational. ✓", color: "#3fb950" },
 ];
+const BOOT_WORDS = BOOT_LINES.map((line) => line.text.split(" "));
+const HERO_SEQUENCE_STEP_MS = 850;
+const HERO_ENTRY_EASE: [number, number, number, number] = [0.16, 0.84, 0.24, 1];
+const HERO_ENTRY_HIDDEN = { opacity: 0, y: "100vh" };
+const HERO_ENTRY_VISIBLE = { opacity: 1, y: 0 };
+const HERO_INTRO_DOCKED = { opacity: 1, y: -22 };
 
 const CONNECTION_LINES = [
   { text: "Connecting to shivani.dev...", delay: 0, color: "#888" },
@@ -44,7 +51,10 @@ const CONNECTION_LINES = [
 
 export default function GUIHome() {
   const [bootPhase, setBootPhase] = useState(0);
-  const [visibleBootLines, setVisibleBootLines] = useState(0);
+  const [bootWordCounts, setBootWordCounts] = useState<number[]>(
+    BOOT_WORDS.map(() => 0)
+  );
+  const [showBootOverlay, setShowBootOverlay] = useState(true);
   const [contactLines, setContactLines] = useState(0);
   const [contactAnimated, setContactAnimated] = useState(false);
   const [skillsVisible, setSkillsVisible] = useState(false);
@@ -53,17 +63,37 @@ export default function GUIHome() {
   // Boot sequence
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
-    timers.push(
-      setTimeout(() => {
-        setBootPhase(1);
-        setVisibleBootLines(1);
-      }, 200)
-    );
-    timers.push(setTimeout(() => setVisibleBootLines(2), 600));
-    timers.push(setTimeout(() => setVisibleBootLines(3), 1000));
-    timers.push(setTimeout(() => setBootPhase(2), 1400));
-    timers.push(setTimeout(() => setBootPhase(3), 1800));
-    timers.push(setTimeout(() => setBootPhase(4), 2400));
+    let currentDelay = 200;
+
+    BOOT_WORDS.forEach((words, lineIndex) => {
+      words.forEach((_, wordIndex) => {
+        timers.push(
+          setTimeout(() => {
+            setBootWordCounts((prev) =>
+              prev.map((count, index) =>
+                index === lineIndex ? wordIndex + 1 : count
+              )
+            );
+          }, currentDelay)
+        );
+        currentDelay += 150;
+      });
+      currentDelay += 280;
+    });
+
+    const overlayExitAt = currentDelay + 980;
+    const overlayUnmountAt = currentDelay + 1780;
+    const introStartAt = currentDelay + 2080;
+    const introDockAt = introStartAt + HERO_SEQUENCE_STEP_MS;
+    const heroRevealAt = introDockAt + HERO_SEQUENCE_STEP_MS;
+
+    timers.push(setTimeout(() => setBootPhase(1), currentDelay + 140));
+    timers.push(setTimeout(() => setBootPhase(2), overlayExitAt));
+    timers.push(setTimeout(() => setShowBootOverlay(false), overlayUnmountAt));
+    timers.push(setTimeout(() => setBootPhase(3), introStartAt));
+    timers.push(setTimeout(() => setBootPhase(4), introDockAt));
+    timers.push(setTimeout(() => setBootPhase(5), heroRevealAt));
+
     return () => timers.forEach(clearTimeout);
   }, []);
 
@@ -141,6 +171,39 @@ export default function GUIHome() {
 
   return (
     <div ref={mainRef} className="text-[14px] md:text-[15px]">
+      <AnimatePresence>
+        {showBootOverlay && (
+          <motion.div
+            key="boot-overlay"
+            initial={{ opacity: 1, y: 0 }}
+            animate={
+              bootPhase >= 2
+                ? { opacity: 0, y: -110, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+                : { opacity: 1, y: 0 }
+            }
+            exit={{ opacity: 0, y: -110, transition: { duration: 0.45, ease: "easeInOut" } }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0b]"
+          >
+            <div className="flex min-h-[148px] w-full max-w-[680px] flex-col justify-center px-6 text-center">
+              {BOOT_LINES.map((line, i) => (
+                <div
+                  key={line.text}
+                  className={`min-h-[28px] text-[14px] leading-7 tracking-[0.02em] transition-all duration-300 ${
+                    bootWordCounts[i] > 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
+                  }`}
+                  style={{ color: line.color }}
+                >
+                  {BOOT_WORDS[i].slice(0, bootWordCounts[i]).join(" ")}
+                  {bootWordCounts[i] > 0 && bootWordCounts[i] < BOOT_WORDS[i].length ? (
+                    <span className="ml-1 inline-block h-[14px] w-[8px] animate-pulse bg-[#ffddc0] align-[-1px]" />
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ════════ HERO — full viewport ════════ */}
       <section
         id="hero"
@@ -152,68 +215,56 @@ export default function GUIHome() {
         </div>
 
         <div className="relative mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12 xl:px-16 pt-24 pb-8">
-          {/* Boot lines */}
-          <div className="mb-12 min-h-[86px]">
-            {BOOT_LINES.map((line, i) => (
-              <div
-                key={i}
-                className={`text-[13px] leading-relaxed transition-all duration-300 ${
-                  visibleBootLines > i
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-1"
-                }`}
-                style={{ color: line.color }}
-              >
-                {line.text}
-              </div>
-            ))}
-          </div>
-
           {/* Intro */}
-          <div
-            className={`text-[18px] text-[#888] mb-7 transition-all duration-500 ${
-              bootPhase >= 2
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-2"
-            }`}
-          >
-            Hii, I&apos;m <span className="text-white">{personal.name}</span>
+          <div className="relative">
+            <motion.div
+              initial={HERO_ENTRY_HIDDEN}
+              animate={
+                bootPhase >= 4
+                  ? HERO_INTRO_DOCKED
+                  : bootPhase >= 3
+                    ? HERO_ENTRY_VISIBLE
+                    : HERO_ENTRY_HIDDEN
+              }
+              transition={{ duration: bootPhase >= 4 ? 0.72 : 0.58, ease: HERO_ENTRY_EASE }}
+              className="text-[18px] text-[#888]"
+            >
+              Hii, I&apos;m <span className="text-white">{personal.name}</span>
+            </motion.div>
           </div>
 
           {/* Pixel headline */}
-          <div
-            className={`mb-8 transition-all duration-700 ${
-              bootPhase >= 3
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
+          <motion.div
+            initial={HERO_ENTRY_HIDDEN}
+            animate={bootPhase >= 4 ? HERO_ENTRY_VISIBLE : HERO_ENTRY_HIDDEN}
+            transition={{ duration: 0.6, ease: HERO_ENTRY_EASE }}
+            className="mb-8"
           >
             <h1 className="font-['Press_Start_2P',cursive] leading-[1.3] tracking-wide [text-shadow:0_0_20px_rgba(255,221,192,0.15),0_0_40px_rgba(255,221,192,0.05)]">
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
-                <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block mb-2">
+                <span className="pr-3 py-1.5 inline-block mb-2">
                   I TURN DESIGN FILES
                 </span>
               </span>
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
-                <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block mb-2">
+                <span className="pr-3 py-1.5 inline-block mb-2">
                   INTO LIVING
                 </span>
               </span>
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-[#ffddc0]">
-                <span className="bg-[#1a1a1a] px-3 py-1.5 inline-block">
+                <span className="pr-3 py-1.5 inline-block">
                   INTERFACES.
                 </span>
               </span>
             </h1>
-          </div>
+          </motion.div>
 
           {/* Description + CTAs */}
-          <div
-            className={`max-w-[760px] transition-all duration-500 ${
-              bootPhase >= 4
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-2"
-            }`}
+          <motion.div
+            initial={HERO_ENTRY_HIDDEN}
+            animate={bootPhase >= 5 ? HERO_ENTRY_VISIBLE : HERO_ENTRY_HIDDEN}
+            transition={{ duration: 0.56, ease: HERO_ENTRY_EASE }}
+            className="max-w-[760px]"
           >
             <p className="text-[16px] text-[#888] leading-[1.8] mb-10 max-w-[760px]">
               {personal.intro}
@@ -232,12 +283,12 @@ export default function GUIHome() {
                 view projects
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Bottom status bar */}
           <div
             className={`mt-24 pt-5 border-t border-[#1a1a1a] flex justify-between items-center transition-all duration-500 ${
-              bootPhase >= 4 ? "opacity-100" : "opacity-0"
+              bootPhase >= 5 ? "opacity-100" : "opacity-0"
             }`}
           >
             <div className="text-[12px] text-[#333]">
