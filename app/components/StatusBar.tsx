@@ -36,7 +36,7 @@ export default function StatusBar(props: Props) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="border-t border-[#242428] px-6 h-9 text-[12px] flex items-center bg-[#0a0a0b]"
+        className="border-t border-[#242428] bg-[#0a0a0b]/96 px-6 h-11 text-[12px] flex items-center backdrop-blur"
       >
         <span className="text-[#d4b483] mr-1 font-medium">:</span>
         <input
@@ -55,7 +55,7 @@ export default function StatusBar(props: Props) {
   }
 
   return (
-    <div className="border-t border-[#242428] px-6 h-9 text-[11.5px] flex items-center gap-4 text-[#7c7c85] bg-[#0a0a0b]">
+    <div className="border-t border-[#242428] bg-[#0a0a0b]/96 px-6 h-11 text-[11.5px] flex items-center gap-4 text-[#7c7c85] backdrop-blur">
       <span className="text-[#a8a8ad]">By Shivani</span>
       <span className="text-[#4a4a52]">│</span>
       <span>{props.time}</span>

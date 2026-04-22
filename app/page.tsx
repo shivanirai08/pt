@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ModeToggle from "./components/ModeToggle";
-import TabBar from "./components/TabBar";
 import StatusBar from "./components/StatusBar";
 import HelpOverlay from "./components/HelpOverlay";
 import GUIHome from "./gui/Home";
@@ -12,10 +11,11 @@ import CLIProjects from "./cli/Projects";
 import CLIExperience from "./cli/Experience";
 import CLISkills from "./cli/Skills";
 import CLIContact from "./cli/Contact";
-import { personal, socials, asciiLogo } from "./data";
+import { personal, socials } from "./data";
 
 type Mode = "gui" | "cli";
 type CLITab = "about" | "projects" | "experience" | "skills" | "contact";
+type GUISection = "about" | "projects" | "experience" | "contact";
 
 const CLI_TABS: Record<CLITab, React.ComponentType> = {
   about: CLIAbout,
@@ -35,6 +35,7 @@ export default function Page() {
   const [clock, setClock] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [hasPlayedGUIBoot, setHasPlayedGUIBoot] = useState(false);
+  const [activeGUISection, setActiveGUISection] = useState<GUISection>("about");
 
   // Clock
   useEffect(() => {
@@ -49,22 +50,78 @@ export default function Page() {
     return () => clearInterval(t);
   }, []);
 
-  // Scroll detection for GUI header
+  // Scroll detection for GUI header + active section
   useEffect(() => {
+    if (mode !== "gui") return;
+
     const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+
+    const sections = ["about", "projects", "experience", "contact"] as const;
+    const observers: IntersectionObserver[] = [];
+
+    sections.forEach((sectionId) => {
+      const el = document.getElementById(sectionId);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveGUISection(sectionId);
+          }
+        },
+        {
+          threshold: 0.45,
+          rootMargin: "-20% 0px -30% 0px",
+        }
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, [mode]);
 
   const pushToast = useCallback((msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(""), 3200);
   }, []);
 
-  const toggleMode = useCallback(() => {
-    setMode((m) => (m === "gui" ? "cli" : "gui"));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const scrollToGUISection = useCallback((section: GUISection) => {
+    const el = document.getElementById(section);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
+
+  const switchToGUI = useCallback(
+    (sourceTab: CLITab) => {
+      const targetSection: GUISection =
+        sourceTab === "skills" ? "about" : sourceTab;
+
+      setMode("gui");
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollToGUISection(targetSection);
+        });
+      });
+    },
+    [scrollToGUISection]
+  );
+
+  const toggleMode = useCallback(() => {
+    if (mode === "gui") {
+      setCLITab(activeGUISection);
+      setMode("cli");
+      return;
+    }
+
+    switchToGUI(cliTab);
+  }, [activeGUISection, cliTab, mode, switchToGUI]);
 
   const handleGUIBootComplete = useCallback(() => {
     setHasPlayedGUIBoot(true);
@@ -88,10 +145,10 @@ export default function Page() {
     if (input === "email") { setCLITab("contact"); return; }
     if (input === "cv" || input === "resume") { pushToast("downloading cv.pdf..."); return; }
     if (input === "github") { window.open("https://github.com", "_blank"); return; }
-    if (input === "gui") { setMode("gui"); return; }
+    if (input === "gui") { switchToGUI(cliTab); return; }
 
     pushToast(`command not found: :${input} — try :help`);
-  }, [cmd, pushToast]);
+  }, [cliTab, cmd, pushToast, switchToGUI]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -143,6 +200,17 @@ export default function Page() {
 
   return (
     <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
+      <SharedHeader
+        mode={mode}
+        activeGUISection={activeGUISection}
+        onNavigate={(section) => {
+          setActiveGUISection(section);
+          setCLITab(section);
+          scrollToGUISection(section);
+        }}
+        onToggleMode={toggleMode}
+      />
+
       <AnimatePresence mode="wait">
         {mode === "gui" ? (
           <motion.div
@@ -152,30 +220,7 @@ export default function Page() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
           >
-            {/* GUI Header */}
-            <header
-              className={
-                "sticky top-0 transition-colors duration-200 " +
-                (scrolled
-                  ? "bg-[#0a0a0b]/90 backdrop-blur border-b border-[#16161a]"
-                  : "bg-[#0a0a0b]")
-              }
-            >
-              <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
-                <span className="text-[#e8e8ea] font-bold tracking-tight text-[16px]">
-                  {personal.initials}.
-                </span>
-                <nav className="hidden md:flex items-center gap-8 text-[14px] text-[#a8a8ad]">
-                  <a href="#about" className="hover:text-[#e8e8ea] transition-colors">about</a>
-                  <a href="#projects" className="hover:text-[#e8e8ea] transition-colors">projects</a>
-                  <a href="#experience" className="hover:text-[#e8e8ea] transition-colors">experience</a>
-                  <a href="#contact" className="hover:text-[#e8e8ea] transition-colors">contact</a>
-                </nav>
-                <ModeToggle mode="gui" onToggle={toggleMode} />
-              </div>
-            </header>
-
-            <main>
+            <main className={scrolled ? "pt-0" : ""}>
               <GUIHome
                 showBootSequence={!hasPlayedGUIBoot}
                 onBootSequenceComplete={handleGUIBootComplete}
@@ -218,37 +263,22 @@ export default function Page() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex flex-col min-h-dvh"
+            className="flex h-[calc(100dvh-68px)] flex-col"
           >
-            {/* CLI Header */}
-            <header className="px-8 pt-6 pb-4 flex items-start justify-between bg-[#0a0a0b]">
-              <div className="flex items-start gap-10">
-                <pre className="text-[11px] text-[#e8e8ea] leading-[1.05] font-medium">
-                  {asciiLogo}
-                </pre>
-                <div className="pt-1 text-[12.5px] leading-[1.7]">
-                  {[
-                    ["Name", personal.fullName],
-                    ["Location", personal.location],
-                    ["Handle", personal.handle],
-                    ["Editor", personal.editor],
-                  ].map(([k, v]) => (
-                    <div key={k} className="flex gap-8">
-                      <span className="w-[74px] text-[#7c7c85]">{k}</span>
-                      <span className="text-[#e8e8ea]">{v}</span>
-                    </div>
-                  ))}
-                </div>
+            <div className="border-b border-[#16161a] bg-[#0a0a0b]/95 px-5 py-3 text-[12px] text-[#7c7c85] backdrop-blur sm:px-8 lg:px-12 xl:px-16">
+              <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between">
+                <span>
+                  terminal mode · active section{" "}
+                  <span className="text-[#e8e8ea]">{cliTab}</span>
+                </span>
+                <span className="hidden md:inline">
+                  press <span className="text-[#d4b483]">:</span> to open the command bar ·{" "}
+                  <span className="text-[#d4b483]">1-5</span> to switch sections
+                </span>
               </div>
-              <ModeToggle mode="cli" onToggle={toggleMode} />
-            </header>
+            </div>
 
-            <TabBar
-              activeTab={cliTab}
-              onTabChange={(key) => setCLITab(key as CLITab)}
-            />
-
-            <main className="flex-1 px-8 py-8 min-h-0 overflow-y-auto">
+            <main className="flex-1 min-h-0 overflow-y-auto px-5 py-8 sm:px-8 lg:px-12 xl:px-16">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={cliTab}
@@ -262,7 +292,8 @@ export default function Page() {
               </AnimatePresence>
             </main>
 
-            <StatusBar
+            <div className="sticky bottom-0 z-30">
+              <StatusBar
               commandMode={commandMode}
               commandValue={cmd}
               onCommandChange={setCmd}
@@ -273,12 +304,65 @@ export default function Page() {
               }}
               toast={toast}
               time={clock}
-            />
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
+  );
+}
+
+function SharedHeader({
+  mode,
+  activeGUISection,
+  onNavigate,
+  onToggleMode,
+}: {
+  mode: Mode;
+  activeGUISection: GUISection;
+  onNavigate: (section: GUISection) => void;
+  onToggleMode: () => void;
+}) {
+  const navSections: GUISection[] = ["about", "projects", "experience", "contact"];
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
+      <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
+        <span className="text-[16px] font-bold tracking-tight text-[#e8e8ea]">
+          {personal.initials}.
+        </span>
+
+        <div className="flex items-center gap-6">
+          {mode === "gui" ? (
+            <nav className="hidden items-center gap-8 text-[14px] text-[#a8a8ad] md:flex">
+              {navSections.map((section) => {
+                const isActive = section === activeGUISection;
+                return (
+                  <button
+                    key={section}
+                    onClick={() => onNavigate(section)}
+                    className={
+                      "transition-colors duration-150 " +
+                      (isActive ? "text-[#e8e8ea]" : "hover:text-[#e8e8ea]")
+                    }
+                  >
+                    {section}
+                  </button>
+                );
+              })}
+            </nav>
+          ) : (
+            <div className="hidden text-[12px] uppercase tracking-[0.18em] text-[#4a4a52] md:block">
+              terminal interface
+            </div>
+          )}
+
+          <ModeToggle mode={mode} onToggle={onToggleMode} />
+        </div>
+      </div>
+    </header>
   );
 }
