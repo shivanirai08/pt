@@ -719,7 +719,7 @@ export default function GUIHome({
       <SectionCommandReveal
         id="contact"
         command="❯ ssh connect@shivani.dev"
-        className="min-h-screen py-20 md:py-24 xl:py-32"
+        className="py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
           <div className="flex items-center justify-center min-h-[560px]">

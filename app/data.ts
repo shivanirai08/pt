@@ -2,13 +2,13 @@
 
 export const personal = {
   name: "Shivani",
-  fullName: "Shivani Narula",
-  initials: "SN",
+  fullName: "Shivani Rai",
+  initials: "SR",
   handle: "@shivani",
   location: "Bengaluru, IN",
   timezone: "IST (UTC+5:30)",
   editor: "Neovim btw",
-  email: "hi@shivani.dev",
+  email: "raishivani1406@gmail.com",
   tagline: "frontend developer & designer",
   headline: "I TURN DESIGN FILES INTO LIVING INTERFACES.",
   intro:
@@ -21,10 +21,10 @@ export const personal = {
 };
 
 export const socials = [
-  { name: "github", handle: "shivani", url: "https://github.com" },
-  { name: "twitter", handle: "@shivani", url: "https://twitter.com" },
-  { name: "discord", handle: "@shivani", url: "#" },
-  { name: "linkedin", handle: "/in/shivani", url: "https://linkedin.com" },
+  { name: "github", handle: "shivani", url: "https://github.com/shivanirai08" },
+  { name: "twitter", handle: "@shivani", url: "https://twitter.com/shivanirai08" },
+  { name: "behance", handle: "@shivani", url: "https://www.behance.net/shivanirai08" },
+  { name: "linkedin", handle: "/in/shivani", url: "https://linkedin.com/in/shivanirai08" },
 ];
 
 export type Project = {
