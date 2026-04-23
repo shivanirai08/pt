@@ -10,12 +10,12 @@ export const personal = {
   editor: "Neovim btw",
   email: "raishivani1406@gmail.com",
   tagline: "frontend developer & designer",
-  headline: "I TURN DESIGN FILES INTO LIVING INTERFACES.",
+  headline: "I design, build, and ship.",
   intro:
-    "Bridging the gap between design and engineering — pixel-perfect UIs, clean architecture, and zero compromises on performance.",
+    "I turn design thinking into fast, scalable frontend systems.",
   synopsis: "shivani [--design] [--develop] [--deploy] <projects>",
   description:
-    "4+ years building performant, accessible web applications. Equally comfortable in Figma and VS Code. Believes great UI is invisible — it just works. Previously led frontend teams and shipped 20+ production features.",
+    "2+ years building performant, accessible web applications. Equally comfortable in Figma and VS Code. Believes great UI is invisible — it just works.",
   responseTime: "< 24 hours",
   availability: "open to select freelance + full-time",
 };
@@ -212,8 +212,9 @@ export const stats = {
   yearsLed: 3,
 };
 
-export const asciiLogo = `  ▄▄▄▄▄▄    ▄▄▄     ▄▄▄ 
- ██▀▀▀▀▀    ████▄   ██  
+export const asciiLogo = 
+`  ▄▄▄▄▄    ▄▄▄     ▄▄▄ 
+ ██▀▀▀▀▀    ████▄   ██ 
  ▀██▄▄▄▄    ██▀██▄  ██  
      ▀▀██   ██  ▀██▄██  
  ▄▄▄▄▄██▀   ██    ▀████ 
