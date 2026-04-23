@@ -30,24 +30,15 @@ const HERO_ENTRY_HIDDEN = { opacity: 0, y: "100vh" };
 const HERO_ENTRY_VISIBLE = { opacity: 1, y: 0 };
 const HERO_INTRO_DOCKED = { opacity: 1, y: -22 };
 
-const CONNECTION_LINES = [
-  { text: "Connecting to shivani.dev...", delay: 0, color: "#888" },
-  {
-    text: "Verifying host key.............. ",
-    delay: 400,
-    color: "#888",
-    suffix: "OK",
-    suffixColor: "#3fb950",
-  },
-  {
-    text: "Authenticating................ ",
-    delay: 800,
-    color: "#888",
-    suffix: "OK",
-    suffixColor: "#3fb950",
-  },
-  { text: "Connection established.", delay: 1200, color: "#3fb950" },
+const CONNECTION_LINES: ConnectionLine[] = [
+  { text: "Connecting to shivani.dev...", color: "#888" },
+  { text: "Connection established.", color: "#3fb950" },
 ];
+
+const CONTACT_SEQUENCE_DELAYS = {
+  connected: 1400,
+  reveal: 2200,
+};
 
 type GUIHomeProps = {
   showBootSequence: boolean;
@@ -62,6 +53,13 @@ type SectionCommandRevealProps = {
   children: React.ReactNode;
 };
 
+type ConnectionLine = {
+  text: string;
+  color: string;
+  suffix?: string;
+  suffixColor?: string;
+};
+
 export default function GUIHome({
   showBootSequence,
   onBootSequenceComplete,
@@ -73,10 +71,11 @@ export default function GUIHome({
       : BOOT_WORDS.map((words) => words.length)
   );
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
-  const [contactLines, setContactLines] = useState(0);
-  const [contactAnimated, setContactAnimated] = useState(false);
+  const [contactPhase, setContactPhase] = useState(0);
+  const [contactConnected, setContactConnected] = useState(false);
   const [skillsVisible, setSkillsVisible] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
+  const contactSequenceStartedRef = useRef(false);
 
   // Boot sequence
   useEffect(() => {
@@ -119,24 +118,31 @@ export default function GUIHome({
 
   // Contact SSH animation
   useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !contactAnimated) {
-          setContactAnimated(true);
-          CONNECTION_LINES.forEach((_, i) => {
-            setTimeout(
-              () => setContactLines((prev) => Math.max(prev, i + 1)),
-              CONNECTION_LINES[i].delay + 300
-            );
-          });
+        if (entries[0].isIntersecting && !contactSequenceStartedRef.current) {
+          contactSequenceStartedRef.current = true;
+          setContactPhase(1);
+          observer.disconnect();
+
+          timers.push(
+            setTimeout(() => setContactPhase(2), CONTACT_SEQUENCE_DELAYS.connected)
+          );
+          timers.push(
+            setTimeout(() => setContactConnected(true), CONTACT_SEQUENCE_DELAYS.reveal)
+          );
         }
       },
       { threshold: 0.3 }
     );
     const el = document.getElementById("contact-terminal");
     if (el) observer.observe(el);
-    return () => observer.disconnect();
-  }, [contactAnimated]);
+    return () => {
+      observer.disconnect();
+      timers.forEach(clearTimeout);
+    };
+  }, []);
 
   // Skills visibility observer
   useEffect(() => {
@@ -249,7 +255,7 @@ export default function GUIHome({
               transition={{ duration: bootPhase >= 4 ? 0.72 : 0.58, ease: HERO_ENTRY_EASE }}
               className="text-[18px] text-[#888]"
             >
-              Hii, I&apos;m <span className="text-white">{personal.name}</span>
+              Hi, I&apos;m <span className="text-white">{personal.name}</span>
             </motion.div>
           </div>
 
@@ -263,17 +269,17 @@ export default function GUIHome({
             <h1 className="font-['Press_Start_2P',cursive] leading-[1.3] tracking-wide [text-shadow:0_0_20px_rgba(255,221,192,0.15),0_0_40px_rgba(255,221,192,0.05)]">
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
                 <span className="pr-3 py-1.5 inline-block mb-2">
-                  I TURN DESIGN FILES
+                  I BUILD
                 </span>
               </span>
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-white">
                 <span className="pr-3 py-1.5 inline-block mb-2">
-                  INTO LIVING
+                   PRODUCTS WITH
                 </span>
               </span>
               <span className="block text-[36px] sm:text-[50px] lg:text-[64px] text-[#ffddc0]">
                 <span className="pr-3 py-1.5 inline-block">
-                  INTERFACES.
+                  DESIGN INSTINCT.
                 </span>
               </span>
             </h1>
@@ -284,9 +290,9 @@ export default function GUIHome({
             initial={HERO_ENTRY_HIDDEN}
             animate={bootPhase >= 5 ? HERO_ENTRY_VISIBLE : HERO_ENTRY_HIDDEN}
             transition={{ duration: 0.56, ease: HERO_ENTRY_EASE }}
-            className="max-w-[760px]"
+            className="max-w-[940px]"
           >
-            <p className="text-[16px] text-[#888] leading-[1.8] mb-10 max-w-[760px]">
+            <p className="text-[16px] text-[#888] leading-[1.8] mb-10">
               {personal.intro}
             </p>
             <div className="flex flex-wrap items-center gap-5 md:gap-7 text-[15px]">
@@ -300,7 +306,7 @@ export default function GUIHome({
                 href="#projects"
                 className="text-[#c3c7f4] border-b border-dashed border-[#c3c7f4] pb-[1px] hover:text-white hover:border-white transition-colors duration-150"
               >
-                view projects
+                View my work
               </a>
             </div>
           </motion.div>
@@ -722,47 +728,78 @@ export default function GUIHome({
         className="py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-          <div className="flex items-center justify-center min-h-[560px]">
+          <div className="flex items-center justify-center py-10">
             <div className="max-w-[680px] w-full text-center">
               {/* Terminal connection animation */}
               <div
                 id="contact-terminal"
-                className="mb-10 border border-[#222] bg-[#0d0d0d] p-6 md:p-7 text-left text-[14px] leading-loose reveal-section xl:p-11"
+                className="relative mb-10 border border-[#222] bg-[#0d0d0d] p-6 text-left text-[14px] leading-loose reveal-section md:p-7 xl:p-11"
               >
-                {CONNECTION_LINES.map((line, i) => (
+                <div
+                  className={`transition-all duration-400 ${
+                    contactConnected
+                      ? "pointer-events-none absolute inset-x-6 top-6 opacity-0 md:inset-x-7 md:top-7 xl:inset-x-11 xl:top-11"
+                      : "opacity-100"
+                  }`}
+                >
                   <div
-                    key={i}
                     className={`transition-all duration-300 ${
-                      contactLines > i
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-1"
+                      contactPhase >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
                     }`}
-                    style={{ color: line.color }}
+                    style={{ color: CONNECTION_LINES[0].color }}
                   >
-                    {line.text}
-                    {line.suffix && (
-                      <span style={{ color: line.suffixColor }}>
-                        {line.suffix}
-                      </span>
-                    )}
+                    {CONNECTION_LINES[0].text}
+                    {contactPhase === 1 ? (
+                      <span className="ml-1 inline-block h-[15px] w-[10px] animate-pulse bg-[#ffddc0] align-[-2px]" />
+                    ) : null}
                   </div>
-                ))}
+
+                  {CONNECTION_LINES.slice(1).map((line, index) => {
+                    const visibleAtPhase = index + 2;
+                    const showWaitingCursor =
+                      Boolean(line.suffix) && contactPhase === visibleAtPhase;
+                    const showSuffix =
+                      Boolean(line.suffix) && contactPhase > visibleAtPhase;
+
+                    return (
+                      <div
+                        key={line.text}
+                        className={`transition-all duration-300 ${
+                          contactPhase >= visibleAtPhase
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-1"
+                        }`}
+                        style={{ color: line.color }}
+                      >
+                        {line.text}
+                        {showWaitingCursor ? (
+                          <span className="inline-block h-[15px] w-[10px] animate-pulse bg-[#ffddc0] align-[-2px]" />
+                        ) : null}
+                        {showSuffix ? (
+                          <span style={{ color: line.suffixColor }}>
+                            {line.suffix}
+                          </span>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
 
                 {/* Welcome message */}
                 <div
-                  className={`mt-4 transition-all duration-500 delay-300 ${
-                    contactLines >= 4
+                  className={`text-center transition-all duration-500 delay-300 ${
+                    contactConnected
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-2"
                   }`}
                 >
-                  <div className="text-[#ccc] text-[15px]">
+                  <div className="text-[15px] text-[#ccc]">
                     Welcome! I&apos;m always open to interesting conversations
                   </div>
-                  <div className="text-[#ccc] text-[15px]">
+                  <div className="text-[15px] text-[#ccc]">
                     about frontend, design systems, or your next project.
                   </div>
-                  <div className="mt-3 text-[#888] text-[14px]">
+                  <div className="mt-3 text-[14px] text-[#888]">
                     Response time:{" "}
                     <span className="text-[#3fb950]">&lt; 24 hours</span> ·
                     Timezone:{" "}
@@ -772,7 +809,11 @@ export default function GUIHome({
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-5 justify-center mb-7 reveal-section">
+              <div
+                className={`mb-7 flex flex-col justify-center gap-5 transition-all duration-500 sm:flex-row ${
+                  contactConnected ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-3"
+                }`}
+              >
                 <a
                   href={`mailto:${personal.email}`}
                   className="inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap bg-[#ffddc0] px-11 py-4 text-[15px] font-bold leading-none text-[#0a0a0a] transition-colors duration-200 hover:bg-white"
@@ -788,7 +829,11 @@ export default function GUIHome({
               </div>
 
               {/* Social links */}
-              <div className="flex justify-center gap-8 text-[14px] reveal-section">
+              <div
+                className={`flex justify-center gap-8 text-[14px] transition-all duration-500 ${
+                  contactConnected ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-3"
+                }`}
+              >
                 {socials.map((s, i) => (
                   <span key={s.name}>
                     <a

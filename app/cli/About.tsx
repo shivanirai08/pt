@@ -13,13 +13,6 @@ const fadeUp = {
 };
 
 export default function CLIAbout() {
-  const commandList = [
-    { cmd: ":email<enter>", desc: "To send an email" },
-    { cmd: ":cv<enter>", desc: "To download my CV" },
-    { cmd: ":help<enter>", desc: "For the full command reference" },
-    { cmd: ":projects<enter>", desc: "Browse selected work" },
-  ];
-
   return (
     <motion.div
       variants={stagger}
@@ -77,37 +70,6 @@ export default function CLIAbout() {
           contact(5)
         </span>
       </Section>
-
-      <motion.div
-        variants={fadeUp}
-        className="mt-14 border-t border-[#16161a] pt-10"
-      >
-        <div className="text-center mb-6">
-          <div className="text-[11px] text-[#4a4a52] tracking-[0.3em]">
-            ABOUT PAGE v0.0.1
-          </div>
-          <div className="text-[11px] text-[#4a4a52] tracking-[0.3em] mt-1">
-            Commands about the site
-          </div>
-        </div>
-        <div className="max-w-[540px] mx-auto">
-          {commandList.map((c) => (
-            <div key={c.cmd} className="flex items-baseline gap-6 py-1">
-              <span className="w-[200px] text-right text-[#a8a8ad]">
-                type{" "}
-                <span className="text-[#d4b483]">
-                  {c.cmd.replace("<enter>", "")}
-                </span>
-                <span className="text-[#7c7c85]">&lt;enter&gt;</span>
-              </span>
-              <span className="text-[#7c7c85]">{c.desc}</span>
-            </div>
-          ))}
-        </div>
-        <div className="text-center mt-8 text-[11px] text-[#4a4a52]">
-          Inspired by Neovim · Built for devs and designers alike
-        </div>
-      </motion.div>
     </motion.div>
   );
 }
