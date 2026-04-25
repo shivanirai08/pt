@@ -11,6 +11,8 @@ type Props = {
   onCommandCancel: () => void;
   onCommandFocus: () => void;
   onCommandBlur: () => void;
+  onCommandHistoryUp: () => void;
+  onCommandHistoryDown: () => void;
   toast: string;
   time: string;
 };
@@ -32,6 +34,14 @@ export default function StatusBar(props: Props) {
       e.preventDefault();
       inputRef.current?.blur();
       props.onCommandCancel();
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      props.onCommandHistoryUp();
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      props.onCommandHistoryDown();
     }
   };
 
@@ -56,7 +66,7 @@ export default function StatusBar(props: Props) {
           onKeyDown={handleKey}
           onFocus={props.onCommandFocus}
           onBlur={props.onCommandBlur}
-          placeholder="type a command, use 1-5, or use left/right arrows"
+          placeholder="type a command, use up/down history, 1-5, or left/right arrows"
         />
         <span className="ml-3 text-[10px] tracking-widest text-[#4a4a52]">
           COMMAND

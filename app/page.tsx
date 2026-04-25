@@ -36,6 +36,9 @@ export default function Page() {
   const [cliInvalidCommand, setCLIInvalidCommand] = useState("");
   const [commandMode, setCommandMode] = useState(false);
   const [cmd, setCmd] = useState("");
+  const [cliCommandHistory, setCLICommandHistory] = useState<string[]>([]);
+  const [cliHistoryIndex, setCLIHistoryIndex] = useState<number | null>(null);
+  const [cliHistoryDraft, setCLIHistoryDraft] = useState("");
   const [cliCommandEcho, setCLICommandEcho] = useState("");
   const [helpOpen, setHelpOpen] = useState(false);
   const [toast, setToast] = useState("");
@@ -222,8 +225,12 @@ export default function Page() {
     const rawInput = cmd.trim();
     const input = rawInput.toLowerCase();
     setCmd("");
+    setCLIHistoryIndex(null);
+    setCLIHistoryDraft("");
     setCommandMode(false);
     if (!input) return;
+
+    setCLICommandHistory((previous) => [...previous, rawInput]);
 
     if (input === "help" || input === "?") {
       runCLICommandAnimation(rawInput, () => setHelpOpen(true));
@@ -253,6 +260,42 @@ export default function Page() {
       setCLIView("not-found");
     });
   }, [cliTab, cmd, navigateCLI, pushToast, runCLICommandAnimation, switchToGUI]);
+
+  const handleCLIHistoryUp = useCallback(() => {
+    if (!cliCommandHistory.length) return;
+
+    if (cliHistoryIndex === null) {
+      setCLIHistoryDraft(cmd);
+      const nextIndex = cliCommandHistory.length - 1;
+      setCLIHistoryIndex(nextIndex);
+      setCmd(cliCommandHistory[nextIndex]);
+      return;
+    }
+
+    const nextIndex = Math.max(0, cliHistoryIndex - 1);
+    setCLIHistoryIndex(nextIndex);
+    setCmd(cliCommandHistory[nextIndex]);
+  }, [cliCommandHistory, cliHistoryIndex, cmd]);
+
+  const handleCLIHistoryDown = useCallback(() => {
+    if (!cliCommandHistory.length || cliHistoryIndex === null) return;
+
+    if (cliHistoryIndex >= cliCommandHistory.length - 1) {
+      setCLIHistoryIndex(null);
+      setCmd(cliHistoryDraft);
+      return;
+    }
+
+    const nextIndex = cliHistoryIndex + 1;
+    setCLIHistoryIndex(nextIndex);
+    setCmd(cliCommandHistory[nextIndex]);
+  }, [cliCommandHistory, cliHistoryDraft, cliHistoryIndex]);
+
+  const handleCommandChange = useCallback((value: string) => {
+    setCmd(value);
+    setCLIHistoryIndex(null);
+    setCLIHistoryDraft("");
+  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -418,14 +461,18 @@ export default function Page() {
               <StatusBar
                 commandMode={commandMode}
                 commandValue={cmd}
-                onCommandChange={setCmd}
+                onCommandChange={handleCommandChange}
                 onCommandSubmit={executeCommand}
                 onCommandCancel={() => {
                   setCommandMode(false);
                   setCmd("");
+                  setCLIHistoryIndex(null);
+                  setCLIHistoryDraft("");
                 }}
                 onCommandFocus={() => setCommandMode(true)}
                 onCommandBlur={() => setCommandMode(false)}
+                onCommandHistoryUp={handleCLIHistoryUp}
+                onCommandHistoryDown={handleCLIHistoryDown}
                 toast={toast}
                 time={clock}
               />
