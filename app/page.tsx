@@ -147,14 +147,18 @@ export default function Page() {
 
   const toggleMode = useCallback(() => {
     if (mode === "gui") {
-      setCLIView("home");
+      clearCLICommandPlayback();
+      setCLICommandEcho("");
+      setCommandMode(false);
+      setCmd("");
+      setCLIView((previousView) => (previousView === "section" ? "section" : "home"));
       setCLIInvalidCommand("");
       setMode("cli");
       return;
     }
 
     switchToGUI(cliTab);
-  }, [cliTab, mode, switchToGUI]);
+  }, [clearCLICommandPlayback, cliTab, mode, switchToGUI]);
 
   const handleGUIBootComplete = useCallback(() => {
     setHasPlayedGUIBoot(true);
@@ -270,6 +274,12 @@ export default function Page() {
         return;
       }
 
+      if (helpOpen && e.key.toLowerCase() === "q") {
+        e.preventDefault();
+        setHelpOpen(false);
+        return;
+      }
+
       // CLI-only shortcuts
       if (mode === "cli") {
         if (e.key === ":") {
@@ -357,7 +367,12 @@ export default function Page() {
             transition={{ duration: 0.4 }}
             className="flex h-[calc(100dvh-68px)] flex-col"
           >
-            <main className="flex-1 min-h-0 overflow-y-auto px-5 py-8 sm:px-8 lg:px-12 xl:px-16">
+            <main
+              className={
+                "flex-1 min-h-0 overflow-y-auto px-5 py-8 sm:px-8 lg:px-12 xl:px-16 " +
+                (cliView === "home" && !cliCommandEcho ? "flex items-center" : "")
+              }
+            >
               {cliCommandEcho ? (
                 <motion.div
                   key={cliCommandEcho}
@@ -378,6 +393,7 @@ export default function Page() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
+                  className="w-full"
                 >
                   {cliView === "home" ? (
                     <CLIHome
@@ -434,12 +450,12 @@ function CLIHome({
   ];
 
   return (
-    <div className="mx-auto flex min-h-full max-w-[960px] flex-col items-center justify-center py-6 text-center">
+    <div className="mx-auto w-full max-w-[960px] py-6 text-center">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="max-w-[760px]"
+        className="mx-auto w-full max-w-[760px]"
       >
         <div className="mb-4 text-[11px] uppercase tracking-[0.28em] text-[#4a4a52]">
           terminal session ready

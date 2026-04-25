@@ -77,14 +77,15 @@ export default function StatusBar(props: Props) {
             {props.toast}
           </motion.span>
         ) : (
-          <span>
-            use <span className="text-[#d4b483]">←</span>/<span className="text-[#d4b483]">→</span>,{" "}
-            <span className="text-[#d4b483]">1-5</span>, or{" "}
-            <span className="text-[#d4b483]">:help</span> · press{" "}
-            <kbd className="bg-[#1d1d22] px-1.5 py-0.5 text-[10px] text-[#e8e8ea]">
+          <span className="flex flex-wrap items-center gap-2 text-[#d7d7dc]">
+            <span className="text-[#7c7c85]">Shortcuts:</span>
+            <span>
+              use <span className="text-[#ffddc0]">←</span>/<span className="text-[#ffddc0]">→</span>, <span className="text-[#ffddc0]">1-5</span>, or <span className="text-[#ffddc0]">:help</span>
+            </span>
+            <span className="rounded-sm border border-[#5a4630] bg-[#241b12] px-1.5 py-0.5 text-[10px] font-medium text-[#ffddc0]">
               ~
-            </kbd>{" "}
-            for GUI
+            </span>
+            <span>for GUI</span>
           </span>
         )}
       </div>
