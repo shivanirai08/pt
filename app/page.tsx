@@ -28,6 +28,18 @@ const CLI_TABS: Record<CLITab, React.ComponentType> = {
 const CLI_TAB_ORDER: CLITab[] = ["about", "projects", "experience", "skills", "contact"];
 const CLI_COMMAND_TYPE_MS = 38;
 const CLI_COMMAND_SETTLE_MS = 180;
+const CLI_DISPLAY_COMMAND_MAX = 40;
+
+function formatCLICommandForDisplay(command: string) {
+  const sanitized = command
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (sanitized.length <= CLI_DISPLAY_COMMAND_MAX) return sanitized;
+
+  return `${sanitized.slice(0, CLI_DISPLAY_COMMAND_MAX - 1)}…`;
+}
 
 export default function Page() {
   const [mode, setMode] = useState<Mode>("gui");
@@ -360,6 +372,8 @@ export default function Page() {
   }, [commandMode, helpOpen, mode, moveCLITab, navigateCLI, toggleMode]);
 
   const ActiveCLI = CLI_TABS[cliTab];
+  const cliCommandEchoDisplay = formatCLICommandForDisplay(cliCommandEcho);
+  const cliInvalidCommandDisplay = formatCLICommandForDisplay(cliInvalidCommand);
 
   return (
     <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
@@ -426,10 +440,10 @@ export default function Page() {
                   key={cliCommandEcho}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-8 border-b border-[#16161a] pb-5 text-[13px] text-[#7c7c85]"
+                  className="mb-8 flex items-center gap-2 border-b border-[#16161a] pb-5 text-[13px] text-[#7c7c85]"
                 >
-                  <span className="text-[#d4b483]">shivanirai@portfolio:~$</span>{" "}
-                  <span className="text-[#e8e8ea]">{cliCommandEcho}</span>
+                  <span className="shrink-0 text-[#d4b483]">shivanirai@portfolio:~$</span>
+                  <span className="min-w-0 truncate text-[#e8e8ea]">{cliCommandEchoDisplay}</span>
                   <span className="ml-1 inline-block h-[14px] w-[8px] animate-pulse bg-[#ffddc0] align-[-2px]" />
                 </motion.div>
               ) : null}
@@ -565,6 +579,8 @@ function CLINotFound({
   command: string;
   onSelect: (tab: CLITab) => void;
 }) {
+  const commandDisplay = formatCLICommandForDisplay(command);
+
   const quickLinks: { tab: CLITab; label: string }[] = [
     { tab: "projects", label: "projects" },
     { tab: "about", label: "about" },
@@ -577,20 +593,22 @@ function CLINotFound({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="max-w-[760px]"
+        className=""
       >
         <div className="mb-6 text-[11px] uppercase tracking-[0.28em] text-[#4a4a52]">
           invalid terminal route
         </div>
         <div className="mb-6 font-['Press_Start_2P',cursive] text-[48px] leading-none text-[#ffddc0] sm:text-[72px]">
-          404
+          FOUR-O-FOUR
+          {/* 404 */}
         </div>
         <div className="mb-2 text-[16px] text-[#e8e8ea]">Command not found</div>
         <div className="mb-4 text-[13px] text-[#7c7c85]">
           {command ? (
-            <>
-              Nothing happens at <span className="text-[#d4b483]">:{command}</span>
-            </>
+            <div className="mx-auto flex w-full max-w-[520px] items-baseline justify-center gap-2">
+              <span className="shrink-0">Nothing happens at</span>
+              <span className="min-w-0 truncate text-[#d4b483]">:{commandDisplay}</span>
+            </div>
           ) : (
             <>Nothing happens here.</>
           )}
