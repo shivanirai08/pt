@@ -148,17 +148,20 @@ export default function Page() {
   const toggleMode = useCallback(() => {
     if (mode === "gui") {
       clearCLICommandPlayback();
-      setCLICommandEcho("");
       setCommandMode(false);
       setCmd("");
-      setCLIView((previousView) => (previousView === "section" ? "section" : "home"));
+      const targetCLIView: CLIView = cliView === "section" ? "section" : "home";
+      if (targetCLIView === "home") {
+        setCLICommandEcho("");
+      }
+      setCLIView(targetCLIView);
       setCLIInvalidCommand("");
       setMode("cli");
       return;
     }
 
     switchToGUI(cliTab);
-  }, [clearCLICommandPlayback, cliTab, mode, switchToGUI]);
+  }, [clearCLICommandPlayback, cliTab, cliView, mode, switchToGUI]);
 
   const handleGUIBootComplete = useCallback(() => {
     setHasPlayedGUIBoot(true);
@@ -373,7 +376,7 @@ export default function Page() {
                 (cliView === "home" && !cliCommandEcho ? "flex items-center" : "")
               }
             >
-              {cliCommandEcho ? (
+              {cliCommandEcho && cliView !== "home" ? (
                 <motion.div
                   key={cliCommandEcho}
                   initial={{ opacity: 0, y: 8 }}
