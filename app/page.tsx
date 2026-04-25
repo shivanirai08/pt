@@ -415,8 +415,10 @@ export default function Page() {
           >
             <main
               className={
-                "flex-1 min-h-0 overflow-y-auto px-5 py-8 sm:px-8 lg:px-12 xl:px-16 " +
-                (cliView === "home" && !cliCommandEcho ? "flex items-center" : "")
+                "flex-1 min-h-0 px-5 py-8 sm:px-8 lg:px-12 xl:px-16 " +
+                (cliView === "section" ? "overflow-y-auto " : "overflow-hidden ") +
+                (cliView === "home" && !cliCommandEcho ? "flex items-center " : "") +
+                (cliView === "not-found" ? "flex flex-col " : "")
               }
             >
               {cliCommandEcho && cliView !== "home" ? (
@@ -439,7 +441,10 @@ export default function Page() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
-                  className="w-full"
+                  className={
+                    "w-full " +
+                    (cliView === "not-found" ? "flex flex-1 items-center justify-center" : "")
+                  }
                 >
                   {cliView === "home" ? (
                     <CLIHome
@@ -567,7 +572,7 @@ function CLINotFound({
   ];
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-220px)] max-w-[960px] flex-col items-center justify-center text-center">
+    <div className="mx-auto flex w-full max-w-[960px] flex-col items-center justify-center text-center">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
