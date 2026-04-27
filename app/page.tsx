@@ -476,7 +476,7 @@ export default function Page() {
               </AnimatePresence>
             </main>
 
-            <div className="pointer-events-none fixed bottom-3 left-4 right-4 z-40 sm:left-6 sm:right-6 lg:left-10 lg:right-10 xl:left-14 xl:right-14">
+            <div className="pointer-events-none fixed bottom-5 left-4 right-4 z-40 sm:left-6 sm:right-6 lg:left-10 lg:right-10 xl:left-14 xl:right-14">
               <StatusBar
                 commandMode={commandMode}
                 commandValue={cmd}
@@ -646,54 +646,68 @@ function SharedHeader({
   onToggleMode: () => void;
 }) {
   const navSections: GUISection[] = ["about", "projects", "experience", "contact"];
+  const headerSpring = { type: "spring", stiffness: 120, damping: 24, mass: 0.85 } as const;
 
   return (
     <header className="sticky top-0 z-40 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
-      <div
-        className={
-          "flex h-[68px] w-full items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 " +
-          (mode === "gui" ? "mx-auto max-w-[1440px]" : "")
-        }
+      <motion.div
+        layout
+        className="mx-auto flex h-[68px] w-full items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 will-change-transform"
+        animate={{ maxWidth: mode === "gui" ? 1440 : 2400 }}
+        transition={headerSpring}
       >
         <span className="text-[16px] font-bold tracking-tight text-[#e8e8ea]">
           {personal.initials}.
         </span>
 
-        <div className="flex items-center gap-6">
-          {mode === "gui" ? (
-            <nav className="hidden items-center gap-8 text-[14px] text-[#a8a8ad] md:flex">
-              {navSections.map((section) => {
-                const isActive = section === activeGUISection;
-                return (
-                  <button
-                    key={section}
-                    onClick={() => onNavigate(section)}
-                    className={
-                      "transition-colors duration-150 " +
-                      (isActive ? "text-[#e8e8ea]" : "hover:text-[#e8e8ea]")
-                    }
-                  >
-                    {section}
-                  </button>
-                );
-              })}
-            </nav>
-          ) : (
-            <motion.div
-              key="cli-navbar-label"
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="hidden text-[12px] uppercase tracking-[0.18em] text-[#4a4a52] md:block"
-            >
-              terminal interface
-            </motion.div>
-          )}
+        <motion.div layout className="flex items-center gap-6">
+          <motion.div layout className="hidden min-h-[20px] items-center md:flex">
+            <AnimatePresence mode="sync" initial={false}>
+            {mode === "gui" ? (
+              <motion.nav
+                key="gui-navbar"
+                layout
+                initial={{ opacity: 0, y: -10, filter: "blur(3px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
+                transition={headerSpring}
+                className="flex items-center gap-8 text-[14px] text-[#a8a8ad]"
+              >
+                {navSections.map((section) => {
+                  const isActive = section === activeGUISection;
+                  return (
+                    <button
+                      key={section}
+                      onClick={() => onNavigate(section)}
+                      className={
+                        "transition-colors duration-150 " +
+                        (isActive ? "text-[#e8e8ea]" : "hover:text-[#e8e8ea]")
+                      }
+                    >
+                      {section}
+                    </button>
+                  );
+                })}
+              </motion.nav>
+            ) : (
+              <motion.div
+                key="cli-navbar-label"
+                layout
+                initial={{ opacity: 0, y: -10, filter: "blur(3px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
+                transition={headerSpring}
+                className="text-[12px] uppercase tracking-[0.18em] text-[#4a4a52]"
+              >
+                terminal interface
+              </motion.div>
+            )}
+            </AnimatePresence>
+          </motion.div>
 
           <ModeToggle mode={mode} onToggle={onToggleMode} />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </header>
   );
 }

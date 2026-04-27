@@ -46,9 +46,11 @@ export default function StatusBar(props: Props) {
   };
 
   return (
-    <div className="pointer-events-auto w-full border border-[#242428] bg-[#070708]/96 backdrop-blur-lg">
+    <div className="pointer-events-auto w-full border border-[#242428] bg-[#070708]/96 backdrop-blur-lg overflow-hidden">
       <motion.div
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ clipPath: "inset(0 50% 0 50%)" }}
+        animate={{ clipPath: "inset(0 0% 0 0%)" }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={
           "flex h-14 w-full items-center justify-center gap-3 px-4 text-[12px] transition-colors duration-200" +
           (props.commandMode
