@@ -15,9 +15,44 @@ export const personal = {
     "I turn design thinking into fast, scalable frontend systems.",
   synopsis: "shivani [--design] [--develop] [--deploy] <projects>",
   description:
-    "2+ years building performant, accessible web applications. Equally comfortable in Figma and VS Code. Believes great UI is invisible — it just works.",
-  responseTime: "< 24 hours",
+    "4+ years shipping production interfaces. I draw the file in Figma, then build it in React — the shorter that loop, the better the product feels.",
+  bio:
+    "I bridge design and engineering. Pixel-perfect UIs, clean architecture, zero compromises on performance.",
+  role: "Frontend Engineer · UI Designer",
+  pronouns: "she/her",
+  status: "open_to_work",
+  responseTime: "< 24h",
   availability: "open to select freelance + full-time",
+};
+
+export const aboutStack = [
+  { label: "core/", items: "react · typescript · next.js" },
+  { label: "styling/", items: "tailwind · css · framer-motion" },
+  { label: "state/", items: "zustand · react-query" },
+  { label: "tools/", items: "figma · git · vercel · linear" },
+  { label: "exploring/", items: "rust · three.js · webgpu" },
+];
+
+export const aboutPhilosophy = [
+  "pixel = pride",
+  "ship beats perfect — until the last 5%",
+  "good DX makes good UX",
+  "animation is a feature, not a polish",
+];
+
+export const aboutCurrently = {
+  reading: '"designing data-intensive apps"',
+  building: "terminal portfolio v2",
+  learning: "rust + tauri",
+  listening: "tycho · rüfüs · ambient",
+};
+
+export const aboutEnv = {
+  timezone: "IST · UTC+5:30",
+  available: "9-6 · weekdays",
+  response: "< 24h",
+  remote: "yes",
+  coffee: "★★★ /day",
 };
 
 export const socials = [

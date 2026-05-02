@@ -280,9 +280,9 @@ export default function CLIContact() {
                       </div>
                     )}
 
-                    <div className="mt-5 text-[11px] text-[#4a4a52]">
+                    {/* <div className="mt-5 text-[11px] text-[#4a4a52]">
                       // privacy: goes straight to my inbox · no third-party form service · no tracking
-                    </div>
+                    </div> */}
                   </>
                 ) : (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="space-y-2 text-[13px]">

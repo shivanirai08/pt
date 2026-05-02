@@ -28,18 +28,6 @@ const CLI_TABS: Record<CLITab, React.ComponentType> = {
 const CLI_TAB_ORDER: CLITab[] = ["about", "projects", "experience", "skills", "contact"];
 const CLI_COMMAND_TYPE_MS = 38;
 const CLI_COMMAND_SETTLE_MS = 180;
-const CLI_DISPLAY_COMMAND_MAX = 40;
-
-function formatCLICommandForDisplay(command: string) {
-  const sanitized = command
-    .replace(/[\u0000-\u001F\u007F]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (sanitized.length <= CLI_DISPLAY_COMMAND_MAX) return sanitized;
-
-  return `${sanitized.slice(0, CLI_DISPLAY_COMMAND_MAX - 1)}…`;
-}
 
 export default function Page() {
   const [mode, setMode] = useState<Mode>("gui");
@@ -48,9 +36,6 @@ export default function Page() {
   const [cliInvalidCommand, setCLIInvalidCommand] = useState("");
   const [commandMode, setCommandMode] = useState(false);
   const [cmd, setCmd] = useState("");
-  const [cliCommandHistory, setCLICommandHistory] = useState<string[]>([]);
-  const [cliHistoryIndex, setCLIHistoryIndex] = useState<number | null>(null);
-  const [cliHistoryDraft, setCLIHistoryDraft] = useState("");
   const [cliCommandEcho, setCLICommandEcho] = useState("");
   const [helpOpen, setHelpOpen] = useState(false);
   const [toast, setToast] = useState("");
@@ -162,21 +147,14 @@ export default function Page() {
 
   const toggleMode = useCallback(() => {
     if (mode === "gui") {
-      clearCLICommandPlayback();
-      setCommandMode(false);
-      setCmd("");
-      const targetCLIView: CLIView = cliView === "section" ? "section" : "home";
-      if (targetCLIView === "home") {
-        setCLICommandEcho("");
-      }
-      setCLIView(targetCLIView);
+      setCLIView("home");
       setCLIInvalidCommand("");
       setMode("cli");
       return;
     }
 
     switchToGUI(cliTab);
-  }, [clearCLICommandPlayback, cliTab, cliView, mode, switchToGUI]);
+  }, [cliTab, mode, switchToGUI]);
 
   const handleGUIBootComplete = useCallback(() => {
     setHasPlayedGUIBoot(true);
@@ -237,12 +215,8 @@ export default function Page() {
     const rawInput = cmd.trim();
     const input = rawInput.toLowerCase();
     setCmd("");
-    setCLIHistoryIndex(null);
-    setCLIHistoryDraft("");
     setCommandMode(false);
     if (!input) return;
-
-    setCLICommandHistory((previous) => [...previous, rawInput]);
 
     if (input === "help" || input === "?") {
       runCLICommandAnimation(rawInput, () => setHelpOpen(true));
@@ -272,42 +246,6 @@ export default function Page() {
       setCLIView("not-found");
     });
   }, [cliTab, cmd, navigateCLI, pushToast, runCLICommandAnimation, switchToGUI]);
-
-  const handleCLIHistoryUp = useCallback(() => {
-    if (!cliCommandHistory.length) return;
-
-    if (cliHistoryIndex === null) {
-      setCLIHistoryDraft(cmd);
-      const nextIndex = cliCommandHistory.length - 1;
-      setCLIHistoryIndex(nextIndex);
-      setCmd(cliCommandHistory[nextIndex]);
-      return;
-    }
-
-    const nextIndex = Math.max(0, cliHistoryIndex - 1);
-    setCLIHistoryIndex(nextIndex);
-    setCmd(cliCommandHistory[nextIndex]);
-  }, [cliCommandHistory, cliHistoryIndex, cmd]);
-
-  const handleCLIHistoryDown = useCallback(() => {
-    if (!cliCommandHistory.length || cliHistoryIndex === null) return;
-
-    if (cliHistoryIndex >= cliCommandHistory.length - 1) {
-      setCLIHistoryIndex(null);
-      setCmd(cliHistoryDraft);
-      return;
-    }
-
-    const nextIndex = cliHistoryIndex + 1;
-    setCLIHistoryIndex(nextIndex);
-    setCmd(cliCommandHistory[nextIndex]);
-  }, [cliCommandHistory, cliHistoryDraft, cliHistoryIndex]);
-
-  const handleCommandChange = useCallback((value: string) => {
-    setCmd(value);
-    setCLIHistoryIndex(null);
-    setCLIHistoryDraft("");
-  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -372,8 +310,6 @@ export default function Page() {
   }, [commandMode, helpOpen, mode, moveCLITab, navigateCLI, toggleMode]);
 
   const ActiveCLI = CLI_TABS[cliTab];
-  const cliCommandEchoDisplay = formatCLICommandForDisplay(cliCommandEcho);
-  const cliInvalidCommandDisplay = formatCLICommandForDisplay(cliInvalidCommand);
 
   return (
     <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
@@ -425,25 +361,18 @@ export default function Page() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="relative h-[calc(100dvh-68px)]"
+            className="flex h-[calc(100dvh-68px)] flex-col"
           >
-            <main
-              className={
-                "h-full overflow-y-auto px-5 py-8 pb-32 sm:px-8 sm:pb-36 lg:px-12 xl:px-16 " +
-                (cliView === "section" ? "overflow-y-auto " : "overflow-hidden ") +
-                (cliView === "home" && !cliCommandEcho ? "flex items-center " : "") +
-                (cliView === "not-found" ? "flex flex-col " : "")
-              }
-            >
-              {cliCommandEcho && cliView !== "home" ? (
+            <main className="flex-1 min-h-0 overflow-y-auto px-5 py-8 sm:px-8 lg:px-12 xl:px-16">
+              {cliCommandEcho ? (
                 <motion.div
                   key={cliCommandEcho}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-8 flex items-center gap-2 border-b border-[#16161a] pb-5 text-[13px] text-[#7c7c85]"
+                  className="mb-8 border-b border-[#16161a] pb-5 text-[13px] text-[#7c7c85]"
                 >
-                  <span className="shrink-0 text-[#d4b483]">shivanirai@portfolio:~$</span>
-                  <span className="min-w-0 truncate text-[#e8e8ea]">{cliCommandEchoDisplay}</span>
+                  <span className="text-[#d4b483]">shivanirai@portfolio:~$</span>{" "}
+                  <span className="text-[#e8e8ea]">{cliCommandEcho}</span>
                   <span className="ml-1 inline-block h-[14px] w-[8px] animate-pulse bg-[#ffddc0] align-[-2px]" />
                 </motion.div>
               ) : null}
@@ -455,10 +384,6 @@ export default function Page() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
-                  className={
-                    "w-full " +
-                    (cliView === "not-found" ? "flex flex-1 items-center justify-center" : "")
-                  }
                 >
                   {cliView === "home" ? (
                     <CLIHome
@@ -476,22 +401,18 @@ export default function Page() {
               </AnimatePresence>
             </main>
 
-            <div className="pointer-events-none fixed bottom-5 left-4 right-4 z-40 sm:left-6 sm:right-6 lg:left-10 lg:right-10 xl:left-14 xl:right-14">
+            <div className="sticky bottom-0 z-30">
               <StatusBar
                 commandMode={commandMode}
                 commandValue={cmd}
-                onCommandChange={handleCommandChange}
+                onCommandChange={setCmd}
                 onCommandSubmit={executeCommand}
                 onCommandCancel={() => {
                   setCommandMode(false);
                   setCmd("");
-                  setCLIHistoryIndex(null);
-                  setCLIHistoryDraft("");
                 }}
                 onCommandFocus={() => setCommandMode(true)}
                 onCommandBlur={() => setCommandMode(false)}
-                onCommandHistoryUp={handleCLIHistoryUp}
-                onCommandHistoryDown={handleCLIHistoryDown}
                 toast={toast}
                 time={clock}
               />
@@ -519,12 +440,12 @@ function CLIHome({
   ];
 
   return (
-    <div className="mx-auto w-full max-w-[960px] py-6 text-center">
+    <div className="mx-auto flex min-h-full max-w-[960px] flex-col items-center justify-center py-6 text-center">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mx-auto w-full max-w-[760px]"
+        className="max-w-[760px]"
       >
         <div className="mb-4 text-[11px] uppercase tracking-[0.28em] text-[#4a4a52]">
           terminal session ready
@@ -579,8 +500,6 @@ function CLINotFound({
   command: string;
   onSelect: (tab: CLITab) => void;
 }) {
-  const commandDisplay = formatCLICommandForDisplay(command);
-
   const quickLinks: { tab: CLITab; label: string }[] = [
     { tab: "projects", label: "projects" },
     { tab: "about", label: "about" },
@@ -588,27 +507,25 @@ function CLINotFound({
   ];
 
   return (
-    <div className="mx-auto flex w-full max-w-[960px] flex-col items-center justify-center text-center">
+    <div className="mx-auto flex min-h-[calc(100dvh-220px)] max-w-[960px] flex-col items-center justify-center text-center">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className=""
+        className="max-w-[760px]"
       >
         <div className="mb-6 text-[11px] uppercase tracking-[0.28em] text-[#4a4a52]">
           invalid terminal route
         </div>
         <div className="mb-6 font-['Press_Start_2P',cursive] text-[48px] leading-none text-[#ffddc0] sm:text-[72px]">
-          FOUR-O-FOUR
-          {/* 404 */}
+          404
         </div>
         <div className="mb-2 text-[16px] text-[#e8e8ea]">Command not found</div>
         <div className="mb-4 text-[13px] text-[#7c7c85]">
           {command ? (
-            <div className="mx-auto flex w-full max-w-[520px] items-baseline justify-center gap-2">
-              <span className="shrink-0">Nothing happens at</span>
-              <span className="min-w-0 truncate text-[#d4b483]">:{commandDisplay}</span>
-            </div>
+            <>
+              Nothing happens at <span className="text-[#d4b483]">:{command}</span>
+            </>
           ) : (
             <>Nothing happens here.</>
           )}
@@ -646,68 +563,42 @@ function SharedHeader({
   onToggleMode: () => void;
 }) {
   const navSections: GUISection[] = ["about", "projects", "experience", "contact"];
-  const headerSpring = { type: "spring", stiffness: 120, damping: 24, mass: 0.85 } as const;
 
   return (
     <header className="sticky top-0 z-40 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
-      <motion.div
-        layout
-        className="mx-auto flex h-[68px] w-full items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16 will-change-transform"
-        animate={{ maxWidth: mode === "gui" ? 1440 : 2400 }}
-        transition={headerSpring}
-      >
+      <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
         <span className="text-[16px] font-bold tracking-tight text-[#e8e8ea]">
           {personal.initials}.
         </span>
 
-        <motion.div layout className="flex items-center gap-6">
-          <motion.div layout className="hidden min-h-[20px] items-center md:flex">
-            <AnimatePresence mode="sync" initial={false}>
-            {mode === "gui" ? (
-              <motion.nav
-                key="gui-navbar"
-                layout
-                initial={{ opacity: 0, y: -10, filter: "blur(3px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
-                transition={headerSpring}
-                className="flex items-center gap-8 text-[14px] text-[#a8a8ad]"
-              >
-                {navSections.map((section) => {
-                  const isActive = section === activeGUISection;
-                  return (
-                    <button
-                      key={section}
-                      onClick={() => onNavigate(section)}
-                      className={
-                        "transition-colors duration-150 " +
-                        (isActive ? "text-[#e8e8ea]" : "hover:text-[#e8e8ea]")
-                      }
-                    >
-                      {section}
-                    </button>
-                  );
-                })}
-              </motion.nav>
-            ) : (
-              <motion.div
-                key="cli-navbar-label"
-                layout
-                initial={{ opacity: 0, y: -10, filter: "blur(3px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
-                transition={headerSpring}
-                className="text-[12px] uppercase tracking-[0.18em] text-[#4a4a52]"
-              >
-                terminal interface
-              </motion.div>
-            )}
-            </AnimatePresence>
-          </motion.div>
+        <div className="flex items-center gap-6">
+          {mode === "gui" ? (
+            <nav className="hidden items-center gap-8 text-[14px] text-[#a8a8ad] md:flex">
+              {navSections.map((section) => {
+                const isActive = section === activeGUISection;
+                return (
+                  <button
+                    key={section}
+                    onClick={() => onNavigate(section)}
+                    className={
+                      "transition-colors duration-150 " +
+                      (isActive ? "text-[#e8e8ea]" : "hover:text-[#e8e8ea]")
+                    }
+                  >
+                    {section}
+                  </button>
+                );
+              })}
+            </nav>
+          ) : (
+            <div className="hidden text-[12px] uppercase tracking-[0.18em] text-[#4a4a52] md:block">
+              terminal interface
+            </div>
+          )}
 
           <ModeToggle mode={mode} onToggle={onToggleMode} />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </header>
   );
 }

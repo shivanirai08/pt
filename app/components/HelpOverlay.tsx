@@ -1,14 +1,13 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, X } from "lucide-react";
+import { X } from "lucide-react";
 
 type Props = { open: boolean; onClose: () => void };
 
 export default function HelpOverlay({ open, onClose }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [showCommandList, setShowCommandList] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -38,19 +37,6 @@ export default function HelpOverlay({ open, onClose }: Props) {
         { key: "Q", desc: "close this modal" },
       ],
     },
-  ] as const;
-
-  const commandItems = [
-    { key: ":about", desc: "open About section" },
-    { key: ":projects", desc: "open Projects section" },
-    { key: ":experience", desc: "open Experience section" },
-    { key: ":skills", desc: "open Skills section" },
-    { key: ":contact", desc: "open Contact section" },
-    { key: ":email", desc: "shortcut to Contact section" },
-    { key: ":cv / :resume", desc: "trigger CV download action" },
-    { key: ":github", desc: "open GitHub profile" },
-    { key: ":help", desc: "open this help popup" },
-    { key: ":gui", desc: "switch to GUI mode" },
   ] as const;
 
   return (
@@ -95,48 +81,6 @@ export default function HelpOverlay({ open, onClose }: Props) {
               {sections.map((section) => (
                 <CmdSection key={section.title} title={section.title} items={section.items} />
               ))}
-
-              <div className="">
-                <button
-                  type="button"
-                  onClick={() => setShowCommandList((value) => !value)}
-                  className="flex w-full items-center justify-between py-3 text-left transition-colors hover:bg-[#101013] cursor-pointer"
-                  aria-expanded={showCommandList}
-                >
-                  <span className="text-[11px] uppercase tracking-[0.18em] text-[#d4b483]">
-                    CLI command options
-                  </span>
-                  <ChevronDown
-                    size={15}
-                    className={
-                      "text-[#7c7c85] transition-transform duration-200 " +
-                      (showCommandList ? "rotate-180" : "rotate-0")
-                    }
-                  />
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {showCommandList ? (
-                    <motion.div
-                      key="help-command-list"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="overflow-hidden border-t border-[#2a2a30]"
-                    >
-                      <div className="grid grid-cols-1 gap-1.5 py-3 text-[12px]">
-                        {commandItems.map((item) => (
-                          <div key={item.key} className="flex items-baseline gap-4">
-                            <span className="w-[160px] shrink-0 text-[#d7d7dc]">{item.key}</span>
-                            <span className="flex-1 text-[#9a9aa1]">{item.desc}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-              </div>
             </div>
 
             <div className="border-t border-[#2a2a30] bg-[#101013] px-7 py-4 text-[11.5px] text-[#a8a8ad]">
@@ -182,7 +126,7 @@ function CmdSection({
   items,
 }: {
   title: string;
-  items: readonly { key: string; desc: string }[];
+  items: { key: string; desc: string }[];
 }) {
   return (
     <div>
