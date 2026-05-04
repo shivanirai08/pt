@@ -15,7 +15,7 @@ export const personal = {
     "I turn design thinking into fast, scalable frontend systems.",
   synopsis: "shivani [--design] [--develop] [--deploy] <projects>",
   description:
-    "4+ years shipping production interfaces. I draw the file in Figma, then build it in React — the shorter that loop, the better the product feels.",
+    "2+ years shipping production interfaces. I draw the file in Figma, then build it in React — the shorter that loop, the better the product feels.",
   bio:
     "I bridge design and engineering. Pixel-perfect UIs, clean architecture, zero compromises on performance.",
   role: "Frontend Engineer · UI Designer",
@@ -56,10 +56,10 @@ export const aboutEnv = {
 };
 
 export const socials = [
-  { name: "github", handle: "shivani", url: "https://github.com/shivanirai08" },
-  { name: "twitter", handle: "@shivani", url: "https://twitter.com/shivanirai08" },
-  { name: "behance", handle: "@shivani", url: "https://www.behance.net/shivanirai08" },
-  { name: "linkedin", handle: "/in/shivani", url: "https://linkedin.com/in/shivanirai08" },
+  { name: "github", handle: "shivanirai08", url: "https://github.com/shivanirai08" },
+  { name: "twitter", handle: "shivanirai08", url: "https://twitter.com/shivanirai08" },
+  { name: "behance", handle: "shivanirai08", url: "https://www.behance.net/shivanirai08" },
+  { name: "linkedin", handle: "shivanirai08", url: "https://linkedin.com/in/shivanirai08" },
 ];
 
 export type Project = {

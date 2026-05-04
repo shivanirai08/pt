@@ -37,8 +37,8 @@ type FormValues = Record<StepKey, string>;
 
 const CONTACT_LINKS = [
   { label: "email", value: personal.email, href: `mailto:${personal.email}` },
-  { label: "twitter", value: "@shivanirai_", href: socials.find((s) => s.name === "twitter")?.url ?? "#" },
-  { label: "linkedin", value: "linkedin.com/in/shivanirai", href: socials.find((s) => s.name === "linkedin")?.url ?? "#" },
+  { label: "twitter", value: "shivanirai08", href: socials.find((s) => s.name === "twitter")?.url ?? "#" },
+  { label: "linkedin", value: "shivanirai08", href: socials.find((s) => s.name === "linkedin")?.url ?? "#" },
 ];
 
 export default function CLIContact() {

@@ -126,7 +126,7 @@ function CmdSection({
   items,
 }: {
   title: string;
-  items: { key: string; desc: string }[];
+  items: readonly { key: string; desc: string }[];
 }) {
   return (
     <div>
