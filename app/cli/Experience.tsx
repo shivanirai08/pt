@@ -40,29 +40,29 @@ export default function CLIExperience() {
             <motion.div
               key={e.version}
               variants={fadeUp}
-              className="mb-9 relative"
+              className="mb-12 relative"
             >
-              <div className="flex items-baseline gap-3 mb-2">
+              <div className="flex items-baseline gap-3 mb-3 flex-wrap">
                 <span className="text-[16px] text-[#d4b483] font-medium">
                   ## [{e.version}]
                 </span>
                 <span className="text-[12px] text-[#7c7c85]">{e.range}</span>
                 {i === 0 && (
-                  <span className="text-[10px] bg-[#8fb88f] text-[#0a0a0b] px-1.5 py-0.5 font-medium">
-                    CURRENT
+                  <span className="text-[10px] bg-[#8fb88f] text-[#0a0a0b] px-1.5 py-0.5 font-medium tracking-wide">
+                    LATEST
                   </span>
                 )}
               </div>
-              <div className="text-[14px] text-[#e8e8ea] mb-3">
+              <div className="text-[15px] text-[#e8e8ea] mb-4 leading-relaxed">
                 {e.role}{" "}
                 {e.company && (
                   <span className="text-[#7c7c85]">— {e.company}</span>
                 )}
               </div>
               {e.achievements.length > 0 && (
-                <ul className="space-y-1.5 pl-2">
+                <ul className="space-y-3 pl-2">
                   {e.achievements.map((a) => (
-                    <li key={a} className="flex gap-3 text-[#a8a8ad]">
+                    <li key={a} className="flex gap-3 text-[#a8a8ad] leading-[1.9] max-w-[96%]">
                       <span className="text-[#8fb88f] shrink-0">+</span>
                       <span>{a}</span>
                     </li>

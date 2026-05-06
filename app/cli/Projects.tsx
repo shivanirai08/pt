@@ -78,8 +78,8 @@ export default function CLIProjects() {
                 </p>
 
                 {/* Project preview placeholder + details */}
-                <div className="grid grid-cols-[1fr_300px] gap-6">
-                  <div className="bg-[#111] border border-[#222] h-[150px] flex items-center justify-center">
+                <div className="grid items-stretch gap-6 md:grid-cols-[minmax(240px,0.8fr)_minmax(320px,1.2fr)]">
+                  <div className="flex min-h-[170px] h-full items-center justify-center border border-[#222] bg-[#111] px-6 py-8">
                     <div className="text-center">
                       <div className="text-[16px] text-[#1a1a2e]">
                         {p.name.replace("feat: ", "")}
@@ -89,7 +89,7 @@ export default function CLIProjects() {
                       </div>
                     </div>
                   </div>
-                  <div>
+                  <div className="flex h-full min-w-0 flex-col">
                     <div className="flex flex-wrap gap-1 mb-4">
                       {p.stack.map((s) => (
                         <span
@@ -108,17 +108,29 @@ export default function CLIProjects() {
                         </p>
                       ))}
                     </div>
-                    <div className="flex items-center gap-4 text-[12px]">
-                      {p.links.map((l) => (
+                    <div className="mb-4 space-y-1 text-[12px] text-[#6f737d]">
+                      {p.highlights.map((highlight) => (
+                        <p key={highlight} className="leading-[18px]">
+                          - {highlight}
+                        </p>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 text-[12px]">
+                      {p.links.map((l, index) => (
                         <a
                           key={l.label}
                           href={l.url}
-                          className="text-[#c3c7f4] border-b border-[#c3c7f4] hover:text-[#e8e8ea] transition-colors"
+                          target="_blank"
+                          rel="noreferrer"
+                          className={
+                            index === 0
+                              ? "inline-flex min-h-10 items-center justify-center whitespace-nowrap border border-[#ffddc0] px-4 py-2 text-[#ffddc0] transition-all duration-200 hover:bg-[#ffddc0] hover:text-[#0a0a0a]"
+                              : "inline-flex min-h-10 items-center justify-center whitespace-nowrap border border-[#333] px-4 py-2 text-[#a8a8ad] transition-all duration-200 hover:border-[#c3c7f4] hover:text-[#c3c7f4]"
+                          }
                         >
                           → {l.label}
                         </a>
                       ))}
-                      <span className="text-[#555]">★ 142</span>
                     </div>
                   </div>
                 </div>

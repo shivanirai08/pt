@@ -49,8 +49,8 @@ export default function CLIAbout() {
           {/* ## bio */}
           <motion.div variants={fadeUp} className="mb-8">
             <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-2">## bio</div>
-            <p className="text-[#e8e8ea] leading-relaxed">{personal.bio}</p>
-            <p className="text-[#a8a8ad] leading-relaxed mt-2">{personal.description}</p>
+            <p className="text-[#e8e8ea] leading-[1.9]">{personal.description}</p>
+            <p className="text-[#a8a8ad] leading-[1.9] mt-4">{personal.bio}</p>
           </motion.div>
 
           {/* ## stack */}

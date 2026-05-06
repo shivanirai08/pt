@@ -344,8 +344,7 @@ export default function GUIHome({
                   NAME
                 </div>
                 <div className="text-[15px] text-[#ccc] pl-7 leading-[1.85]">
-                  {personal.name} — {personal.tagline}. Specializing in turning
-                  design visions into production-ready, pixel-perfect interfaces.
+                  {personal.name} — frontend developer with a product brain.
                 </div>
               </div>
 
@@ -362,8 +361,13 @@ export default function GUIHome({
                 <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
                   DESCRIPTION
                 </div>
-                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.85]">
-                  {personal.description}
+                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.9] space-y-6">
+                  <p>
+                    Frontend is where I live, but I&apos;ve never been able to stop at the component boundary. Two years of building real products will do that - you start caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually experiences between the click and the render.
+                  </p>
+                  <p>
+                    Next.js by default. Figma when I need to think out loud. Strong opinions about padding, motion, and whether that shade of grey is actually neutral. All held loosely, none of them quiet.
+                  </p>
                 </div>
               </div>
 
@@ -486,8 +490,8 @@ export default function GUIHome({
       >
           <div className="relative">
             {projects.slice(0, 4).map((project, i) => {
-              const isExpanded = i < 2;
-              const isLast = i === projects.length - 1;
+              const isExpanded = true;
+              const isLast = i === projects.slice(0, 4).length - 1;
               const dotColor =
                 i === 0
                   ? "#ffddc0"
@@ -537,9 +541,9 @@ export default function GUIHome({
                     </div>
 
                     {isExpanded ? (
-                      <div className="flex flex-col xl:flex-row gap-7">
+                      <div className="grid items-stretch gap-7 xl:grid-cols-[minmax(280px,0.8fr)_minmax(420px,1.2fr)]">
                         {/* Screenshot placeholder */}
-                        <div className="flex h-[170px] flex-1 items-center justify-center border border-[#222] bg-[#111] p-6 md:p-7">
+                        <div className="flex min-h-[170px] items-center justify-center self-stretch border border-[#222] bg-[#111] p-6 md:p-7 xl:min-h-0">
                           <div className="text-center">
                             <div className="text-[18px] text-[#1a1a2e]">
                               {project.name.replace("feat: ", "")}
@@ -551,7 +555,7 @@ export default function GUIHome({
                         </div>
 
                         {/* Details */}
-                        <div className="xl:w-[380px] shrink-0">
+                        <div className="flex h-full min-w-0 flex-col">
                           <div className="flex gap-2 flex-wrap mb-4">
                             {project.stack.map((tag) => (
                               <span
@@ -565,7 +569,12 @@ export default function GUIHome({
                           <div className="text-[14px] text-[#888] leading-relaxed mb-4">
                             {project.description}
                           </div>
-                          <div className="flex gap-4 text-[13px]">
+                          <div className="mb-4 space-y-1 text-[13px] leading-relaxed text-[#6f737d]">
+                            {project.highlights.map((highlight) => (
+                              <p key={highlight}>- {highlight}</p>
+                            ))}
+                          </div>
+                          <div className="flex flex-wrap gap-3 text-[13px]">
                             {project.links.map((l, li) => (
                               <a
                                 key={l.label}
@@ -574,8 +583,8 @@ export default function GUIHome({
                                 rel="noreferrer"
                                 className={
                                   li === 0
-                                    ? "text-[#c3c7f4] border-b border-[#c3c7f4] pb-[1px] hover:text-white hover:border-white transition-colors duration-150"
-                                    : "text-[#666] hover:text-[#888] transition-colors duration-150"
+                                    ? "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap border border-[#ffddc0] px-5 py-2.5 leading-none text-[#ffddc0] transition-all duration-200 hover:bg-[#ffddc0] hover:text-[#0a0a0a]"
+                                    : "inline-flex min-h-11 items-center justify-center whitespace-nowrap border border-[#333] px-5 py-2.5 leading-none text-[#a8a8ad] transition-all duration-200 hover:border-[#c3c7f4] hover:text-[#c3c7f4]"
                                 }
                               >
                                 → {l.label}
@@ -655,15 +664,15 @@ export default function GUIHome({
                     )}
                   </div>
 
-                  <div className="text-[16px] text-[#ccc] mb-3">
+                  <div className="text-[16px] text-[#ccc] mb-4 leading-relaxed">
                     {role.role} —{" "}
                     <span className="text-[#c3c7f4]">{role.company}</span>
                   </div>
 
                   {role.achievements.length > 0 && (
-                    <div className="pl-6 text-[14px] leading-loose">
+                    <div className="pl-6 text-[14px] leading-[2] space-y-2">
                       {role.achievements.map((a, j) => (
-                        <div key={j} className="text-[#888]">
+                        <div key={j} className="text-[#888] max-w-[92%]">
                           <span className="text-[#3fb950]">+</span> {a}
                         </div>
                       ))}
