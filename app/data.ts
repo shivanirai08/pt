@@ -239,17 +239,18 @@ export type Skill = {
 };
 
 export const skills: Skill[] = [
-  { name: "react", years: 4, projects: 24, level: 1.0, category: "frontend" },
-  { name: "typescript", years: 3, projects: 18, level: 0.9, category: "frontend" },
-  { name: "css", years: 5, projects: 32, level: 0.95, category: "frontend" },
-  { name: "figma", years: 4, projects: 30, level: 0.9, category: "design" },
-  { name: "next.js", years: 2, projects: 8, level: 0.75, category: "frontend" },
-  { name: "three.js", years: 1, projects: 5, level: 0.55, category: "frontend" },
-  { name: "vue", years: 1, projects: 3, level: 0.45, category: "frontend" },
+  { name: "next.js", years: 3, projects: 18, level: 0.95, category: "frontend" },
+  { name: "css", years: 4, projects: 22, level: 0.95, category: "frontend" },
+  { name: "javascript", years: 4, projects: 24, level: 0.92, category: "frontend" },
+  { name: "react", years: 4, projects: 24, level: 0.9, category: "frontend" },
+  { name: "typescript", years: 3, projects: 18, level: 0.88, category: "frontend" },
+  { name: "figma", years: 3, projects: 20, level: 0.88, category: "design" },
+  { name: "redux", years: 2, projects: 12, level: 0.75, category: "frontend" },
+  { name: "socket.io", years: 2, projects: 8, level: 0.65, category: "tooling" },
 ];
 
 export const secondaryTools = [
-  "Git", "Vite", "Docker", "Redux", "REST", "GraphQL", "Storybook", "Jira", "Neovim", "tmux",
+  "Git", "Tailwind CSS", "Supabase", "WebRTC", "Redux Toolkit", "REST APIs", "Vite", "MongoDB",
 ];
 
 export const certifications = [
