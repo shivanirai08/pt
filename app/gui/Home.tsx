@@ -318,11 +318,7 @@ export default function GUIHome({
             }`}
           >
             <div className="text-[12px] text-[#333]">
-              <span className="text-[#555]">[LOAD]</span> modules:{" "}
-              <span className="text-[#3fb950]">about</span> ·{" "}
-              <span className="text-[#3fb950]">projects</span> ·{" "}
-              <span className="text-[#3fb950]">experience</span> ·{" "}
-              <span className="text-[#3fb950]">contact</span> — all loaded
+              <span className="text-[#555]">[tip]</span> prefer terminals? → press ~ or switch to CLI mode (--- underlined btn)
             </div>
             <div className="text-[12px] text-[#333]">↓ scroll to explore</div>
           </div>
