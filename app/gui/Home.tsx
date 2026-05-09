@@ -76,8 +76,12 @@ export default function GUIHome({
   const [contactPhase, setContactPhase] = useState(0);
   const [contactConnected, setContactConnected] = useState(false);
   const [skillsVisible, setSkillsVisible] = useState(false);
+  const [activeProject, setActiveProject] = useState(0);
+  const [activeExperience, setActiveExperience] = useState(0);
   const mainRef = useRef<HTMLDivElement>(null);
   const contactSequenceStartedRef = useRef(false);
+  const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const experienceRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Boot sequence
   useEffect(() => {
@@ -144,6 +148,40 @@ export default function GUIHome({
       observer.disconnect();
       timers.forEach(clearTimeout);
     };
+  }, []);
+
+  // Active project scroll tracker
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    projectRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) setActiveProject(i);
+        },
+        { threshold: 0.4 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  // Active experience scroll tracker
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    experienceRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) setActiveExperience(i);
+        },
+        { threshold: 0.4 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   // Skills visibility observer
@@ -496,17 +534,15 @@ export default function GUIHome({
             {projects.slice(0, 4).map((project, i) => {
               const isExpanded = true;
               const isLast = i === projects.slice(0, 4).length - 1;
-              const dotColor =
-                i === 0
-                  ? "#ffddc0"
-                  : i === 1
-                  ? "#c3c7f4"
-                  : i === 2
-                  ? "#3fb950"
-                  : "#555";
+              const isActive = i === activeProject;
+              const dotColor = isActive ? "#ffddc0" : "#c3c7f4";
 
               return (
-                <div key={project.id} className="flex gap-9 mb-14 reveal-item">
+                <div
+                  key={project.id}
+                  ref={(el) => { projectRefs.current[i] = el; }}
+                  className="flex gap-9 mb-14 reveal-item"
+                >
                   {/* Timeline */}
                   <div className="flex flex-col items-center shrink-0 w-5">
                     <div
@@ -641,20 +677,15 @@ export default function GUIHome({
             {/* Timeline */}
             <div className="flex-1">
               {experience.map((role, i) => (
-                <div key={role.version} className="mb-10 reveal-item">
+                <div
+                  key={role.version}
+                  ref={(el) => { experienceRefs.current[i] = el; }}
+                  className="mb-10 reveal-item"
+                >
                   <div className="flex items-center gap-3 mb-1 flex-wrap">
                     <span
-                      className="text-[20px] font-bold"
-                      style={{
-                        color:
-                          i === 0
-                            ? "#ffddc0"
-                            : i === 1
-                            ? "#c3c7f4"
-                            : i === 2
-                            ? "#888"
-                            : "#555",
-                      }}
+                      className="text-[20px] font-bold transition-colors duration-300"
+                      style={{ color: i === activeExperience ? "#ffddc0" : "#c3c7f4" }}
                     >
                       ## [{role.version}]
                     </span>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { projects } from "../data";
 
@@ -13,6 +14,24 @@ const fadeUp = {
 };
 
 export default function CLIProjects() {
+  const [activeProject, setActiveProject] = useState(0);
+  const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    projectRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) setActiveProject(i);
+        },
+        { threshold: 0.4 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
   return (
     <motion.div
       variants={stagger}
@@ -31,11 +50,13 @@ export default function CLIProjects() {
 
       <div className="space-y-0">
         {projects.map((p, i) => {
-          const isHead = p.head;
           const isLast = i === projects.length - 1;
+          const isActive = i === activeProject;
+          const accentColor = isActive ? "#ffddc0" : "#c3c7f4";
           return (
             <motion.div
               key={p.id}
+              ref={(el) => { projectRefs.current[i] = el; }}
               variants={fadeUp}
               className="group grid grid-cols-[20px_1fr] gap-6 cursor-pointer"
             >
@@ -43,11 +64,14 @@ export default function CLIProjects() {
               <div className="flex flex-col items-center pt-1">
                 <div
                   className={
-                    isHead
-                      ? "w-3 h-3 rounded-full bg-[#ffddc0] border-2 border-[#ffddc0] shrink-0"
-                      : p.status === "archived"
+                    p.status === "archived"
                       ? "w-3 h-3 rounded-full border border-[#4a4a52] shrink-0"
-                      : "w-3 h-3 rounded-full bg-[#c3c7f4] border-2 border-[#c3c7f4] shrink-0"
+                      : "w-3 h-3 rounded-full shrink-0 border-2"
+                  }
+                  style={
+                    p.status !== "archived"
+                      ? { backgroundColor: accentColor, borderColor: accentColor }
+                      : undefined
                   }
                 />
                 {!isLast && (
@@ -59,10 +83,8 @@ export default function CLIProjects() {
               <div className="pb-8">
                 <div className="flex items-center gap-3 mb-1.5">
                   <span
-                    className={
-                      "text-[15px] font-bold " +
-                      (isHead ? "text-[#ffddc0]" : "text-[#c3c7f4]")
-                    }
+                    className="text-[15px] font-bold transition-colors duration-300"
+                    style={{ color: accentColor }}
                   >
                     {p.name}
                   </span>
