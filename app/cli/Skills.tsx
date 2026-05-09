@@ -61,8 +61,8 @@ export default function CLISkills() {
         <span className="ml-4 text-[#666a73]">CPU usage mapped from project frequency x recency</span>
       </motion.div>
 
-      <motion.div variants={fadeUp} className="rounded border border-[#1d2130] bg-[#0c0f19] px-4 py-4">
-        <div className="grid grid-cols-[52px_1.2fr_80px_80px_120px] gap-3 bg-[#1a1d29] px-3 py-1.5 text-[12px] text-[#a8a8ad]">
+      <motion.div variants={fadeUp} className="rounded border border-[#242428] bg-[#111114] px-4 py-4">
+        <div className="grid grid-cols-[52px_1.2fr_80px_80px_120px] gap-3 bg-[#1a1a1f] px-3 py-1.5 text-[12px] text-[#a8a8ad]">
           <span>PID</span>
           <span>SKILL</span>
           <span>TIME</span>
@@ -70,7 +70,7 @@ export default function CLISkills() {
           <span>STATE</span>
         </div>
 
-        <div className="space-y-0.5 px-3 py-1.5 text-[13px] text-[#2f3440]">·</div>
+        <div className="space-y-0.5 px-3 py-1.5 text-[13px] text-[#2b2b31]">·</div>
 
         <div className="space-y-1 px-3 text-[13px] leading-[1.35]">
           {rows.slice(0, 9).map((row) => (
@@ -84,7 +84,7 @@ export default function CLISkills() {
           ))}
         </div>
 
-        <div className="space-y-0.5 px-3 py-1.5 text-[13px] text-[#2f3440]">·</div>
+        <div className="space-y-0.5 px-3 py-1.5 text-[13px] text-[#2b2b31]">·</div>
 
         <div className="space-y-1 px-3 text-[13px] leading-[1.35]">
           {rows.slice(9).map((row) => (
