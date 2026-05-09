@@ -30,6 +30,11 @@
   box-sizing: border-box;
 }
 
+a,
+img {
+  -webkit-user-drag: none;
+}
+
 body {
   background: var(--color-bg-dark);
   color: var(--color-text);

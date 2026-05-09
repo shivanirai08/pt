@@ -341,7 +341,7 @@ export default function GUIHome({
             }`}
           >
             <div className="text-[12px] text-[#888]">
-              <span className="text-[#555]">[tip]</span> prefer terminals?   press <kbd className="font-sans">~</kbd> or switch to{" "}
+              <span className="text-[#555]">[tip]</span> prefer terminals?   press <kbd>~</kbd> or switch to{" "}
               <button
                 onClick={onSwitchToCLI}
                 className="underline decoration-dashed underline-offset-2 text-[#aaa] hover:text-[#ffddc0] transition-colors duration-150"

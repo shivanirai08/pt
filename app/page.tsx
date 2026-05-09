@@ -87,6 +87,18 @@ export default function Page() {
     return () => clearInterval(t);
   }, []);
 
+  // Prevent native drag ghost preview when moving selected text/elements.
+  useEffect(() => {
+    const handleDragStart = (event: DragEvent) => {
+      event.preventDefault();
+    };
+
+    document.addEventListener("dragstart", handleDragStart);
+    return () => {
+      document.removeEventListener("dragstart", handleDragStart);
+    };
+  }, []);
+
   // Scroll detection for GUI header + active section
   useEffect(() => {
     if (mode !== "gui") return;
