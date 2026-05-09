@@ -43,6 +43,7 @@ const CONTACT_SEQUENCE_DELAYS = {
 type GUIHomeProps = {
   showBootSequence: boolean;
   onBootSequenceComplete: () => void;
+  onSwitchToCLI: () => void;
 };
 
 type SectionCommandRevealProps = {
@@ -63,6 +64,7 @@ type ConnectionLine = {
 export default function GUIHome({
   showBootSequence,
   onBootSequenceComplete,
+  onSwitchToCLI,
 }: GUIHomeProps) {
   const [bootPhase, setBootPhase] = useState(showBootSequence ? 0 : 5);
   const [bootWordCounts, setBootWordCounts] = useState<number[]>(
@@ -317,10 +319,16 @@ export default function GUIHome({
               bootPhase >= 5 ? "opacity-100" : "opacity-0"
             }`}
           >
-            <div className="text-[12px] text-[#333]">
-              <span className="text-[#555]">[tip]</span> prefer terminals? → press ~ or switch to CLI mode (--- underlined btn)
+            <div className="text-[12px] text-[#888]">
+              <span className="text-[#555]">[tip]</span> prefer terminals?   press <kbd className="font-sans">~</kbd> or switch to{" "}
+              <button
+                onClick={onSwitchToCLI}
+                className="underline decoration-dashed underline-offset-2 text-[#aaa] hover:text-[#ffddc0] transition-colors duration-150"
+              >
+                CLI mode
+              </button>
             </div>
-            <div className="text-[12px] text-[#333]">↓ scroll to explore</div>
+            <div className="text-[12px] text-[#666]">↓ scroll to explore</div>
           </div>
         </div>
       </section>

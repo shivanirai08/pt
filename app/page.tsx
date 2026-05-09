@@ -399,6 +399,7 @@ export default function Page() {
               <GUIHome
                 showBootSequence={!hasPlayedGUIBoot}
                 onBootSequenceComplete={handleGUIBootComplete}
+                onSwitchToCLI={toggleMode}
               />
             </main>
 
