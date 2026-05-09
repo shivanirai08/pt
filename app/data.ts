@@ -93,8 +93,8 @@ export const projects: Project[] = [
     role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live", url: "#" },
-      { label: "GitHub", url: "#" },
+      { label: "Live", url: "http://code-to-collab.vercel.app" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/CodeCollab" },
     ],
     highlights: [
       "Sub-100ms cursor sync with line locking across unlimited collaborators",
@@ -116,8 +116,8 @@ export const projects: Project[] = [
     role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live", url: "#" },
-      { label: "GitHub", url: "#" },
+      { label: "Live", url: "https://codeclash.notsg.space/" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/codeclash" },
     ],
     highlights: [
       "Queue-based matchmaking in under 10 seconds, no major CP platform does this natively",
@@ -137,8 +137,8 @@ export const projects: Project[] = [
     role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live", url: "#" },
-      { label: "GitHub", url: "#" },
+      { label: "Live", url: "http://chess-xi-ivory.vercel.app" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/chess" },
     ],
     highlights: [
       "Server-side clock sync accurate to 50ms, zero client-side drift",
@@ -158,8 +158,8 @@ export const projects: Project[] = [
     role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live", url: "#" },
-      { label: "GitHub", url: "#" },
+      { label: "Live", url: "https://classence-frontened-8e7d.vercel.app/" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/classence" },
     ],
     highlights: [
       "Single account for both roles, onboarding friction cut in half",
