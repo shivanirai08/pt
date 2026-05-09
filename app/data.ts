@@ -86,9 +86,9 @@ export const projects: Project[] = [
     date: "2025",
     dateSort: 20250101,
     excerpt:
-      "Real-time collaborative coding, like a shared VS Code session but actually built for it.",
+      "Real-time collaborative coding platform. One shared editor, live cursors, zero context switching.",
     description:
-      "Cursor sync and line-locking across unlimited collaborators with sub-100ms latency reduced code collision to zero during active sessions. GitHub integration cut context switching by keeping push, pull, and diff checks inside the editor. Voice, chat, and code in one screen eliminated the need for 3 separate tools during a typical pair programming session.",
+      "CodeCollab lets developers code together in real time with live cursors, line locking, voice, chat, and GitHub integration in one screen. Built with Next.js 15, Monaco Editor, and Supabase Realtime for presence sync. Redux Toolkit manages shared session state across all panels simultaneously.",
     stack: ["Next.js 15", "Supabase", "Monaco Editor", "Redux Toolkit", "TypeScript"],
     role: "Full Stack",
     status: "live",
@@ -97,9 +97,9 @@ export const projects: Project[] = [
       { label: "GitHub", url: "#" },
     ],
     highlights: [
-      "Sub-100ms cursor sync",
-      "Zero code collisions during active sessions",
-      "Voice, chat, and code in one workspace",
+      "Sub-100ms cursor sync with line locking across unlimited collaborators",
+      "GitHub push, pull, and diff built into the editor, no tab switching",
+      "Voice, chat, and code in one screen, no external tools needed",
     ],
     head: true,
   },
@@ -109,9 +109,9 @@ export const projects: Project[] = [
     date: "2025",
     dateSort: 20250201,
     excerpt:
-      "1v1 coding battles. Three questions. One winner.",
+      "1v1 coding battles and contest management. Built for competitive programmers.",
     description:
-      "Head-to-head matchmaking that connects two players in under 10 seconds - a format no major CP platform offers natively. Real-time leaderboards and auto-evaluated submissions across 4 languages reduced result wait time to near zero. Contest creation flow designed to take under 2 minutes from setup to publish, with role-based access keeping participant management clean at any scale.",
+      "CodeClash matches two players head to head with three DSA questions and decides a winner in real time. Supports full contest creation end to end. Built with Next.js, TypeScript, and a queue-based pairing system. JWT handles role-based auth separating participants from organisers.",
     stack: ["Next.js", "TypeScript", "Redux", "Tailwind CSS", "JWT"],
     role: "Full Stack",
     status: "live",
@@ -120,9 +120,9 @@ export const projects: Project[] = [
       { label: "GitHub", url: "#" },
     ],
     highlights: [
-      "Under 10 seconds to match two players",
-      "Auto-evaluated submissions in 4 languages",
-      "Contest setup to publish in under 2 minutes",
+      "Queue-based matchmaking in under 10 seconds, no major CP platform does this natively",
+      "Auto-evaluated submissions across 4 languages with near zero wait time",
+      "Contest setup to publish in under 2 minutes at any scale",
     ],
   },
   {
@@ -130,9 +130,9 @@ export const projects: Project[] = [
     name: "feat: Chess Platform",
     date: "2024",
     dateSort: 20240301,
-    excerpt: "Real-time chess. One click to match, zero account needed to start.",
+    excerpt: "Real-time chess with multiplayer and AI. One click to match, no account needed.",
     description:
-      "Reduced time-to-first-game to under 30 seconds for both guests and logged-in users. Server-side clock sync kept timing accurate to 50ms, eliminating client-side drift entirely. Stockfish integration across 3 difficulty tiers gave solo players a full practice loop without needing an opponent. Mobile-first board design brought full gameplay to screens under 400px with zero layout breakage.",
+      "Multiplayer chess where guests and logged-in users both get into a match in under 30 seconds. Solo players practice against Stockfish AI across three difficulty tiers. Built with Next.js, Socket.io for move sync, and Node.js with MongoDB for game state and player stats.",
     stack: ["Next.js", "TypeScript", "Socket.io", "Stockfish", "Node.js", "MongoDB"],
     role: "Full Stack",
     status: "live",
@@ -141,9 +141,9 @@ export const projects: Project[] = [
       { label: "GitHub", url: "#" },
     ],
     highlights: [
-      "Under 30 seconds to first game",
-      "Clock sync accurate to 50ms",
-      "Responsive play under 400px",
+      "Server-side clock sync accurate to 50ms, zero client-side drift",
+      "No sign-up wall, guests play immediately with just a name",
+      "Full gameplay on screens under 400px, built mobile-first throughout",
     ],
   },
   {
@@ -151,9 +151,9 @@ export const projects: Project[] = [
     name: "feat: Classence",
     date: "2024",
     dateSort: 20240201,
-    excerpt: "One account, two roles. Teacher and student dashboards under a single toggle.",
+    excerpt: "Online classroom platform. One account, two roles, switched by a single toggle.",
     description:
-      "Eliminated the need for separate accounts per role, reducing onboarding friction by half for users who teach and learn on the same platform. Built-in WebRTC removed dependency on third-party tools like Meet or Zoom, cutting the steps to start a live class from 4 to 1. Assignment tracking and announcements consolidated into one dashboard reduced the number of screens a teacher navigates per session by 60%.",
+      "Classence lets the same person teach and learn from one account without separate logins. Teachers manage classes, live sessions, announcements, and assignments. Students join and submit from the same dashboard. Built with React, Node.js, MongoDB, and WebRTC for live classes without any third-party dependency.",
     stack: ["React", "Redux Toolkit", "Node.js", "MongoDB", "WebRTC", "Tailwind CSS"],
     role: "Full Stack",
     status: "live",
@@ -162,9 +162,9 @@ export const projects: Project[] = [
       { label: "GitHub", url: "#" },
     ],
     highlights: [
-      "Single account across teacher and student roles",
-      "Live class flow reduced from 4 steps to 1",
-      "60% fewer screens per teacher session",
+      "Single account for both roles, onboarding friction cut in half",
+      "WebRTC built in directly, live class setup reduced from 4 steps to 1",
+      "Unified dashboard reduced screens per teacher session by 60%",
     ],
   },
 ];
