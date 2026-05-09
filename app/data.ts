@@ -15,9 +15,9 @@ export const personal = {
     "I turn design thinking into fast, scalable frontend systems.",
   synopsis: "shivani [--design] [--develop] [--deploy] <ideas>",
   description:
-    "Frontend is where I live, but I've never been able to stop at the component boundary. Two years of building real products will do that - you start caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually experiences between the click and the render.",
+    "Frontend is where I live, but I've never been able to stop at the component boundary. Two years of building real products pushed me past it. I started caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually feels between the click and the render.",
   bio:
-    "Next.js by default. Figma when I need to think out loud. Strong opinions about padding, motion, and whether that shade of grey is actually neutral. All held loosely, none of them quiet.",
+    "I reach for Next.js by default, and open Figma when I need to think out loud. I obsess over the details that most people ship past: the 200ms that feels slow, the grey that isn't quite neutral, the motion that either earns its place or gets cut.",
   role: "Frontend Developer · Product Designer",
   pronouns: "she/her",
   status: "open_to_work",
@@ -26,10 +26,12 @@ export const personal = {
 };
 
 export const aboutStack = [
-  { label: "core/", items: "react · typescript · next.js" },
+  { label: "core/", items: "react · typescript · next.js · javascript" },
   { label: "styling/", items: "tailwind · css · framer-motion" },
-  { label: "state/", items: "zustand · react-query" },
-  { label: "tools/", items: "figma · git · vercel · linear" },
+  { label: "state/", items: "zustand · react-query · redux toolkit" },
+  { label: "backend/", items: "node · supabase · mongodb · rest apis" },
+  { label: "realtime/", items: "socket.io · webrtc" },
+  { label: "tools/", items: "figma · git · vercel · vite" },
   { label: "exploring/", items: "rust · three.js · webgpu" },
 ];
 
@@ -41,7 +43,7 @@ export const aboutPhilosophy = [
 ];
 
 export const aboutCurrently = {
-  reading: '"designing data-intensive apps"',
+  reading: '"Designing Data-Intensive Applications"',
   building: "terminal portfolio v2",
   learning: "rust + tauri",
   listening: "tycho · rüfüs · ambient",
@@ -259,8 +261,8 @@ export const certifications = [
 ];
 
 export const stats = {
-  yearsActive: "4+",
-  projectsShipped: "28+",
+  yearsActive: "2+",
+  projectsShipped: "8+",
   yearsLed: 3,
 };
 

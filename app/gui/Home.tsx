@@ -9,8 +9,8 @@ import {
   personal,
   projects,
   experience,
-  skills,
-  secondaryTools,
+  aboutStack,
+  aboutCurrently,
   socials,
   stats,
   certifications,
@@ -75,7 +75,6 @@ export default function GUIHome({
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
   const [contactPhase, setContactPhase] = useState(0);
   const [contactConnected, setContactConnected] = useState(false);
-  const [skillsVisible, setSkillsVisible] = useState(false);
   const [activeProject, setActiveProject] = useState(0);
   const [activeExperience, setActiveExperience] = useState(0);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -182,22 +181,6 @@ export default function GUIHome({
       observers.push(obs);
     });
     return () => observers.forEach((o) => o.disconnect());
-  }, []);
-
-  // Skills visibility observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setSkillsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    const el = document.getElementById("skills-panel");
-    if (el) observer.observe(el);
-    return () => observer.disconnect();
   }, []);
 
   // GSAP scroll reveals
@@ -468,56 +451,29 @@ export default function GUIHome({
                 <div className="text-[#ffddc0] font-bold text-[16px] mb-6">
                   OPTIONS (Skills)
                 </div>
-                <div className="pl-4 space-y-5">
-                  {skills.map((skill) => {
-                    const level = Math.round(skill.level * 100);
-                    const blocks = 20;
-                    const filled = Math.round((level / 100) * blocks);
-                    const bar =
-                      "█".repeat(filled) + "░".repeat(blocks - filled);
-                    return (
-                      <div key={skill.name}>
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-[#c3c7f4] text-[15px]">
-                            --{skill.name}
-                          </span>
-                          <span className="text-[#444] text-[13px]">
-                            {level}%
-                          </span>
-                        </div>
-                        <div className="h-[5px] bg-[#1a1a2e] overflow-hidden">
-                          <div
-                            className="h-full transition-all duration-1000 ease-out"
-                            style={{
-                              width: skillsVisible ? `${level}%` : "0%",
-                              background:
-                                "linear-gradient(90deg, #c3c7f4, #ffddc0)",
-                            }}
-                          />
-                        </div>
-                        <div className="text-[11px] text-[#222] mt-1 tracking-wider">
-                          {bar}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="text-[12px] text-[#7c7c85] mb-3">
+                  <span className="text-[#7c7c85]">&gt;</span> ls ~/stack/
+                </div>
+                <div className="border border-[#242428] bg-[#111114] p-5 space-y-3">
+                  {aboutStack.map((row) => (
+                    <div key={row.label} className="flex gap-4 text-[14px] leading-relaxed">
+                      <span className="text-[#8fb88f] w-[95px] shrink-0">{row.label}</span>
+                      <span className="text-[#a8a8ad]">{row.items}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 text-[12px] text-[#7c7c85]">
+                  tip · type <span className="text-[#d4b483]">~ :projects</span> to see these in action.
                 </div>
               </div>
 
               <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[13px] text-[#888] mb-4">
-                  ALSO PROFICIENT IN
+                <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-3">
+                  CURRENTLY READING
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {secondaryTools.slice(0, 8).map((tool) => (
-                    <span
-                      key={tool}
-                      className="bg-[#111] text-[#888] text-[13px] px-3 py-1.5 border border-[#222]"
-                    >
-                      [{tool}]
-                    </span>
-                  ))}
-                </div>
+                <p className="text-[13px] leading-relaxed text-[#a8a8ad]">
+                  {aboutCurrently.reading} — Kleppmann
+                </p>
               </div>
             </div>
           </div>

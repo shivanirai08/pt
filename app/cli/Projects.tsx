@@ -50,6 +50,7 @@ export default function CLIProjects() {
 
       <div className="space-y-0">
         {projects.map((p, i) => {
+          const isHead = p.head;
           const isLast = i === projects.length - 1;
           const isActive = i === activeProject;
           const accentColor = isActive ? "#ffddc0" : "#c3c7f4";
