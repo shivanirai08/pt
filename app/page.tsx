@@ -46,6 +46,7 @@ export default function Page() {
   const [cliTab, setCLITab] = useState<CLITab>("about");
   const [cliView, setCLIView] = useState<CLIView>("home");
   const [cliInvalidCommand, setCLIInvalidCommand] = useState("");
+  const [cliInvalidMessage, setCLIInvalidMessage] = useState("");
   const [commandMode, setCommandMode] = useState(false);
   const [cmd, setCmd] = useState("");
   const [cliCommandHistory, setCLICommandHistory] = useState<string[]>([]);
@@ -149,6 +150,42 @@ export default function Page() {
     cliCommandTimersRef.current = [];
   }, []);
 
+  const fetchCLIUnknownMessage = useCallback(async (commandText: string) => {
+    const fallback = "unknown command. terminal unimpressed.";
+
+    try {
+      const response = await fetch("/api/terminal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command: commandText }),
+      });
+
+      const data = (await response.json()) as {
+        message?: string;
+        error?: string;
+        details?: unknown;
+      };
+
+      if (!response.ok) {
+        console.error("[terminal-ui] terminal api non-200 response", {
+          status: response.status,
+          body: data,
+        });
+        return fallback;
+      }
+
+      if (typeof data.message === "string" && data.message.trim()) {
+        return data.message.trim();
+      }
+
+      console.error("[terminal-ui] terminal api returned empty message", data);
+      return fallback;
+    } catch (error) {
+      console.error("[terminal-ui] terminal api request failed", error);
+      return fallback;
+    }
+  }, []);
+
   useEffect(() => clearCLICommandPlayback, [clearCLICommandPlayback]);
 
   const scrollToGUISection = useCallback((section: GUISection) => {
@@ -183,6 +220,7 @@ export default function Page() {
       }
       setCLIView(targetCLIView);
       setCLIInvalidCommand("");
+      setCLIInvalidMessage("");
       setMode("cli");
       return;
     }
@@ -227,6 +265,7 @@ export default function Page() {
         setCLITab(tab);
         setCLIView("section");
         setCLIInvalidCommand("");
+        setCLIInvalidMessage("");
       });
     },
     [runCLICommandAnimation]
@@ -280,10 +319,22 @@ export default function Page() {
     }
 
     runCLICommandAnimation(rawInput, () => {
-      setCLIInvalidCommand(rawInput);
-      setCLIView("not-found");
+      void (async () => {
+        const message = await fetchCLIUnknownMessage(rawInput);
+        setCLIInvalidCommand(rawInput);
+        setCLIInvalidMessage(message);
+        setCLIView("not-found");
+      })();
     });
-  }, [cliTab, cmd, navigateCLI, pushToast, runCLICommandAnimation, switchToGUI]);
+  }, [
+    cliTab,
+    cmd,
+    fetchCLIUnknownMessage,
+    navigateCLI,
+    pushToast,
+    runCLICommandAnimation,
+    switchToGUI,
+  ]);
 
   const handleCLIHistoryUp = useCallback(() => {
     if (!cliCommandHistory.length) return;
@@ -477,7 +528,7 @@ export default function Page() {
                     />
                   ) : cliView === "not-found" ? (
                     <CLINotFound
-                      command={cliInvalidCommand}
+                      message={cliInvalidMessage}
                       onSelect={(tab) => navigateCLI(tab, tab)}
                     />
                   ) : (
@@ -584,17 +635,24 @@ function CLIHome({
 }
 
 function CLINotFound({
-  command,
+  message,
   onSelect,
 }: {
-  command: string;
+  message: string;
   onSelect: (tab: CLITab) => void;
 }) {
   const quickLinks: { tab: CLITab; label: string }[] = [
     { tab: "projects", label: "projects" },
     { tab: "about", label: "about" },
+    { tab: "experience", label: "experience" },
+    { tab: "skills", label: "skills" },
     { tab: "contact", label: "contact" },
   ];
+  const responseLines = message
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 1);
 
   return (
     <div className="mx-auto flex min-h-[calc(100dvh-220px)] max-w-[960px] flex-col items-center justify-center text-center">
@@ -602,26 +660,27 @@ function CLINotFound({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="max-w-[760px]"
+        className=""
       >
         <div className="mb-6 text-[11px] uppercase tracking-[0.28em] text-[#4a4a52]">
           invalid terminal route
         </div>
         <div className="mb-6 font-['Press_Start_2P',cursive] text-[48px] leading-none text-[#ffddc0] sm:text-[72px]">
-          404
+          FOUR-O-FOUR
         </div>
-        <div className="mb-2 text-[16px] text-[#e8e8ea]">Command not found</div>
-        <div className="mb-4 text-[13px] text-[#7c7c85]">
-          {command ? (
-            <>
-              Nothing happens at <span className="text-[#d4b483]">:{command}</span>
-            </>
-          ) : (
-            <>Nothing happens here.</>
-          )}
-        </div>
-        <div className="mb-8 text-[13px] text-[#a8a8ad]">
-          Try one of the valid routes below.
+        {responseLines.length > 0 ? (
+          <div className="mb-6 space-y-1 text-md text-[#a8a8ad]">
+            {responseLines.map((line, index) => (
+              <div key={`${line}-${index}`}>{line}</div>
+            ))}
+          </div>
+        ) : (
+          <div className="mb-6 text-[13px] text-[#a8a8ad]">
+            Try one of the valid routes below.
+          </div>
+        )}
+        <div className="mb-3 text-[13px] text-[#7c7c85]">
+          try any of the links below
         </div>
         <div className="flex flex-wrap items-center justify-center gap-3 text-[13px]">
           {quickLinks.map((item) => (
