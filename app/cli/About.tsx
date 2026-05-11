@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { personal, socials, aboutStack, aboutPhilosophy, aboutCurrently, aboutEnv } from "../data";
 
@@ -30,7 +31,7 @@ export default function CLIAbout() {
         <span className="text-[#a8a8ad]">about.md</span>
       </motion.div>
 
-      <div className="grid grid-cols-[1fr_260px] gap-10">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_260px] md:gap-10">
         {/* ── LEFT COLUMN ── */}
         <div>
           {/* ~/identity block */}
@@ -48,8 +49,8 @@ export default function CLIAbout() {
           {/* ## bio */}
           <motion.div variants={fadeUp} className="mb-8">
             <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-2">## bio</div>
-            <p className="text-[#e8e8ea] leading-relaxed">{personal.bio}</p>
-            <p className="text-[#a8a8ad] leading-relaxed mt-2">{personal.description}</p>
+            <p className="text-[#e8e8ea] leading-[1.9]">{personal.description}</p>
+            <p className="text-[#a8a8ad] leading-[1.9] mt-4">{personal.bio}</p>
           </motion.div>
 
           {/* ## stack */}
@@ -84,37 +85,47 @@ export default function CLIAbout() {
 
         {/* ── RIGHT COLUMN ── */}
         <motion.aside variants={fadeUp} className="space-y-5">
-          {/* FIND ME */}
+          {/* FIND ME / CONNECT */}
           <div className="border border-[#242428] p-5 bg-[#111114]">
-            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-4">FIND ME</div>
-            <ul className="space-y-2 text-[12px]">
-              {socials.map((s) => (
-                <li key={s.name} className="flex gap-2 items-baseline">
-                  <span className="text-[#4a4a52]">—</span>
-                  <span className="text-[#7c7c85] w-[52px] shrink-0">{s.name}</span>
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#89b4e8] hover:text-[#b4cffb] transition-colors"
-                  >
-                    {s.handle}
-                  </a>
-                </li>
-              ))}
-              <li className="flex gap-2 items-baseline">
-                <span className="text-[#4a4a52]">—</span>
-                <span className="text-[#7c7c85] w-[52px] shrink-0">email</span>
-                <a
-                  href={`mailto:${personal.email}`}
-                  className="text-[#89b4e8] hover:text-[#b4cffb] transition-colors"
-                >
-                  {personal.email}
-                </a>
-              </li>
-            </ul>
-            <div className="mt-3 text-[10.5px] text-[#4a4a52]">
-              type <span className="text-[#d4b483]">contact</span> for the full reach-out form
+            <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-4">CONNECT</div>
+            
+            <div className="space-y-4 text-[12px]">
+              {/* HANDLE */}
+              <div className="flex gap-2">
+                <span className="text-[#d4b483]">$HANDLE</span>
+                <span className="text-[#7c7c85]">=</span>
+                <span className="text-[#89b4e8]">@shivanirai08</span>
+              </div>
+
+              {/* SOCIALS */}
+              <div>
+                <div className="flex gap-2">
+                  <span className="text-[#d4b483]">$ON</span>
+                  <span className="text-[#7c7c85]">=</span>
+                  <div className="flex flex-wrap gap-1">
+                    {socials.map((s, idx) => (
+                      <a
+                        key={s.name}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#89b4e8] hover:text-[#b4cffb] transition-colors cursor-pointer"
+                      >
+                        {s.name}{idx < socials.length - 1 ? "," : ""}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* EMAIL */}
+              <FindMeEmail />
+
+              {/* RESPONSE TIME */}
+              <div className="flex gap-2">
+                <span className="text-[#7c7c85]">replies in</span>
+                <span className="text-[#a8a8ad]">&lt; 24h</span>
+              </div>
             </div>
           </div>
 
@@ -176,6 +187,40 @@ function EnvRow({ k, v }: { k: string; v: string }) {
     <div className="flex gap-3">
       <span className="text-[#d4b483] w-[72px] shrink-0">{k}</span>
       <span className="text-[#a8a8ad]">{v}</span>
+    </div>
+  );
+}
+
+function FindMeEmail() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(personal.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex gap-2">
+      <span className="text-[#d4b483]">$EMAIL</span>
+      <span className="text-[#7c7c85]">=</span>
+      <div className="flex gap-2 items-center">
+        <span className="text-[#7c7c85]">[</span>
+        <a
+          href={`mailto:${personal.email}`}
+          className="text-[#89b4e8] hover:text-[#b4cffb] transition-colors cursor-pointer"
+        >
+           mail to
+        </a>
+        <span className="text-[#7c7c85]">·</span>
+        <button
+          onClick={handleCopy}
+          className="text-[#89b4e8] hover:text-[#b4cffb] transition-colors cursor-pointer"
+        >
+          {copied ? "copied" : "copy"}
+        </button>
+        <span className="text-[#7c7c85]">]</span>
+      </div>
     </div>
   );
 }

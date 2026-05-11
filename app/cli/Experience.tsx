@@ -34,7 +34,7 @@ export default function CLIExperience() {
         </span>
       </motion.div>
 
-      <div className="grid grid-cols-[1fr_260px] gap-10">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_260px] md:gap-10">
         <div>
           {experience.map((e, i) => (
             <motion.div

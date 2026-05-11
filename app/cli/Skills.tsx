@@ -54,7 +54,7 @@ export default function CLISkills() {
       </motion.div>
 
       <motion.div variants={fadeUp} className="mb-3 text-[12px] text-[#555a64]">
-        top · 17:38 · uptime 4y 280d · <span className="text-[#d4b483]">{learningCount} learning</span> · <span className="text-[#3fb950]">{runningCount} running</span> · 0 zombies
+        top <span className="hidden sm:inline">· 17:38</span> · uptime 4y 280d · <span className="text-[#d4b483]">{learningCount} learning</span> · <span className="text-[#3fb950]">{runningCount} running</span> · 0 zombies
       </motion.div>
       <motion.div variants={fadeUp} className="mb-4 text-[13px] text-[#8b8b92]">
         Tasks: <span className="text-[#d0d0d4]">{rows.length} total</span>, <span className="text-[#3fb950]">{runningCount} running</span>, <span className="text-[#d4b483]">{learningCount} learning</span>
@@ -62,11 +62,11 @@ export default function CLISkills() {
       </motion.div>
 
       <motion.div variants={fadeUp} className="rounded border border-[#242428] bg-[#111114] px-4 py-4">
-        <div className="grid grid-cols-[52px_1.2fr_80px_80px_120px] gap-3 bg-[#1a1a1f] px-3 py-1.5 text-[12px] text-[#a8a8ad]">
+        <div className="grid grid-cols-[44px_minmax(0,1fr)_110px] gap-2 bg-[#1a1a1f] px-3 py-1.5 text-[12px] text-[#a8a8ad] md:grid-cols-[52px_1.2fr_80px_80px_120px] md:gap-3">
           <span>PID</span>
           <span>SKILL</span>
-          <span>TIME</span>
-          <span>PROJECTS</span>
+          <span className="hidden md:block">TIME</span>
+          <span className="hidden md:block">PROJECTS</span>
           <span>STATE</span>
         </div>
 
@@ -74,11 +74,11 @@ export default function CLISkills() {
 
         <div className="space-y-1 px-3 text-[13px] leading-[1.35]">
           {rows.slice(0, 9).map((row) => (
-            <div key={row.pid} className="grid grid-cols-[52px_1.2fr_80px_80px_120px] gap-3 text-[#a8a8ad]">
+            <div key={row.pid} className="grid grid-cols-[44px_minmax(0,1fr)_110px] gap-2 text-[#a8a8ad] md:grid-cols-[52px_1.2fr_80px_80px_120px] md:gap-3">
               <span>{row.pid}</span>
               <span>{row.skill}</span>
-              <span>{row.years}</span>
-              <span>{row.projects}</span>
+              <span className="hidden md:block">{row.years}</span>
+              <span className="hidden md:block">{row.projects}</span>
               <span className={stateClass(row.state)}>{row.state}</span>
             </div>
           ))}
@@ -88,11 +88,11 @@ export default function CLISkills() {
 
         <div className="space-y-1 px-3 text-[13px] leading-[1.35]">
           {rows.slice(9).map((row) => (
-            <div key={row.pid} className="grid grid-cols-[52px_1.2fr_80px_80px_120px] gap-3 text-[#a8a8ad]">
+            <div key={row.pid} className="grid grid-cols-[44px_minmax(0,1fr)_110px] gap-2 text-[#a8a8ad] md:grid-cols-[52px_1.2fr_80px_80px_120px] md:gap-3">
               <span>{row.pid}</span>
               <span>{row.skill}</span>
-              <span>{row.years}</span>
-              <span>{row.projects}</span>
+              <span className="hidden md:block">{row.years}</span>
+              <span className="hidden md:block">{row.projects}</span>
               <span className={stateClass(row.state)}>{row.state}</span>
             </div>
           ))}
