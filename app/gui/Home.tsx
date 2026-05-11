@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { ArrowUpRight, Mail, FileText } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import {
   personal,
   projects,
@@ -76,6 +76,7 @@ export default function GUIHome({
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
   const [contactPhase, setContactPhase] = useState(0);
   const [contactConnected, setContactConnected] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
   const [activeProject, setActiveProject] = useState(0);
   const [activeExperience, setActiveExperience] = useState(0);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -218,6 +219,16 @@ export default function GUIHome({
     }, mainRef);
     return () => ctx.revert();
   }, []);
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(personal.email);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${personal.email}`;
+    }
+  };
 
   return (
     <div ref={mainRef} className="text-[14px] md:text-[15px]">
@@ -819,12 +830,13 @@ export default function GUIHome({
                 >
                   <Mail size={14} /> Send Email →
                 </a>
-                <a
-                  href="#"
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
                   className="inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap border border-[#333] px-11 py-4 text-[15px] leading-none text-[#c3c7f4] transition-colors duration-200 hover:border-[#c3c7f4]"
                 >
-                  <FileText size={14} /> View Resume
-                </a>
+                  <Mail size={14} /> {emailCopied ? "Copied" : "Copy Email"}
+                </button>
               </div>
 
               {/* Social links */}

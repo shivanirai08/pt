@@ -305,10 +305,6 @@ export default function Page() {
     if (input === "skills" || input === "4") { navigateCLI("skills", rawInput); return; }
     if (input === "contact" || input === "5") { navigateCLI("contact", rawInput); return; }
     if (input === "email") { navigateCLI("contact", rawInput); return; }
-    if (input === "cv" || input === "resume") {
-      runCLICommandAnimation(rawInput, () => pushToast("downloading cv.pdf..."));
-      return;
-    }
     if (input === "github") {
       runCLICommandAnimation(rawInput, () => window.open("https://github.com", "_blank"));
       return;

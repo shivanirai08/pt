@@ -27,11 +27,6 @@ export default function CLIExperience() {
         <span className="text-[#7c7c85]">&gt;</span>
         <span className="text-[#e8e8ea]">cat</span>
         <span className="text-[#a8a8ad]">CHANGELOG.md</span>
-        <span className="flex-1" />
-        <span className="text-[10.5px] text-[#4a4a52] tracking-widest">
-          type <span className="text-[#d4b483]">:cv</span> to download full
-          resume
-        </span>
       </motion.div>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_260px] md:gap-10">

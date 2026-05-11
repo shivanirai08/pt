@@ -282,7 +282,6 @@ export const asciiLogo =
 export const commands = [
   { cmd: ":help", desc: "Show this help overlay" },
   { cmd: ":email", desc: "Open compose form to reach me" },
-  { cmd: ":cv", desc: "Download my CV (PDF)" },
   { cmd: ":github", desc: "Open my Github profile" },
   { cmd: ":1 / about", desc: "Go to About" },
   { cmd: ":2 / projects", desc: "Go to Projects" },
