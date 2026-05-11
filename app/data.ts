@@ -67,6 +67,7 @@ export const socials = [
 export type Project = {
   id: string;
   name: string;
+  image: string;
   date: string;
   dateSort: number;
   excerpt: string;
@@ -83,6 +84,7 @@ export const projects: Project[] = [
   {
     id: "codecollab",
     name: "feat: CodeCollab",
+    image: "/projects/codecollab2.png",
     date: "2025",
     dateSort: 20250101,
     excerpt:
@@ -106,6 +108,7 @@ export const projects: Project[] = [
   {
     id: "codeclash",
     name: "feat: CodeClash",
+    image: "/projects/codeclash2.png",
     date: "2025",
     dateSort: 20250201,
     excerpt:
@@ -128,6 +131,7 @@ export const projects: Project[] = [
   {
     id: "chess-platform",
     name: "feat: Chess Platform",
+    image: "/projects/chess2.png",
     date: "2024",
     dateSort: 20240301,
     excerpt: "Real-time chess with multiplayer and AI. One click to match, no account needed.",
@@ -149,6 +153,7 @@ export const projects: Project[] = [
   {
     id: "classence",
     name: "feat: Classence",
+    image: "/projects/classence2.png",
     date: "2024",
     dateSort: 20240201,
     excerpt: "Online classroom platform. One account, two roles, switched by a single toggle.",

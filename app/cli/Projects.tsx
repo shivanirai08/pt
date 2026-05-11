@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { projects } from "../data";
 
 const stagger = {
@@ -102,15 +103,14 @@ export default function CLIProjects() {
 
                 {/* Project preview placeholder + details */}
                 <div className="grid items-stretch gap-6 md:grid-cols-[minmax(240px,0.8fr)_minmax(320px,1.2fr)]">
-                  <div className="flex min-h-[170px] h-full items-center justify-center border border-[#222] bg-[#111] px-6 py-8">
-                    <div className="text-center">
-                      <div className="text-[16px] text-[#1a1a2e]">
-                        {p.name.replace("feat: ", "")}
-                      </div>
-                      <div className="text-[11px] text-[#222]">
-                        [ project screenshot ]
-                      </div>
-                    </div>
+                  <div className="relative min-h-[170px] h-full overflow-hidden border border-[#222] bg-[#111]">
+                    <Image
+                      src={p.image}
+                      alt={`${p.name.replace("feat: ", "")} screenshot`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 40vw"
+                      className="object-cover"
+                    />
                   </div>
                   <div className="flex h-full min-w-0 flex-col">
                     <div className="flex flex-wrap gap-1 mb-4">

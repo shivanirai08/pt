@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { ArrowUpRight, Mail, FileText } from "lucide-react";
 import {
   personal,
@@ -538,16 +539,14 @@ export default function GUIHome({
 
                     {isExpanded ? (
                       <div className="grid items-stretch gap-7 xl:grid-cols-[minmax(280px,0.8fr)_minmax(420px,1.2fr)]">
-                        {/* Screenshot placeholder */}
-                        <div className="flex min-h-[170px] items-center justify-center self-stretch border border-[#222] bg-[#111] p-6 md:p-7 xl:min-h-0">
-                          <div className="text-center">
-                            <div className="text-[18px] text-[#1a1a2e]">
-                              {project.name.replace("feat: ", "")}
-                            </div>
-                            <div className="text-[12px] text-[#222]">
-                              [ project screenshot ]
-                            </div>
-                          </div>
+                        <div className="relative min-h-[170px] self-stretch overflow-hidden border border-[#222] bg-[#111] md:p-0 xl:min-h-0">
+                          <Image
+                            src={project.image}
+                            alt={`${project.name.replace("feat: ", "")} screenshot`}
+                            fill
+                            sizes="(max-width: 1280px) 100vw, 35vw"
+                            className="object-cover"
+                          />
                         </div>
 
                         {/* Details */}
