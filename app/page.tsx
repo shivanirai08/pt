@@ -437,7 +437,7 @@ export default function Page() {
   const ActiveCLI = CLI_TABS[cliTab];
 
   return (
-    <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
+    <div className="min-h-dvh overflow-x-hidden bg-[#0a0a0b] text-[#e8e8ea]">
       <SharedHeader
         mode={mode}
         activeGUISection={activeGUISection}
@@ -466,13 +466,16 @@ export default function Page() {
               />
             </main>
 
-            <footer className="relative mt-24 overflow-visible border-t border-[#16161a] py-10">
+            <footer className="relative mt-24 overflow-visible py-2 sm:py-4 md:py-8 lg:py-10">
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute left-1/2 top-[-56px] hidden -translate-x-1/2 md:flex"
+                className="pointer-events-none absolute left-1/2 top-[-56px] -translate-x-1/2"
               >
-                <div className="select-none whitespace-nowrap font-['Press_Start_2P',cursive] text-[72px] font-bold uppercase leading-none text-[#ffddc0]/[0.12]">
-                  Design. Develop. Deliver.
+                <div
+                  className="select-none whitespace-nowrap font-['Press_Start_2P',cursive] font-bold uppercase leading-none text-[#ffddc0]/[0.12]"
+                  style={{ fontSize: "clamp(20px, 4vw - 5px, 72px)" }}
+                >
+                  Design.Develop.Deliver.
                 </div>
               </div>
               <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 text-center text-[13px] text-[#5b5b62] sm:px-8 lg:px-12 xl:px-16">
