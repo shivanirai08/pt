@@ -4,32 +4,34 @@ export const personal = {
   name: "Shivani",
   fullName: "Shivani Rai",
   initials: "SR",
-  handle: "@shivani",
-  location: "Bengaluru, IN",
+  handle: "@shivanirai08",
+  location: "Uttar Pradesh, IN",
   timezone: "IST (UTC+5:30)",
-  editor: "Neovim btw",
+  editor: "VS Code",
   email: "raishivani1406@gmail.com",
-  tagline: "frontend developer & designer",
+  tagline: "frontend developer with a product brain",
   headline: "I design, build, and ship.",
   intro:
     "I turn design thinking into fast, scalable frontend systems.",
-  synopsis: "shivani [--design] [--develop] [--deploy] <projects>",
+  synopsis: "shivani [--design] [--develop] [--deploy] <ideas>",
   description:
-    "4+ years shipping production interfaces. I draw the file in Figma, then build it in React — the shorter that loop, the better the product feels.",
+    "Frontend is where I live, but I've never been able to stop at the component boundary. Two years of building real products pushed me past it. I started caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually feels between the click and the render.",
   bio:
-    "I bridge design and engineering. Pixel-perfect UIs, clean architecture, zero compromises on performance.",
-  role: "Frontend Engineer · UI Designer",
+    "I reach for Next.js by default, and open Figma when I need to think out loud. I obsess over the details that most people ship past: the 200ms that feels slow, the grey that isn't quite neutral, the motion that either earns its place or gets cut.",
+  role: "Frontend Developer · Product Designer",
   pronouns: "she/her",
   status: "open_to_work",
   responseTime: "< 24h",
-  availability: "open to select freelance + full-time",
+  availability: "true",
 };
 
 export const aboutStack = [
-  { label: "core/", items: "react · typescript · next.js" },
+  { label: "core/", items: "react · typescript · next.js · javascript" },
   { label: "styling/", items: "tailwind · css · framer-motion" },
-  { label: "state/", items: "zustand · react-query" },
-  { label: "tools/", items: "figma · git · vercel · linear" },
+  { label: "state/", items: "zustand · react-query · redux toolkit" },
+  { label: "backend/", items: "node · supabase · mongodb · rest apis" },
+  { label: "realtime/", items: "socket.io · webrtc" },
+  { label: "tools/", items: "figma · git · vercel · vite" },
   { label: "exploring/", items: "rust · three.js · webgpu" },
 ];
 
@@ -41,7 +43,7 @@ export const aboutPhilosophy = [
 ];
 
 export const aboutCurrently = {
-  reading: '"designing data-intensive apps"',
+  reading: '"Designing Data-Intensive Applications"',
   building: "terminal portfolio v2",
   learning: "rust + tauri",
   listening: "tycho · rüfüs · ambient",
@@ -49,17 +51,17 @@ export const aboutCurrently = {
 
 export const aboutEnv = {
   timezone: "IST · UTC+5:30",
-  available: "9-6 · weekdays",
+  available: "true",
   response: "< 24h",
   remote: "yes",
   coffee: "★★★ /day",
 };
 
 export const socials = [
-  { name: "github", handle: "shivani", url: "https://github.com/shivanirai08" },
-  { name: "twitter", handle: "@shivani", url: "https://twitter.com/shivanirai08" },
-  { name: "behance", handle: "@shivani", url: "https://www.behance.net/shivanirai08" },
-  { name: "linkedin", handle: "/in/shivani", url: "https://linkedin.com/in/shivanirai08" },
+  { name: "github", handle: "shivanirai08", url: "https://github.com/shivanirai08" },
+  { name: "twitter", handle: "shivanirai08", url: "https://twitter.com/shivanirai08" },
+  { name: "behance", handle: "shivanirai08", url: "https://www.behance.net/shivanirai08" },
+  { name: "linkedin", handle: "shivanirai08", url: "https://linkedin.com/in/shivanirai08" },
 ];
 
 export type Project = {
@@ -81,85 +83,89 @@ export const projects: Project[] = [
   {
     id: "codecollab",
     name: "feat: CodeCollab",
-    date: "Jun 2024",
-    dateSort: 20240624,
+    date: "2025",
+    dateSort: 20250101,
     excerpt:
-      "Real-time collaborative code editor with live preview and multi-user syntax highlighting.",
+      "Real-time collaborative coding platform. One shared editor, live cursors, zero context switching.",
     description:
-      "Built for pair programming sessions. Features real-time cursor sync, chat, and instant preview. Backed by CRDT for conflict-free editing across sessions.",
-    stack: ["React", "WebSocket", "Node.js"],
-    role: "Lead Frontend",
+      "CodeCollab lets developers code together in real time with live cursors, line locking, voice, chat, and GitHub integration in one screen. Built with Next.js 15, Monaco Editor, and Supabase Realtime for presence sync. Redux Toolkit manages shared session state across all panels simultaneously.",
+    stack: ["Next.js 15", "Supabase", "Monaco Editor", "Redux Toolkit", "TypeScript"],
+    role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live Demo", url: "#" },
-      { label: "Source", url: "#" },
+      { label: "Live", url: "http://code-to-collab.vercel.app" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/CodeCollab" },
     ],
     highlights: [
-      "CRDT-based conflict-free editing",
-      "Sub-50ms cursor sync latency",
-      "Monaco editor integration",
+      "Sub-100ms cursor sync with line locking across unlimited collaborators",
+      "GitHub push, pull, and diff built into the editor, no tab switching",
+      "Voice, chat, and code in one screen, no external tools needed",
     ],
     head: true,
   },
   {
-    id: "gpr-dashboard",
-    name: "feat: GPR Dashboard",
-    date: "Mar 2024",
-    dateSort: 20240315,
+    id: "codeclash",
+    name: "feat: CodeClash",
+    date: "2025",
+    dateSort: 20250201,
     excerpt:
-      "Operations analytics dashboard with real-time D3 charts and custom data visualizations.",
+      "1v1 coding battles and contest management. Built for competitive programmers.",
     description:
-      "Tracks KPIs across 4 departments. Custom charting engine built on D3 for performance over stock libraries.",
-    stack: ["Vue.js", "D3.js", "Python"],
-    role: "Frontend + Design",
+      "CodeClash matches two players head to head with three DSA questions and decides a winner in real time. Supports full contest creation end to end. Built with Next.js, TypeScript, and a queue-based pairing system. JWT handles role-based auth separating participants from organisers.",
+    stack: ["Next.js", "TypeScript", "Redux", "Tailwind CSS", "JWT"],
+    role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live Demo", url: "#" },
-      { label: "Source", url: "#" },
+      { label: "Live", url: "https://codeclash.notsg.space/" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/codeclash" },
     ],
     highlights: [
-      "Custom D3 rendering pipeline",
-      "Real-time WebSocket streams",
-      "45% faster than stock dashboards",
+      "Queue-based matchmaking in under 10 seconds, no major CP platform does this natively",
+      "Auto-evaluated submissions across 4 languages with near zero wait time",
+      "Contest setup to publish in under 2 minutes at any scale",
     ],
   },
   {
-    id: "design-system-kit",
-    name: "feat: Design System Kit",
-    date: "Jan 2023",
-    dateSort: 20230115,
-    excerpt: "Open-source Figma + React component library.",
+    id: "chess-platform",
+    name: "feat: Chess Platform",
+    date: "2024",
+    dateSort: 20240301,
+    excerpt: "Real-time chess with multiplayer and AI. One click to match, no account needed.",
     description:
-      "Published NPM package powering 3 internal products. Full Figma library with tokens that round-trip to code.",
-    stack: ["React", "Figma", "Storybook"],
-    role: "Solo",
+      "Multiplayer chess where guests and logged-in users both get into a match in under 30 seconds. Solo players practice against Stockfish AI across three difficulty tiers. Built with Next.js, Socket.io for move sync, and Node.js with MongoDB for game state and player stats.",
+    stack: ["Next.js", "TypeScript", "Socket.io", "Stockfish", "Node.js", "MongoDB"],
+    role: "Full Stack",
     status: "live",
     links: [
-      { label: "Demo", url: "#" },
-      { label: "Source", url: "#" },
+      { label: "Live", url: "http://chess-xi-ivory.vercel.app" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/chess" },
     ],
     highlights: [
-      "2.1k GitHub stars",
-      "Design tokens → CSS round trip",
-      "42 components shipped",
+      "Server-side clock sync accurate to 50ms, zero client-side drift",
+      "No sign-up wall, guests play immediately with just a name",
+      "Full gameplay on screens under 400px, built mobile-first throughout",
     ],
   },
   {
-    id: "three-playground",
-    name: "feat: Three Playground",
-    date: "Aug 2023",
-    dateSort: 20230810,
-    excerpt: "Collection of WebGL experiments and creative coding projects.",
+    id: "classence",
+    name: "feat: Classence",
+    date: "2024",
+    dateSort: 20240201,
+    excerpt: "Online classroom platform. One account, two roles, switched by a single toggle.",
     description:
-      "Fifteen short experiments exploring shaders, geometry, and motion. Each one self-contained and dependency-light.",
-    stack: ["Three.js", "WebGL"],
-    role: "Solo",
-    status: "archived",
+      "Classence lets the same person teach and learn from one account without separate logins. Teachers manage classes, live sessions, announcements, and assignments. Students join and submit from the same dashboard. Built with React, Node.js, MongoDB, and WebRTC for live classes without any third-party dependency.",
+    stack: ["React", "Redux Toolkit", "Node.js", "MongoDB", "WebRTC", "Tailwind CSS"],
+    role: "Full Stack",
+    status: "live",
     links: [
-      { label: "Demo", url: "#" },
-      { label: "Source", url: "#" },
+      { label: "Live", url: "https://classence-frontened-8e7d.vercel.app/" },
+      { label: "GitHub", url: "https://github.com/shivanirai08/classence" },
     ],
-    highlights: ["15 experiments", "Custom shader library", "60fps target"],
+    highlights: [
+      "Single account for both roles, onboarding friction cut in half",
+      "WebRTC built in directly, live class setup reduced from 4 steps to 1",
+      "Unified dashboard reduced screens per teacher session by 60%",
+    ],
   },
 ];
 
@@ -173,44 +179,56 @@ export type Experience = {
 
 export const experience: Experience[] = [
   {
-    version: "v4.0.0",
-    range: "2023 – Present",
-    role: "Senior Frontend Developer",
-    company: "Company Name",
+    version: "v5.0.0",
+    range: "Dec 2025 – Apr 2026",
+    role: "Frontend Engineer",
+    company: "Hikigai Inc. (Full-Time Remote)",
     achievements: [
-      "Led frontend architecture for 3 major product launches",
-      "Built design system used by 12-person engineering team",
-      "Reduced bundle size by 40% through code splitting",
-      "Mentored 2 junior developers to mid-level",
+      "Built WebRTC consultation modules for a Health AI platform.",
+      "Drop-off rates fell 40% across Chrome, Safari, and Firefox.",
+      "Cut redundant UI code by 25% with a shared React + TypeScript component library across 5 clinical modules.",
+      "Zero missed deadlines across the full patient-doctor workflow.",
+    ],
+  },
+  {
+    version: "v4.0.0",
+    range: "Dec 2025 – Feb 2026",
+    role: "Frontend Developer Intern",
+    company: "QuantumNXT (Remote)",
+    achievements: [
+      "Built 5+ user flows for BOI, a carbon emissions tracking platform, including a live emission calculator on a C# / ASP.NET backend.",
+      "Resolved 15+ UI/UX bugs across 4 dashboard views through sprint-based development.",
     ],
   },
   {
     version: "v3.0.0",
-    range: "2021 – 2023",
-    role: "Frontend Developer",
-    company: "Previous Co",
+    range: "Jul 2025 – Oct 2025",
+    role: "Product Designer",
+    company: "HSLR Limited Technologies (Remote)",
     achievements: [
-      "Shipped 15+ features across 3 products",
-      "Introduced TypeScript to the codebase",
-      "Migrated app from Webpack to Vite",
+      "Led UX research for Ask Ira using Jobs to be Done and Octalysis frameworks to map student motivation across grades 6 to 12.",
+      "Designed the full student query flow - mode selection, concept learning, quiz and practice follow-up screens.",
     ],
   },
   {
     version: "v2.0.0",
-    range: "2020 – 2021",
-    role: "Junior Developer",
-    company: "First Job Co",
+    range: "Apr 2025 – Jul 2025",
+    role: "Product Designer",
+    company: "Algoroot Pvt. Limited (Remote)",
     achievements: [
-      "Built responsive views from Figma mocks",
-      "Learned React, fell in love with components",
+      "Owned end-to-end design for AlgoVox, an AI sales call agent - landing page, dashboard, and all core screens.",
+      "Delivered complete handoff with interactions, animations, and production-ready assets for the frontend team.",
     ],
   },
   {
     version: "v1.0.0",
-    range: "2020",
-    role: "Initial release",
-    company: "Graduated, started coding professionally",
-    achievements: [],
+    range: "Oct 2024 – Present",
+    role: "Frontend Developer & Designer",
+    company: "Software Incubator, SDC",
+    achievements: [
+      "Improved UI consistency by 20% using reusable React and Tailwind CSS components across a large-scale codebase.",
+      "Zero regression defects across 4 sprints for a 45-person team.",
+    ],
   },
 ];
 
@@ -223,17 +241,18 @@ export type Skill = {
 };
 
 export const skills: Skill[] = [
-  { name: "react", years: 4, projects: 24, level: 1.0, category: "frontend" },
-  { name: "typescript", years: 3, projects: 18, level: 0.9, category: "frontend" },
-  { name: "css", years: 5, projects: 32, level: 0.95, category: "frontend" },
-  { name: "figma", years: 4, projects: 30, level: 0.9, category: "design" },
-  { name: "next.js", years: 2, projects: 8, level: 0.75, category: "frontend" },
-  { name: "three.js", years: 1, projects: 5, level: 0.55, category: "frontend" },
-  { name: "vue", years: 1, projects: 3, level: 0.45, category: "frontend" },
+  { name: "next.js", years: 3, projects: 18, level: 0.95, category: "frontend" },
+  { name: "css", years: 4, projects: 22, level: 0.95, category: "frontend" },
+  { name: "javascript", years: 4, projects: 24, level: 0.92, category: "frontend" },
+  { name: "react", years: 4, projects: 24, level: 0.9, category: "frontend" },
+  { name: "typescript", years: 3, projects: 18, level: 0.88, category: "frontend" },
+  { name: "figma", years: 3, projects: 20, level: 0.88, category: "design" },
+  { name: "redux", years: 2, projects: 12, level: 0.75, category: "frontend" },
+  { name: "socket.io", years: 2, projects: 8, level: 0.65, category: "tooling" },
 ];
 
 export const secondaryTools = [
-  "Git", "Vite", "Docker", "Redux", "REST", "GraphQL", "Storybook", "Jira", "Neovim", "tmux",
+  "Git", "Tailwind CSS", "Supabase", "WebRTC", "Redux Toolkit", "REST APIs", "Vite", "MongoDB",
 ];
 
 export const certifications = [
@@ -242,8 +261,8 @@ export const certifications = [
 ];
 
 export const stats = {
-  yearsActive: "4+",
-  projectsShipped: "28+",
+  yearsActive: "2+",
+  projectsShipped: "8+",
   yearsLed: 3,
 };
 

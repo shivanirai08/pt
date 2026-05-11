@@ -21,6 +21,16 @@ export default function HelpOverlay({ open, onClose }: Props) {
 
   const sections = [
     {
+      title: "Main commands",
+      items: [
+        { key: ":about", desc: "open About section" },
+        { key: ":projects", desc: "open Projects section" },
+        { key: ":experience", desc: "open Experience section" },
+        { key: ":skills", desc: "open Skills section" },
+        { key: ":contact", desc: "open Contact section" },
+      ],
+    },
+    {
       title: "Page navigation",
       items: [
         { key: "1-5", desc: "jump between About, Projects, Experience, Skills, and Contact" },

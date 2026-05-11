@@ -19,7 +19,7 @@ Typo detection:
 - Typo format: "keyboard slipped. did you mean '[closest command]'?"
 
 Nonsense input handling:
-- If input is gibberish or does not make semantic sense (e.g., "uii abcd", "vhfujrf"), return a punchy one-line response in the same tone.
+- If input is gibberish or does not make semantic sense (e.g., "uii abcd", "vhfujrf", etc), return a punchy one-line response in the same tone.
 - Keep gibberish responses varied; do not repeat the exact same sentence each time.
 
 Examples:
