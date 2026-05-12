@@ -265,42 +265,63 @@ export const certifications = [
   "AWS Cloud Practitioner",
 ];
 
-export type ImpactStat = {
-  value: string;
-  label: string;
-  context: string;
-};
-
-export type ImpactEntry = {
+export type ExperienceImpact = {
   company: string;
   product: string;
-  stats: ImpactStat[];
+  points: {
+    metric: string;
+    summary: string;
+    context: string;
+  }[];
 };
 
-export const impactLog: ImpactEntry[] = [
+export const experienceImpact: ExperienceImpact[] = [
   {
-    company: "HIKIGAI INC.",
-    product: "HEALTH AI PLATFORM",
-    stats: [
-      { value: "40%", label: "drop-off rate reduced across Chrome, Safari, and Firefox", context: "WebRTC consultation module" },
-      { value: "25%", label: "less redundant UI code after shared component library", context: "React + TypeScript, 5 clinical modules" },
-      { value: "0", label: "missed deadlines across the full patient-doctor workflow", context: "entire product lifecycle" },
+    company: "Hikigai Inc.",
+    product: "Health AI Platform",
+    points: [
+      {
+        metric: "40%",
+        summary: "drop-off rate reduced across Chrome, Safari, and Firefox",
+        context: "WebRTC consultation module",
+      },
+      {
+        metric: "25%",
+        summary: "less redundant UI code after shared component library",
+        context: "React + TypeScript, 5 clinical modules",
+      },
     ],
   },
   {
-    company: "QUANTUMNXT",
-    product: "CARBON EMISSIONS PLATFORM",
-    stats: [
-      { value: "5+", label: "user flows built for BOI including a live emission calculator", context: "C# / ASP.NET backend integration" },
-      { value: "15+", label: "UI/UX bugs resolved across 4 dashboard views", context: "sprint-based development" },
+    company: "QuantumNXT",
+    product: "Carbon Emissions Platform",
+    points: [
+      {
+        metric: "5+",
+        summary: "user flows built for BOI including a live emission calculator",
+        context: "C# / ASP.NET backend integration",
+      },
+      {
+        metric: "15+",
+        summary: "UI/UX bugs resolved across 4 dashboard views",
+        context: "sprint-based development",
+      },
     ],
   },
   {
-    company: "HSLR LIMITED",
-    product: "EDTECH PRODUCT",
-    stats: [
-      { value: "6-12", label: "grades mapped through UX research using JTBD and Octalysis", context: "Ask Ira, student motivation flows" },
-      { value: "1", label: "end-to-end student query flow designed from scratch", context: "mode selection, quiz, practice follow-up" },
+    company: "HSLR Limited",
+    product: "EdTech Product",
+    points: [
+      {
+        metric: "6-12",
+        summary: "grades mapped through UX research using JTBD and Octalysis",
+        context: "Ask Ira, student motivation flows",
+      },
+      {
+        metric: "1",
+        summary: "end-to-end student query flow designed from scratch",
+        context: "mode selection, quiz, practice follow-up",
+      },
     ],
   },
 ];

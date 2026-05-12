@@ -14,7 +14,7 @@ import {
   aboutCurrently,
   socials,
   stats,
-  certifications,
+  experienceImpact,
 } from "../data";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -718,12 +718,37 @@ export default function GUIHome({
               </div>
 
               <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[13px] text-[#555] mb-3">
-                  CERTIFICATIONS
+                <div className="text-[13px] text-[#555] mb-5">
+                  ❯ cat impact.log
                 </div>
-                <div className="text-[13px] text-[#888] leading-loose">
-                  {certifications.map((c) => (
-                    <div key={c}>· {c}</div>
+                <div className="space-y-6">
+                  {experienceImpact.map((group, gi) => (
+                    <div key={group.company}>
+                      {gi > 0 && <div className="border-t border-[#1e1e1e] mb-5" />}
+                      <div className="text-[11px] tracking-[0.1em] uppercase text-[#444] mb-3 font-medium">
+                        {group.company} · {group.product}
+                      </div>
+                      <div className="space-y-3">
+                        {group.points.map((point) => (
+                          <div
+                            key={`${group.company}-${point.metric}`}
+                            className="flex gap-3 items-baseline"
+                          >
+                            <span className="text-[18px] font-bold text-[#ffddc0] leading-none shrink-0 w-10 text-right tabular-nums">
+                              {point.metric}
+                            </span>
+                            <div>
+                              <div className="text-[13px] text-[#ccc] leading-snug">
+                                {point.summary}
+                              </div>
+                              <div className="text-[11px] text-[#555] mt-[2px]">
+                                {point.context}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
