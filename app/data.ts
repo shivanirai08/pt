@@ -265,6 +265,46 @@ export const certifications = [
   "AWS Cloud Practitioner",
 ];
 
+export type ImpactStat = {
+  value: string;
+  label: string;
+  context: string;
+};
+
+export type ImpactEntry = {
+  company: string;
+  product: string;
+  stats: ImpactStat[];
+};
+
+export const impactLog: ImpactEntry[] = [
+  {
+    company: "HIKIGAI INC.",
+    product: "HEALTH AI PLATFORM",
+    stats: [
+      { value: "40%", label: "drop-off rate reduced across Chrome, Safari, and Firefox", context: "WebRTC consultation module" },
+      { value: "25%", label: "less redundant UI code after shared component library", context: "React + TypeScript, 5 clinical modules" },
+      { value: "0", label: "missed deadlines across the full patient-doctor workflow", context: "entire product lifecycle" },
+    ],
+  },
+  {
+    company: "QUANTUMNXT",
+    product: "CARBON EMISSIONS PLATFORM",
+    stats: [
+      { value: "5+", label: "user flows built for BOI including a live emission calculator", context: "C# / ASP.NET backend integration" },
+      { value: "15+", label: "UI/UX bugs resolved across 4 dashboard views", context: "sprint-based development" },
+    ],
+  },
+  {
+    company: "HSLR LIMITED",
+    product: "EDTECH PRODUCT",
+    stats: [
+      { value: "6-12", label: "grades mapped through UX research using JTBD and Octalysis", context: "Ask Ira, student motivation flows" },
+      { value: "1", label: "end-to-end student query flow designed from scratch", context: "mode selection, quiz, practice follow-up" },
+    ],
+  },
+];
+
 export const stats = {
   yearsActive: "2+",
   projectsShipped: "8+",

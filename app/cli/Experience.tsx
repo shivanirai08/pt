@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { experience, stats, certifications } from "../data";
+import { experience, stats, impactLog } from "../data";
 
 const stagger = {
   hidden: {},
@@ -81,17 +81,44 @@ export default function CLIExperience() {
           </div>
 
           <div className="border border-[#242428] p-5 bg-[#111114]">
-            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-3">
-              CERTIFICATIONS
+            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-4">
+              <span className="text-[#d4b483]">&gt;</span> cat impact.log
             </div>
-            <ul className="space-y-1.5 text-[12px]">
-              {certifications.map((c) => (
-                <li key={c} className="flex gap-2 text-[#a8a8ad]">
-                  <span className="text-[#d4b483]">—</span>
-                  <span>{c}</span>
-                </li>
+            <div className="space-y-5">
+              {impactLog.map((entry) => (
+                <div key={entry.company}>
+                  <div className="text-[9.5px] tracking-[0.15em] text-[#7c7c85] mb-3">
+                    {entry.company}
+                    <span className="text-[#3a3a40] mx-1">·</span>
+                    {entry.product}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {entry.stats.map((s) => (
+                      <div key={s.label} className="border border-[#1e1e22] p-2.5 bg-[#0d0d10]">
+                        <div className="text-[18px] font-medium leading-none mb-1.5"
+                          style={{
+                            color:
+                              s.value === "0" ? "#d4b483"
+                              : s.value.includes("%") ? "#6eb5d4"
+                              : "#8fb88f",
+                          }}
+                        >
+                          {s.value}
+                          {s.value !== "0" && !s.value.includes("%") && !s.value.includes("-") && (
+                            <span className="text-[10px] align-super"></span>
+                          )}
+                          {s.value.includes("%") && (
+                            <span className="text-[10px] align-super"></span>
+                          )}
+                        </div>
+                        <div className="text-[9.5px] text-[#a8a8ad] leading-[1.5] mb-1.5">{s.label}</div>
+                        <div className="text-[8.5px] text-[#5a5a62]">{s.context}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </motion.aside>
       </div>
