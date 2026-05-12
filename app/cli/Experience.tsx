@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { experience, stats, certifications } from "../data";
+import { experience, stats, experienceImpact } from "../data";
 
 const stagger = {
   hidden: {},
@@ -81,17 +81,39 @@ export default function CLIExperience() {
           </div>
 
           <div className="border border-[#242428] p-5 bg-[#111114]">
-            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-3">
-              CERTIFICATIONS
+            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-4">
+              <span className="text-[#d4b483]">&gt;</span> cat impact.log
             </div>
-            <ul className="space-y-1.5 text-[12px]">
-              {certifications.map((c) => (
-                <li key={c} className="flex gap-2 text-[#a8a8ad]">
-                  <span className="text-[#d4b483]">—</span>
-                  <span>{c}</span>
-                </li>
+            <div className="space-y-5">
+              {experienceImpact.map((group, gi) => (
+                <div key={group.company}>
+                  {gi > 0 && <div className="border-t border-[#1c1c20] mb-4" />}
+                  <div className="text-[10px] tracking-[0.12em] uppercase text-[#3f3f47] mb-2.5 font-medium">
+                    {group.company} · {group.product}
+                  </div>
+                  <div className="space-y-2.5">
+                    {group.points.map((point) => (
+                      <div
+                        key={`${group.company}-${point.metric}`}
+                        className="flex gap-3 items-baseline"
+                      >
+                        <span className="text-[16px] font-bold text-[#d4b483] leading-none shrink-0 w-9 text-right tabular-nums">
+                          {point.metric}
+                        </span>
+                        <div>
+                          <div className="text-[12px] text-[#c8c8cc] leading-snug">
+                            {point.summary}
+                          </div>
+                          <div className="text-[10.5px] text-[#3f3f47] mt-[2px]">
+                            {point.context}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </motion.aside>
       </div>
