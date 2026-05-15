@@ -30,6 +30,10 @@ const CLI_COMMAND_TYPE_MS = 38;
 const CLI_COMMAND_SETTLE_MS = 180;
 const CLI_DISPLAY_COMMAND_MAX = 40;
 
+function normalizeCLICommand(input: string) {
+  return input.trim().toLowerCase().replace(/^[:/]+/, "").trim();
+}
+
 function formatCLICommandForDisplay(command: string) {
   const sanitized = command
     .replace(/[\u0000-\u001F\u007F]/g, " ")
@@ -286,7 +290,7 @@ export default function Page() {
 
   const executeCommand = useCallback(() => {
     const rawInput = cmd.trim();
-    const input = rawInput.toLowerCase();
+    const input = normalizeCLICommand(rawInput);
     setCmd("");
     setCLIHistoryIndex(null);
     setCLIHistoryDraft("");
