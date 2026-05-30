@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { projects, personal, type Project } from "../../data";
 
 type ProjectPageProps = {
@@ -586,7 +586,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </section>
 
         <footer className="mt-16 border-t border-[#16161a] pt-10 text-[12px] text-[#7c7c85]">
-          <div className="mb-4 flex items-center gap-2 text-[#5d5d65]">
+          <div className="mb-4 flex items-center gap-2 pl-1 text-[#5d5d65]">
             <span className="text-[#8f8f96]">&gt;</span>
             <span>git log --oneline ~/projects</span>
           </div>
@@ -594,39 +594,36 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="grid gap-4 lg:grid-cols-2">
             <Link
               href={`/projects/${previousProject.id}`}
-              className="group border border-[#1f1f24] bg-[#101114] p-5 transition-colors duration-200 hover:border-[#ffddc0]"
+              className="group border border-[#1f1f24] bg-[#101114] px-5 py-4 transition-colors duration-200 hover:border-[#ffddc0]"
             >
-              <div className="mb-3 text-[11px] uppercase tracking-[0.18em] text-[#7c7c85]">
-                previous
+              <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#7c7c85]">
+                - previous
               </div>
-              <div className="text-[15px] text-[#f2f2f3] transition-colors duration-200 group-hover:text-[#ffddc0]">
+              <div className="text-[16px] text-[#f2f2f3] transition-colors duration-200 group-hover:text-[#ffddc0]">
                 {previousProject.name}
               </div>
-              <div className="mt-1 text-[13px] leading-relaxed text-[#a8a8ad]">
+              <div className="mt-1 max-w-[26ch] text-[13px] leading-relaxed text-[#a8a8ad]">
                 {previousProject.excerpt}
               </div>
             </Link>
 
             <Link
               href={`/projects/${nextProject.id}`}
-              className="group border border-[#1f1f24] bg-[#101114] p-5 text-right transition-colors duration-200 hover:border-[#ffddc0]"
+              className="group border border-[#1f1f24] bg-[#101114] px-5 py-4 text-right transition-colors duration-200 hover:border-[#ffddc0]"
             >
-              <div className="mb-3 text-[11px] uppercase tracking-[0.18em] text-[#7c7c85]">
-                next
+              <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#7c7c85]">
+                next -
               </div>
-              <div className="text-[15px] text-[#f2f2f3] transition-colors duration-200 group-hover:text-[#ffddc0]">
+              <div className="text-[16px] text-[#f2f2f3] transition-colors duration-200 group-hover:text-[#ffddc0]">
                 {nextProject.name}
               </div>
-              <div className="mt-1 text-[13px] leading-relaxed text-[#a8a8ad]">
+              <div className="mt-1 ml-auto max-w-[26ch] text-[13px] leading-relaxed text-[#a8a8ad]">
                 {nextProject.excerpt}
               </div>
             </Link>
           </div>
 
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#16161a] pt-6">
-            <Link href="/#projects" className="transition-colors duration-200 hover:text-[#ffddc0]">
-              back to projects section
-            </Link>
             <div className="flex flex-wrap gap-4">
               <span>~/projects/{project.id}</span>
               <span>last updated {project.date}</span>
