@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, Mail } from "lucide-react";
 import {
   personal,
@@ -549,14 +550,17 @@ export default function GUIHome({
                     </div>
 
                     {isExpanded ? (
-                      <div className="grid items-stretch gap-7 xl:grid-cols-[minmax(280px,0.8fr)_minmax(420px,1.2fr)]">
+                      <Link
+                        href={`/projects/${project.id}`}
+                        className="group grid items-stretch gap-7 xl:grid-cols-[minmax(280px,0.8fr)_minmax(420px,1.2fr)]"
+                      >
                         <div className="relative min-h-[170px] self-stretch overflow-hidden border border-[#222] bg-[#111] md:p-0 xl:min-h-0">
                           <Image
                             src={project.image}
                             alt={`${project.name.replace("feat: ", "")} screenshot`}
                             fill
                             sizes="(max-width: 1280px) 100vw, 35vw"
-                            className="object-cover"
+                            className="object-cover transition-transform duration-300 group-hover:scale-[1.01]"
                           />
                         </div>
 
@@ -580,7 +584,8 @@ export default function GUIHome({
                               <p key={highlight}>- {highlight}</p>
                             ))}
                           </div>
-                          <div className="flex flex-wrap gap-3 text-[13px]">
+
+                          <div className="mt-auto flex flex-wrap justify-start gap-3 text-[13px]">
                             {project.links.map((l, li) => (
                               <a
                                 key={l.label}
@@ -598,7 +603,7 @@ export default function GUIHome({
                             ))}
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ) : (
                       <div className="flex gap-4 text-[13px] items-center">
                         <div className="flex gap-2 flex-wrap">
@@ -625,6 +630,7 @@ export default function GUIHome({
                         ))}
                       </div>
                     )}
+
                   </div>
                 </div>
               );
