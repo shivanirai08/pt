@@ -265,21 +265,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <div className="absolute left-1/2 top-0 h-[520px] w-[920px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(142,255,150,0.07)_0%,rgba(142,255,150,0.03)_28%,transparent_72%)] blur-3xl" />
       </div>
 
-      <header className="sticky top-0 z-50 border-b border-[#17171b] bg-[#09090a]/94 backdrop-blur">
-        <div className="mx-auto flex h-[70px] w-full max-w-[1480px] items-center justify-between px-5 sm:px-8 xl:px-10">
-          <div className="flex items-center gap-2 text-[13px] text-[#8f8f96]">
-            <span className="text-[#e8e8ea]">{personal.handle.slice(1)}</span>
-            <span>•</span>
-            <span>~/projects</span>
-            <span>•</span>
-            <span>{project.id}</span>
-          </div>
+      <header className="sticky top-0 z-50 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
+        <div className="mx-auto flex h-[68px] w-full max-w-[1480px] items-center justify-between px-5 sm:px-8 xl:px-10">
+          <span className="text-[16px] font-bold tracking-tight text-[#e8e8ea]">
+            {personal.initials}.
+          </span>
 
           <nav className="flex items-center gap-8 text-[14px] text-[#a8a8ad]">
             <Link href="/#about" className="transition-colors duration-150 hover:text-[#e8e8ea]">
               about
             </Link>
-            <Link href="/#projects" className="text-[#e8e8ea] transition-colors duration-150 hover:text-[#e8e8ea]">
+            <Link href="/#projects" className="transition-colors duration-150 hover:text-[#e8e8ea]">
               projects
             </Link>
             <Link href="/#experience" className="transition-colors duration-150 hover:text-[#e8e8ea]">
