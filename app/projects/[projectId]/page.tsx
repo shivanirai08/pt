@@ -1,7 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Code2,
+  GitBranch,
+  MessageSquareQuote,
+  Radio,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { projects, personal, type Project } from "../../data";
 
@@ -38,7 +47,9 @@ function SectionHeading({
 }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)]">
-      <div className="pt-1 text-[12px] text-[#7c7c85]">## {index} - {file}</div>
+      <div className="pt-1 text-[13px] font-medium tracking-[0.2em] text-[#8fb88f]">
+        ## {index} - {file}
+      </div>
       <div className="space-y-4">
         <h2 className="max-w-4xl text-[22px] font-semibold tracking-[-0.04em] text-[#f1f1f2] sm:text-[26px] lg:text-[30px]">
           {title}
@@ -81,6 +92,28 @@ function StatTile({ label, value }: Metric) {
 
 function Tag({ children }: { children: ReactNode }) {
   return <span className="border border-[#303037] bg-[#0d0d10] px-3 py-1 text-[12px] text-[#c9c9cf]">{children}</span>;
+}
+
+function FeatureVisual({ icon: Icon, accent, label }: { icon: React.ComponentType<{ className?: string }>; accent: string; label: string; }) {
+  return (
+    <div className="relative flex h-[120px] items-center justify-center overflow-hidden border-b border-[#1b1b20] bg-[#0d0d10] px-4 sm:h-[160px]">
+      <div
+        className="absolute inset-0 opacity-70"
+        style={{
+          background: `radial-gradient(circle at 50% 45%, ${accent}22 0%, transparent 55%)`,
+        }}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:18px_18px] opacity-20" />
+      <div className="relative flex flex-col items-center gap-2 text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[#2b2b31] bg-[#111114]" style={{ boxShadow: `0 0 0 1px ${accent}33 inset, 0 0 24px ${accent}22`, color: accent }}>
+          <Icon className="h-6 w-6" />
+        </div>
+        <div className="text-[11px] uppercase tracking-[0.24em]" style={{ color: accent }}>
+          {label}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -336,46 +369,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ))}
           </div>
 
-          <div className="flex flex-col gap-3 xl:hidden">
-            <div className="flex gap-2">
-              {project.links.map((linkItem) => (
-                <a
-                  key={linkItem.label}
-                  href={linkItem.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 border border-[#2a2a30] bg-[#0e0f12] px-4 py-2 text-[13px] text-[#e8e8ea] transition-colors duration-200 hover:border-[#8fb88f] hover:text-[#8fb88f]"
-                >
-                  <span className="text-[12px] text-[#8f8f96]">↗</span>
-                  <span>{linkItem.label}</span>
-                </a>
-              ))}
-            </div>
-
-            <Panel className="p-4">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-[#7c7c85]">project meta</div>
-              <div className="mt-4 grid gap-4 text-[13px] text-[#a8a8ad] sm:grid-cols-2">
-                {heroMetrics.map((metric) => (
-                  <div key={metric.label} className="space-y-1">
-                    <div className="text-[#7c7c85]">{metric.label.toLowerCase()}</div>
-                    <div className="text-[#f2f2f3]">{metric.value}</div>
-                  </div>
-                ))}
-                <div className="space-y-1 sm:col-span-2">
-                  <div className="text-[#7c7c85]">project</div>
-                  <div className="text-[#f2f2f3]">{project.id}</div>
-                </div>
-              </div>
-            </Panel>
-
-            <Panel className="p-4">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-[#7c7c85]">summary</div>
-              <div className="mt-3 space-y-2.5 text-[13px] leading-relaxed text-[#a8a8ad]">
-                <p>{project.description}</p>
-              </div>
-            </Panel>
-          </div>
-
           <div className="relative overflow-hidden border border-[#1f1f24] bg-[#0d0d10] p-3 sm:p-4">
             <div className="flex items-center gap-2 border-b border-[#1c1c20] pb-3 text-[#5d5d65]">
               <span className="h-3 w-3 rounded-full bg-[#2d2d32]" />
@@ -384,7 +377,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <span className="ml-2 text-[12px] text-[#72727a]">codecollab.app/r/sum-fn</span>
             </div>
 
-            <div className="relative mt-3 min-h-[310px] overflow-hidden border border-[#19191e] bg-[#0b0b0e] sm:min-h-[500px]">
+            <div className="relative mt-3 min-h-[240px] overflow-hidden border border-[#19191e] bg-[#0b0b0e] sm:min-h-[360px] lg:min-h-[390px]">
               <Image
                 src={project.image}
                 alt={`${project.name.replace("feat: ", "")} screenshot`}
@@ -539,11 +532,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         <SectionShell index="05" file="features.md" title='Six features that earn the "one tool" claim.'>
           <div className="grid gap-4 md:grid-cols-2">
-            {featureCards.map((card) => (
+            {featureCards.map((card, index) => (
               <div key={card.title} className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
-                <div className="flex h-[120px] items-center justify-center border-b border-[#1b1b20] bg-[#0d0d10] px-4 text-center text-[12px] text-[#5f5f66] sm:h-[160px]">
-                  {card.placeholder}
-                </div>
+                <FeatureVisual
+                  icon={
+                    [Code2, MessageSquareQuote, GitBranch, ShieldCheck, Users, Radio][index]
+                  }
+                  accent={
+                    ["#8fb88f", "#c3c7f4", "#ffddc0", "#d4b483", "#9db7ff", "#7bd0c4"][index]
+                  }
+                  label={card.title.split(" ")[0]}
+                />
                 <div className="p-4 sm:p-5">
                   <div className="text-[14px] text-[#f2f2f3]">{card.title}</div>
                   <div className="mt-2 text-[13px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
