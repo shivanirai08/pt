@@ -4,10 +4,10 @@ import { notFound } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
-  Code2,
   GitBranch,
   MessageSquareQuote,
-  Radio,
+  Mic,
+  MousePointer2,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -369,7 +369,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ))}
           </div>
 
-          <div className="relative overflow-hidden border border-[#1f1f24] bg-[#0d0d10] p-3 sm:p-4">
+          <div className="relative overflow-hidden border border-[#1f1f24] bg-[#0d0d10] p-2.5 sm:p-3">
             <div className="flex items-center gap-2 border-b border-[#1c1c20] pb-3 text-[#5d5d65]">
               <span className="h-3 w-3 rounded-full bg-[#2d2d32]" />
               <span className="h-3 w-3 rounded-full bg-[#2d2d32]" />
@@ -377,7 +377,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <span className="ml-2 text-[12px] text-[#72727a]">codecollab.app/r/sum-fn</span>
             </div>
 
-            <div className="relative mt-3 min-h-[240px] overflow-hidden border border-[#19191e] bg-[#0b0b0e] sm:min-h-[360px] lg:min-h-[390px]">
+            <div className="relative mt-2.5 min-h-[190px] overflow-hidden border border-[#19191e] bg-[#0b0b0e] sm:min-h-[290px] lg:min-h-[320px]">
               <Image
                 src={project.image}
                 alt={`${project.name.replace("feat: ", "")} screenshot`}
@@ -394,34 +394,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </div>
           </div>
-
-          <div className="grid gap-4 xl:grid-cols-2">
-            <Panel className="p-4">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-[#7c7c85]">project meta</div>
-              <div className="mt-4 grid gap-4 text-[13px] text-[#a8a8ad] sm:grid-cols-2">
-                {heroMetrics.map((metric) => (
-                  <div key={metric.label} className="space-y-1">
-                    <div className="text-[#7c7c85]">{metric.label.toLowerCase()}</div>
-                    <div className="text-[#f2f2f3]">{metric.value}</div>
-                  </div>
-                ))}
-                <div className="space-y-1 sm:col-span-2">
-                  <div className="text-[#7c7c85]">project</div>
-                  <div className="text-[#f2f2f3]">{project.id}</div>
-                </div>
-              </div>
-            </Panel>
-
-            <Panel className="p-4">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-[#7c7c85]">summary</div>
-              <div className="mt-3 space-y-2.5 text-[13px] leading-relaxed text-[#a8a8ad]">
-                <p>{project.description}</p>
-              </div>
-            </Panel>
-          </div>
         </section>
 
-        <section className="mt-14 grid gap-4 border-t border-[#16161a] pt-14 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="mt-10 grid gap-4 border-t border-[#16161a] pt-10 sm:grid-cols-2 xl:grid-cols-4">
           {heroMetrics.map((metric) => (
             <StatTile key={metric.label} {...metric} />
           ))}
@@ -536,7 +511,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <div key={card.title} className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
                 <FeatureVisual
                   icon={
-                    [Code2, MessageSquareQuote, GitBranch, ShieldCheck, Users, Radio][index]
+                    [MousePointer2, Mic, MessageSquareQuote, GitBranch, Users, ShieldCheck][index]
                   }
                   accent={
                     ["#8fb88f", "#c3c7f4", "#ffddc0", "#d4b483", "#9db7ff", "#7bd0c4"][index]
