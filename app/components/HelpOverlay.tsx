@@ -21,16 +21,6 @@ export default function HelpOverlay({ open, onClose }: Props) {
 
   const sections = [
     {
-      title: "Main commands",
-      items: [
-        { key: ":about", desc: "open About section" },
-        { key: ":projects", desc: "open Projects section" },
-        { key: ":experience", desc: "open Experience section" },
-        { key: ":skills", desc: "open Skills section" },
-        { key: ":contact", desc: "open Contact section" },
-      ],
-    },
-    {
       title: "Page navigation",
       items: [
         { key: "1-5", desc: "jump between About, Projects, Experience, Skills, and Contact" },
@@ -45,6 +35,12 @@ export default function HelpOverlay({ open, onClose }: Props) {
         { key: "?", desc: "open this help" },
         { key: "Esc", desc: "close any modal or popup" },
         { key: "Q", desc: "close this modal" },
+      ],
+    },
+    {
+      title: "Section commands",
+      items: [
+        { key: ":about | :projects | :experience | :skills | :contact", desc: "" },
       ],
     },
   ] as const;
@@ -145,9 +141,9 @@ function CmdSection({
       </div>
       <div className="grid grid-cols-1 gap-1.5">
         {items.map((item) => (
-          <div key={item.key} className="flex items-baseline gap-6">
-            <span className="w-[142px] shrink-0 text-[#d7d7dc]">{item.key}</span>
-            <span className="flex-1 text-[#9a9aa1]">{item.desc}</span>
+          <div key={item.key} className={`flex items-baseline gap-6 ${!item.desc ? "flex-col" : ""}`}>
+            <span className={`${!item.desc ? "w-full" : "w-[142px]"} shrink-0 text-[#d7d7dc]`}>{item.key}</span>
+            {item.desc && <span className="flex-1 text-[#9a9aa1]">{item.desc}</span>}
           </div>
         ))}
       </div>

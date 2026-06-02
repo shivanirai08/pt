@@ -5,10 +5,10 @@ import {
   ChevronLeft,
   ChevronRight,
   GitBranch,
+  Link2,
   MessageSquareQuote,
   Mic,
   MousePointer2,
-  ShieldCheck,
   Users,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -26,6 +26,13 @@ type Metric = {
 type ContentCard = {
   title: string;
   body: string;
+};
+
+type FeatureCard = ContentCard & {
+  placeholder: string;
+  icon: React.ComponentType<{ className?: string }>;
+  accent: string;
+  iconLabel: string;
 };
 
 function getStatusLabel(project: Project) {
@@ -180,43 +187,64 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         body: `Used across ${project.name.replace("feat: ", "")}.`,
       }));
 
-  const featureCards: Array<ContentCard & { placeholder: string }> = isCodeCollab
+  const featureCards: FeatureCard[] = isCodeCollab
     ? [
         {
           title: "Live cursors with line locks",
           body: "Sub-100ms sync. Soft locks prevent two people editing the same line - no conflict resolution UI needed.",
           placeholder: "[ cursors + name labels GIF ]",
+          icon: MousePointer2,
+          accent: "#8fb88f",
+          iconLabel: "cursor sync",
         },
         {
           title: "Scoped voice chat",
           body: "Voice attaches to the file you're viewing. Open another file, you're in a different conversation.",
           placeholder: "[ voice indicator UI ]",
+          icon: Mic,
+          accent: "#c3c7f4",
+          iconLabel: "file voice",
         },
         {
           title: "Line-anchored reviews",
           body: "Highlight any range, leave a thread. Threads persist with the room and surface on GitHub push.",
           placeholder: "[ inline review thread ]",
+          icon: MessageSquareQuote,
+          accent: "#ffddc0",
+          iconLabel: "line review",
         },
         {
           title: "Native Git in-room",
           body: "Push, pull, diff, branch switch from the editor. No terminal context switch.",
           placeholder: "[ GitHub push panel ]",
+          icon: GitBranch,
+          accent: "#d4b483",
+          iconLabel: "in-room git",
         },
         {
           title: "Presence rail",
           body: "Always-on right rail showing who's in which file. Click an avatar to follow their viewport.",
           placeholder: "[ presence rail ]",
+          icon: Users,
+          accent: "#9db7ff",
+          iconLabel: "presence",
         },
         {
           title: "Zero-friction rooms",
           body: "A URL is the auth. No accounts, no installs. Rooms auto-expire 24h after last activity.",
           placeholder: "[ ephemeral room ]",
+          icon: Link2,
+          accent: "#7bd0c4",
+          iconLabel: "join by url",
         },
       ]
     : project.stack.map((item) => ({
         title: item,
         body: `Used as part of the ${project.role.toLowerCase()} stack for this build.`,
         placeholder: `[ ${item} ]`,
+        icon: MousePointer2,
+        accent: "#8fb88f",
+        iconLabel: "feature",
       }));
 
   const decisionRows: ContentCard[] = isCodeCollab
@@ -507,17 +535,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         <SectionShell index="05" file="features.md" title='Six features that earn the "one tool" claim.'>
           <div className="grid gap-4 md:grid-cols-2">
-            {featureCards.map((card, index) => (
+            {featureCards.map((card) => (
               <div key={card.title} className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
-                <FeatureVisual
-                  icon={
-                    [MousePointer2, Mic, MessageSquareQuote, GitBranch, Users, ShieldCheck][index]
-                  }
-                  accent={
-                    ["#8fb88f", "#c3c7f4", "#ffddc0", "#d4b483", "#9db7ff", "#7bd0c4"][index]
-                  }
-                  label={card.title.split(" ")[0]}
-                />
+                <FeatureVisual icon={card.icon} accent={card.accent} label={card.iconLabel} />
                 <div className="p-4 sm:p-5">
                   <div className="text-[14px] text-[#f2f2f3]">{card.title}</div>
                   <div className="mt-2 text-[13px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
@@ -553,11 +573,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </SectionShell>
 
         <SectionShell index="08" file="challenges.md" title="Things that broke, things I learned.">
-          <div className="space-y-4">
-            {challengeCards.map((card) => (
-              <div key={card.title} className="border-l-2 border-[#f4a646] pl-4">
-                <div className="text-[14px] text-[#f2f2f3]">{card.title}</div>
-                <div className="mt-2 max-w-5xl text-[13px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
+          <div className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
+            {challengeCards.map((card, index) => (
+              <div
+                key={card.title}
+                className={`grid gap-4 px-5 py-4 lg:grid-cols-[280px_1fr] ${index !== challengeCards.length - 1 ? "border-b border-[#1b1b20]" : ""}`}
+              >
+                <div className="text-[13px] text-[#ececef]">{card.title}</div>
+                <div className="text-[13px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
               </div>
             ))}
           </div>
