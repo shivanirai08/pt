@@ -59,7 +59,7 @@ export const aboutEnv = {
 
 export const socials = [
   { name: "github", handle: "shivanirai08", url: "https://github.com/shivanirai08" },
-  { name: "twitter", handle: "shivanirai08", url: "https://twitter.com/shivanirai08" },
+  { name: "twitter", handle: "shivanirai08", url: "https://x.com/shivanirai08" },
   { name: "behance", handle: "shivanirai08", url: "https://www.behance.net/shivanirai08" },
   { name: "linkedin", handle: "shivanirai08", url: "https://linkedin.com/in/shivanirai08" },
 ];
@@ -95,7 +95,7 @@ export const projects: Project[] = [
     role: "Full Stack",
     status: "live",
     links: [
-      { label: "Live", url: "http://code-to-collab.vercel.app" },
+      { label: "Live", url: "http://codecollab.tech" },
       { label: "GitHub", url: "https://github.com/shivanirai08/CodeCollab" },
     ],
     highlights: [
@@ -185,7 +185,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     version: "v5.0.0",
-    range: "Dec 2025 – Apr 2026",
+    range: "Jan 2026 – May 2026",
     role: "Frontend Engineer",
     company: "Hikigai Inc. (Full-Time Remote)",
     achievements: [
@@ -197,7 +197,7 @@ export const experience: Experience[] = [
   },
   {
     version: "v4.0.0",
-    range: "Dec 2025 – Feb 2026",
+    range: "Nov 2025 – Jan 2026",
     role: "Frontend Developer Intern",
     company: "QuantumNXT (Remote)",
     achievements: [
