@@ -4,23 +4,30 @@ import { notFound } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
+  Cpu,
   GitBranch,
   Link2,
   MessageSquareQuote,
   Mic,
   MousePointer2,
+  RefreshCw,
+  Shield,
+  Smartphone,
+  Timer,
+  Trophy,
   Users,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { projects, personal, type Project } from "../../data";
+import {
+  projectDetails,
+  type ProjectDetailContent,
+  type ProjectFeatureCard,
+  type ProjectMetric,
+} from "../../projectDetails";
 
 type ProjectPageProps = {
   params: Promise<{ projectId: string }>;
-};
-
-type Metric = {
-  label: string;
-  value: string;
 };
 
 type ContentCard = {
@@ -29,16 +36,124 @@ type ContentCard = {
 };
 
 type FeatureCard = ContentCard & {
-  placeholder: string;
   icon: React.ComponentType<{ className?: string }>;
   accent: string;
   iconLabel: string;
+};
+
+const featureIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  cursor: MousePointer2,
+  mic: Mic,
+  message: MessageSquareQuote,
+  git: GitBranch,
+  users: Users,
+  link: Link2,
+  trophy: Trophy,
+  timer: Timer,
+  shield: Shield,
+  cpu: Cpu,
+  refresh: RefreshCw,
+  smartphone: Smartphone,
 };
 
 function getStatusLabel(project: Project) {
   if (project.status === "live") return "v1.2 - shipped";
   if (project.status === "wip") return "v0.9 - in progress";
   return "v0.8 - archived";
+}
+
+function buildFallbackDetail(project: Project): ProjectDetailContent {
+  const name = project.name.replace("feat: ", "");
+  return {
+    heroMetrics: [
+      { label: "ROLE", value: project.role },
+      { label: "TIMELINE", value: project.date },
+      { label: "STATUS", value: getStatusLabel(project) },
+      { label: "SCOPE", value: String(project.stack.length) },
+    ],
+    browserBar: `${project.id}.app`,
+    heroPlaceholder: `[ hero product screenshot - ${name} ]`,
+    lastUpdated: project.date,
+    sections: {
+      problem: {
+        title: `Why ${name} exists.`,
+        body: project.description,
+        metrics: [
+          { label: "stack items", value: String(project.stack.length) },
+          { label: "highlights", value: String(project.highlights.length) },
+          { label: "live links", value: String(project.links.length) },
+        ],
+      },
+      solution: {
+        title: `What ${name} delivers.`,
+        body: project.excerpt,
+        beforeItems: ["Scattered tools", "Manual workflows", "Slow setup", "No shared state"],
+        beforeNote: "Multiple surfaces, high friction",
+        afterUrl: `${project.id}.app`,
+        afterNote: "One product, one flow",
+      },
+      approach: {
+        title: `How ${name} was built.`,
+        steps: project.highlights.map((highlight, index) => [
+          `step 0${index + 1}`,
+          `Highlight ${index + 1}`,
+          highlight,
+        ] as [string, string, string]),
+      },
+      architecture: {
+        title: "Stack and structure.",
+        clientLabel: `Client (${project.stack[0] ?? "App"})`,
+        middleLabel: "API Layer",
+        middleConnector: "| ▲ data | ▲ sync |",
+        footerNote: `${project.stack.join(" · ")}`,
+        cards: project.stack.slice(0, 6).map((item) => ({
+          title: item,
+          body: `Used across ${name}.`,
+        })),
+      },
+      features: {
+        title: "Key capabilities.",
+        cards: project.highlights.map((highlight, index) => ({
+          title: `Feature ${index + 1}`,
+          body: highlight,
+          iconKey: "cursor",
+          accent: "#8fb88f",
+          iconLabel: "feature",
+        })),
+      },
+      decisions: {
+        title: "Decisions worth defending.",
+        rows: project.highlights.map((highlight, index) => ({
+          title: `Decision ${index + 1}`,
+          body: highlight,
+        })),
+      },
+      skills: {
+        title: "What I stretched on this one.",
+        cards: project.stack.map((item) => ({
+          title: item,
+          body: `Primary technology shaping ${name}.`,
+        })),
+      },
+      challenges: {
+        title: "Things that broke, things I learned.",
+        cards: project.highlights.slice(0, 3).map((highlight, index) => ({
+          title: `Challenge ${index + 1}`,
+          body: highlight,
+        })),
+      },
+    },
+  };
+}
+
+function toFeatureCards(cards: ProjectFeatureCard[]): FeatureCard[] {
+  return cards.map((card) => ({
+    title: card.title,
+    body: card.body,
+    icon: featureIcons[card.iconKey] ?? MousePointer2,
+    accent: card.accent,
+    iconLabel: card.iconLabel,
+  }));
 }
 
 function SectionHeading({
@@ -88,7 +203,7 @@ function SectionShell({
   );
 }
 
-function StatTile({ label, value }: Metric) {
+function StatTile({ label, value }: ProjectMetric) {
   return (
     <div className="min-h-[96px] border border-[#202026] bg-[#0e0e11] px-5 py-4">
       <div className="text-[11px] uppercase tracking-[0.18em] text-[#686870]">{label}</div>
@@ -142,182 +257,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const currentProjectIndex = projects.findIndex((entry) => entry.id === project.id);
   const previousProject = projects[(currentProjectIndex - 1 + projects.length) % projects.length];
   const nextProject = projects[(currentProjectIndex + 1) % projects.length];
-  const isCodeCollab = project.id === "codecollab";
-  const statusText = getStatusLabel(project);
-
-  const heroMetrics: Metric[] = isCodeCollab
-    ? [
-        { label: "ROLE", value: "Solo • Design + Build" },
-        { label: "TIMELINE", value: "Jan - Apr 2025" },
-        { label: "STATUS", value: statusText },
-        { label: "USERS", value: "~1.2k rooms / mo" },
-      ]
-    : [
-        { label: "ROLE", value: project.role },
-        { label: "TIMELINE", value: project.date },
-        { label: "STATUS", value: statusText },
-        { label: "SCOPE", value: String(project.stack.length) },
-      ];
-
-  const researchCards: Metric[] = isCodeCollab
-    ? [
-        { label: "tools per pair session (avg)", value: "4.2" },
-        { label: "of sync time spent context-switching", value: "38%" },
-        { label: "interviews informing scope", value: "~12" },
-      ]
-    : [
-        { label: "stack items", value: String(project.stack.length) },
-        { label: "highlights", value: String(project.highlights.length) },
-        { label: "live links", value: String(project.links.length) },
-      ];
-
-  const beforeItems = ["VS Code + Live Share", "Discord call", "Excalidraw tab", "Github PR review"];
-
-  const architectureCards: ContentCard[] = isCodeCollab
-    ? [
-        { title: "Monaco Editor", body: "view + decorations" },
-        { title: "Redux Toolkit", body: "presence + locks" },
-        { title: "WebRTC Voice", body: "P2P mesh s6" },
-        { title: "Postgres", body: "rooms, files" },
-        { title: "Broadcast", body: "cursors, ops" },
-        { title: "Presence", body: "who's in room" },
-      ]
-    : project.stack.slice(0, 6).map((item) => ({
-        title: item,
-        body: `Used across ${project.name.replace("feat: ", "")}.`,
-      }));
-
-  const featureCards: FeatureCard[] = isCodeCollab
-    ? [
-        {
-          title: "Live cursors with line locks",
-          body: "Sub-100ms sync. Soft locks prevent two people editing the same line - no conflict resolution UI needed.",
-          placeholder: "[ cursors + name labels GIF ]",
-          icon: MousePointer2,
-          accent: "#8fb88f",
-          iconLabel: "cursor sync",
-        },
-        {
-          title: "Scoped voice chat",
-          body: "Voice attaches to the file you're viewing. Open another file, you're in a different conversation.",
-          placeholder: "[ voice indicator UI ]",
-          icon: Mic,
-          accent: "#c3c7f4",
-          iconLabel: "file voice",
-        },
-        {
-          title: "Line-anchored reviews",
-          body: "Highlight any range, leave a thread. Threads persist with the room and surface on GitHub push.",
-          placeholder: "[ inline review thread ]",
-          icon: MessageSquareQuote,
-          accent: "#ffddc0",
-          iconLabel: "line review",
-        },
-        {
-          title: "Native Git in-room",
-          body: "Push, pull, diff, branch switch from the editor. No terminal context switch.",
-          placeholder: "[ GitHub push panel ]",
-          icon: GitBranch,
-          accent: "#d4b483",
-          iconLabel: "in-room git",
-        },
-        {
-          title: "Presence rail",
-          body: "Always-on right rail showing who's in which file. Click an avatar to follow their viewport.",
-          placeholder: "[ presence rail ]",
-          icon: Users,
-          accent: "#9db7ff",
-          iconLabel: "presence",
-        },
-        {
-          title: "Zero-friction rooms",
-          body: "A URL is the auth. No accounts, no installs. Rooms auto-expire 24h after last activity.",
-          placeholder: "[ ephemeral room ]",
-          icon: Link2,
-          accent: "#7bd0c4",
-          iconLabel: "join by url",
-        },
-      ]
-    : project.stack.map((item) => ({
-        title: item,
-        body: `Used as part of the ${project.role.toLowerCase()} stack for this build.`,
-        placeholder: `[ ${item} ]`,
-        icon: MousePointer2,
-        accent: "#8fb88f",
-        iconLabel: "feature",
-      }));
-
-  const decisionRows: ContentCard[] = isCodeCollab
-    ? [
-        {
-          title: "Soft line locks over CRDTs",
-          body: "CRDT/OT solves character-level merge - pairing rarely needs that. Soft locks match how humans actually pair: 'I've got this function, take the next one.'",
-        },
-        {
-          title: "URL as auth",
-          body: "Skipped accounts entirely. The link is the credential - same model as Google Docs anonymous share. Removed a 4-step funnel before the first edit.",
-        },
-        {
-          title: "Voice scoped to file",
-          body: "Discord-style always-on voice made the wrong default loud. File-scoped voice means split work stays split - you can't accidentally interrupt.",
-        },
-        {
-          title: "Monaco over CodeMirror 6",
-          body: "Monaco's decoration API is heavier but its multi-cursor + IntelliSense came free. Bundle cost (~600KB) acceptable for the editor being the product.",
-        },
-        {
-          title: "Dark mode only",
-          body: "Audience is devs. Skipped theme toggle to ship faster - added in v1.2 after 6 user requests.",
-        },
-      ]
-    : project.highlights.map((highlight, index) => ({
-        title: `Decision ${index + 1}`,
-        body: highlight,
-      }));
-
-  const skillCards: ContentCard[] = isCodeCollab
-    ? [
-        {
-          title: "DESIGN",
-          body: "Interaction design for multi-user state · Presence UI patterns · Dark-mode color systems · Latency-tolerant micro-feedback",
-        },
-        {
-          title: "ENGINEERING",
-          body: "Realtime systems · WebRTC signaling · Monaco decorations + ranges · Redux Toolkit for shared state · Next.js App Router",
-        },
-        {
-          title: "RESEARCH",
-          body: "12 user interviews · Affinity mapping · Beta cohort management · Bug triage from production logs",
-        },
-        {
-          title: "PRODUCT",
-          body: "Scope discipline (cut accounts, billing, orgs from v1) · Tradeoff framing · Beta → GA decision criteria",
-        },
-      ]
-    : project.stack.map((item) => ({
-        title: item,
-        body: `Primary technology shaping ${project.name.replace("feat: ", "")}.`,
-      }));
-
-  const challengeCards: ContentCard[] = isCodeCollab
-    ? [
-        {
-          title: "Cursor drift at 4+ users",
-          body: "Broadcast-on-every-keystroke flooded the channel. Fixed with 40ms debounce + raf-batched cursor updates. Latency went from 180ms p95 to 65ms.",
-        },
-        {
-          title: "Voice mesh past 6 peers",
-          body: "P2P WebRTC mesh CPU-bombed at 7+ peers. Capped rooms at 6 for v1 with a clear 'session full' state; SFU planned for v2.",
-        },
-        {
-          title: "Monaco + Next.js App Router",
-          body: "Monaco's worker loading didn't play with App Router defaults. Dynamic import + custom worker resolver - documented in a blog post.",
-        },
-      ]
-    : project.highlights.slice(0, 3).map((highlight, index) => ({
-        title: `Challenge ${index + 1}`,
-        body: highlight,
-      }));
+  const detail = projectDetails[project.id] ?? buildFallbackDetail(project);
+  const { sections } = detail;
+  const featureCards = toFeatureCards(sections.features.cards);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#09090a] text-[#e8e8ea]">
@@ -360,8 +302,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <span className="text-[#8fb88f]">●</span>
             <span className="text-[#f2f2f3]">feat:</span>
             <span className="text-[#f2f2f3]">{project.name.replace("feat: ", "")}</span>
-            <span className="border border-[#2f2f35] bg-[#0f1013] px-2 py-0.5 text-[#8fb88f]">2025</span>
-            <span className="border border-[#2f2f35] bg-[#0f1013] px-2 py-0.5 text-[#8fb88f]">HEAD</span>
+            <span className="border border-[#2f2f35] bg-[#0f1013] px-2 py-0.5 text-[#8fb88f]">{project.date}</span>
+            {project.head ? (
+              <span className="border border-[#2f2f35] bg-[#0f1013] px-2 py-0.5 text-[#8fb88f]">HEAD</span>
+            ) : null}
             <span className="border border-[#2f2f35] bg-[#0f1013] px-2 py-0.5 text-[#a8a8ad]">shipped</span>
           </div>
 
@@ -402,7 +346,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <span className="h-3 w-3 rounded-full bg-[#2d2d32]" />
               <span className="h-3 w-3 rounded-full bg-[#2d2d32]" />
               <span className="h-3 w-3 rounded-full bg-[#2d2d32]" />
-              <span className="ml-2 text-[12px] text-[#72727a]">codecollab.app/r/sum-fn</span>
+              <span className="ml-2 text-[12px] text-[#72727a]">{detail.browserBar}</span>
             </div>
 
             <div className="relative mt-2.5 min-h-[190px] overflow-hidden border border-[#19191e] bg-[#0b0b0e] sm:min-h-[290px] lg:min-h-[320px]">
@@ -417,7 +361,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(10,10,11,0.2),rgba(10,10,11,0.42))]" />
               <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
                 <div className="max-w-md border border-[#24242a] bg-[#080809]/70 px-5 py-3 text-[12px] text-[#5f5f66] backdrop-blur-[1px]">
-                  [ hero product screenshot - full editor view with cursors + presence rail ]
+                  {detail.heroPlaceholder}
                 </div>
               </div>
             </div>
@@ -425,7 +369,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </section>
 
         <section className="mt-10 grid gap-4 border-t border-[#16161a] pt-10 sm:grid-cols-2 xl:grid-cols-4">
-          {heroMetrics.map((metric) => (
+          {detail.heroMetrics.map((metric) => (
             <StatTile key={metric.label} {...metric} />
           ))}
         </section>
@@ -433,15 +377,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <SectionShell
           index="01"
           file="problem.md"
-          title="Pairing eats context. Tools punish it."
-          body="Pair programming today means juggling VS Code Live Share, a Discord call, a shared whiteboard for diagrams, and a Github PR for review. Four tools, four tabs, four sync points. Every switch is a context tax - by the time you've alt-tabbed to leave a comment, you've forgotten what you wanted to say."
+          title={sections.problem.title}
+          body={sections.problem.body}
         >
-          <div className="border-l border-[#2f2f35] pl-5 italic text-[13px] leading-relaxed text-[#777780] sm:text-[14px]">
-            “I just want to point at line 47 and say &apos;this is wrong&apos; without joining a call.” - interview, senior eng at fintech
-          </div>
+          {sections.problem.quote ? (
+            <div className="border-l border-[#2f2f35] pl-5 italic text-[13px] leading-relaxed text-[#777780] sm:text-[14px]">
+              &ldquo;{sections.problem.quote}&rdquo;
+            </div>
+          ) : null}
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {researchCards.map((metric) => (
+          <div className={`grid gap-4 md:grid-cols-3 ${sections.problem.quote ? "mt-8" : ""}`}>
+            {sections.problem.metrics.map((metric) => (
               <StatTile key={metric.label} {...metric} />
             ))}
           </div>
@@ -450,59 +396,53 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <SectionShell
           index="02"
           file="solution.md"
-          title="One room. Editor, voice, review - same surface."
-          body="CodeCollab compresses four tools into one persistent room. Open a link, you're in. Live cursors with names, line-level locks to stop step-on edits, voice that scopes to the file you're both looking at, and PR-style review threads anchored to lines - all without leaving the editor pane."
+          title={sections.solution.title}
+          body={sections.solution.body}
         >
           <div className="grid gap-4 xl:grid-cols-2">
             <Panel className="p-5">
               <div className="text-[11px] uppercase tracking-[0.18em] text-[#7c7c85]">before</div>
               <div className="mt-4 space-y-1.5 text-[14px] leading-relaxed text-[#d7d7dd]">
-                {beforeItems.map((item) => (
+                {sections.solution.beforeItems.map((item) => (
                   <div key={item}>{item}</div>
                 ))}
-                <div className="pt-4 text-[12px] text-[#73737b]">- 4 surfaces, 3 logins, 2 sync delays</div>
+                <div className="pt-4 text-[12px] text-[#73737b]">- {sections.solution.beforeNote}</div>
               </div>
             </Panel>
 
             <Panel className="border-[#234328] bg-[#101c10] p-5 text-[#d9f1d9]">
               <div className="text-[11px] uppercase tracking-[0.18em] text-[#8fb88f]">after</div>
               <div className="mt-4 space-y-4">
-                <div className="font-mono text-[14px]">codecollab.app/r/{"{room}"}</div>
-                <div className="font-mono text-[13px] text-[#8fb88f]">- 1 surface, 0 setup, real-time</div>
+                <div className="font-mono text-[14px]">{sections.solution.afterUrl}</div>
+                <div className="font-mono text-[13px] text-[#8fb88f]">- {sections.solution.afterNote}</div>
               </div>
             </Panel>
           </div>
         </SectionShell>
 
-        <SectionShell index="03" file="approach.md" title='How I got from "pairing is broken" to v1.'>
+        <SectionShell index="03" file="approach.md" title={sections.approach.title}>
           <div className="grid gap-0 border-l border-[#1f1f24]">
-            {[
-              ["step 01", "Research - 12 interviews, 3 weeks", "Mapped pain points across solo devs, senior engineers, bootcamp mentors. Found the same context-switch complaint across all 3 cohorts."],
-              ["step 02", "Scope cut - one room, no orgs, no billing", "Killed accounts, teams, persistence v1. A room = a URL = ephemeral. Faster ship, cleaner story."],
-              ["step 03", "Prototype - Monaco + Supabase Realtime", "Stood up cursor sync first to test latency. Sub-100ms across 4 simulated users on free tier - go ahead."],
-              ["step 04", "Conflict model - line locks, not OT", "CRDT/OT was overkill for pairing semantics. Soft line-locks with visual indicators matched the mental model."],
-              ["step 05", "Beta with 8 pairs - ship v1", "3 weeks of paired sessions, 47 bugs filed, 39 closed before launch. Shipped April 4."],
-            ].map(([step, title, body], index) => (
-              <div key={String(step)} className={`grid gap-4 border-b border-dashed border-[#1d1d22] py-6 last:border-b-0 lg:grid-cols-[160px_1fr] ${index === 0 ? "pt-0" : ""}`}>
-                <div className="text-[12px] uppercase tracking-[0.16em] text-[#8fb88f]">{String(step)}</div>
+            {sections.approach.steps.map(([step, title, body], index) => (
+              <div key={step} className={`grid gap-4 border-b border-dashed border-[#1d1d22] py-6 last:border-b-0 lg:grid-cols-[160px_1fr] ${index === 0 ? "pt-0" : ""}`}>
+                <div className="text-[12px] uppercase tracking-[0.16em] text-[#8fb88f]">{step}</div>
                 <div>
-                  <div className="text-[15px] text-[#f2f2f3]">{String(title)}</div>
-                  <div className="mt-2 max-w-4xl text-[13px] leading-relaxed text-[#a8a8ad]">{String(body)}</div>
+                  <div className="text-[15px] text-[#f2f2f3]">{title}</div>
+                  <div className="mt-2 max-w-4xl text-[13px] leading-relaxed text-[#a8a8ad]">{body}</div>
                 </div>
               </div>
             ))}
           </div>
         </SectionShell>
 
-        <SectionShell index="04" file="architecture.md" title="How the room stays in sync.">
+        <SectionShell index="04" file="architecture.md" title={sections.architecture.title}>
           <div className="rounded border border-[#1f1f24] bg-[#0f1013] px-4 py-10 sm:px-6">
             <div className="mx-auto max-w-5xl">
               <div className="mx-auto mb-7 w-fit border border-[#777780] border-b-0 px-10 py-1 text-[12px] text-[#d7d7dd]">
-                Client (Next.js 15)
+                {sections.architecture.clientLabel}
               </div>
 
               <div className="grid gap-3 md:grid-cols-3">
-                {architectureCards.slice(0, 3).map((card) => (
+                {sections.architecture.cards.slice(0, 3).map((card) => (
                   <div key={card.title} className="border border-[#2a2a30] bg-[#111114] px-5 py-4 text-center">
                     <div className="text-[14px] text-[#d8d8de]">{card.title}</div>
                     <div className="mt-1 text-[12px] text-[#767680]">{card.body}</div>
@@ -510,13 +450,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 ))}
               </div>
 
-              <div className="mt-7 text-center text-[12px] text-[#6d6d74]">| ▲ realtime channel | ▲ signaling |</div>
+              <div className="mt-7 text-center text-[12px] text-[#6d6d74]">{sections.architecture.middleConnector}</div>
               <div className="mx-auto mt-3 w-fit border border-[#777780] border-b-0 px-9 py-1 text-[12px] text-[#d7d7dd]">
-                Supabase Realtime
+                {sections.architecture.middleLabel}
               </div>
 
               <div className="mt-7 grid gap-3 md:grid-cols-3">
-                {architectureCards.slice(3).map((card) => (
+                {sections.architecture.cards.slice(3).map((card) => (
                   <div key={card.title} className="border border-[#2a2a30] bg-[#111114] px-5 py-4 text-center">
                     <div className="text-[14px] text-[#d8d8de]">{card.title}</div>
                     <div className="mt-1 text-[12px] text-[#767680]">{card.body}</div>
@@ -525,15 +465,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               <div className="mt-6 text-[12px] leading-relaxed text-[#66666d]">
-                editor ops broadcast on debounce(40ms). cursor positions on raf. presence on heartbeat(2s).
-                <br />
-                single channel per room.
+                {sections.architecture.footerNote}
               </div>
             </div>
           </div>
         </SectionShell>
 
-        <SectionShell index="05" file="features.md" title='Six features that earn the "one tool" claim.'>
+        <SectionShell index="05" file="features.md" title={sections.features.title}>
           <div className="grid gap-4 md:grid-cols-2">
             {featureCards.map((card) => (
               <div key={card.title} className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
@@ -547,12 +485,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </SectionShell>
 
-        <SectionShell index="06" file="design-choices.md" title="Decisions worth defending.">
+        <SectionShell index="06" file="design-choices.md" title={sections.decisions.title}>
           <div className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
-            {decisionRows.map((card, index) => (
+            {sections.decisions.rows.map((card, index) => (
               <div
                 key={card.title}
-                className={`grid gap-4 px-5 py-4 lg:grid-cols-[280px_1fr] ${index !== decisionRows.length - 1 ? "border-b border-[#1b1b20]" : ""}`}
+                className={`grid gap-4 px-5 py-4 lg:grid-cols-[280px_1fr] ${index !== sections.decisions.rows.length - 1 ? "border-b border-[#1b1b20]" : ""}`}
               >
                 <div className="text-[13px] text-[#ececef]">{card.title}</div>
                 <div className="text-[13px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
@@ -561,9 +499,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </SectionShell>
 
-        <SectionShell index="07" file="skills.md" title="What I stretched on this one.">
+        <SectionShell index="07" file="skills.md" title={sections.skills.title}>
           <div className="grid gap-4 md:grid-cols-2">
-            {skillCards.map((card) => (
+            {sections.skills.cards.map((card) => (
               <div key={card.title} className="border border-[#1f1f24] bg-[#101114] p-5">
                 <div className="text-[11px] uppercase tracking-[0.18em] text-[#8fb88f]">{card.title}</div>
                 <div className="mt-3 text-[14px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
@@ -572,12 +510,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </SectionShell>
 
-        <SectionShell index="08" file="challenges.md" title="Things that broke, things I learned.">
+        <SectionShell index="08" file="challenges.md" title={sections.challenges.title}>
           <div className="overflow-hidden border border-[#1f1f24] bg-[#101114]">
-            {challengeCards.map((card, index) => (
+            {sections.challenges.cards.map((card, index) => (
               <div
                 key={card.title}
-                className={`grid gap-4 px-5 py-4 lg:grid-cols-[280px_1fr] ${index !== challengeCards.length - 1 ? "border-b border-[#1b1b20]" : ""}`}
+                className={`grid gap-4 px-5 py-4 lg:grid-cols-[280px_1fr] ${index !== sections.challenges.cards.length - 1 ? "border-b border-[#1b1b20]" : ""}`}
               >
                 <div className="text-[13px] text-[#ececef]">{card.title}</div>
                 <div className="text-[13px] leading-relaxed text-[#a8a8ad]">{card.body}</div>
@@ -627,7 +565,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#16161a] pt-6 text-[#7c7c85]">
             <div className="flex flex-wrap gap-4">
               <span>~/projects/{project.id}</span>
-              <span>last updated Apr 2025</span>
+              <span>last updated {detail.lastUpdated}</span>
               <span>shivanirai08.me © 2025</span>
             </div>
           </div>
