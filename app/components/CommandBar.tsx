@@ -311,30 +311,30 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40">
       {entries.length > 0 && focused && (
-        <div className="border-t border-[#38322b] bg-[#121110]">
-          <div className="flex items-center justify-between border-b border-[#262320] bg-[#1a1715] px-5 py-2">
-            <div className="flex items-center gap-3 text-xs text-[#6b625a]">
+        <div className="border-t border-[#16161a] bg-[#0a0a0b]/98 backdrop-blur-md">
+          <div className="flex items-center justify-between border-b border-[#16161a] bg-[#0d0d10] px-5 py-2">
+            <div className="flex items-center gap-3 text-xs text-[#7c7c85]">
               <span className="flex gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#453f38]" />
-                <span className="h-2 w-2 rounded-full bg-[#453f38]" />
-                <span className="h-2 w-2 rounded-full bg-[#453f38]" />
+                <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
+                <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
+                <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
               </span>
               <span>shivanirai@portfolio: ~ — zsh</span>
             </div>
-            <div className="flex items-center gap-4 text-xs text-[#453f38]">
-              <button type="button" onClick={() => setEntries([])} className="hover:text-[#a89f92]">
+            <div className="flex items-center gap-4 text-xs text-[#4a4a52]">
+              <button type="button" onClick={() => setEntries([])} className="hover:text-[#a8a8ad]">
                 clear
               </button>
               <button
                 type="button"
                 onClick={() => setFocused(false)}
-                className="flex items-center gap-1 hover:text-[#a89f92]"
+                className="flex items-center gap-1 hover:text-[#a8a8ad]"
               >
                 esc <X size={12} strokeWidth={1.5} />
               </button>
             </div>
           </div>
-          <div ref={scrollRef} className="max-h-[46vh] overflow-y-auto px-5 py-4">
+          <div ref={scrollRef} className="max-h-[46vh] overflow-y-auto bg-[#0a0a0b] px-5 py-4">
             <div className="mx-auto flex max-w-5xl flex-col gap-6">
               {entries.map((e) => (
                 <TerminalOutput key={e.id} entry={e} onSuggestion={run} />
@@ -345,7 +345,7 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
       )}
 
       {focused && matches.length > 0 && (
-        <div className="border-t border-[#262320] bg-[#121110]">
+        <div className="border-t border-[#16161a] bg-[#0d0d10]">
           <div className="mx-auto max-w-5xl">
             {matches.map((m, i) => (
               <button
@@ -353,37 +353,37 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
                 type="button"
                 onClick={() => run(m.names[0])}
                 className={`flex w-full items-center justify-between px-5 py-2 text-left text-xs ${
-                  i === 0 ? "bg-[#1a1715] text-[#f7dfc0]" : "text-[#a89f92] hover:bg-[#1a1715]"
+                  i === 0 ? "bg-[#111114] text-[#ffddc0]" : "text-[#a8a8ad] hover:bg-[#111114]"
                 }`}
               >
                 <span>{m.names[0]}</span>
-                <span className="text-[#453f38]">{m.desc}</span>
+                <span className="text-[#4a4a52]">{m.desc}</span>
               </button>
             ))}
           </div>
         </div>
       )}
 
-      <div className="border-t border-[#38322b] bg-[#1a1715]">
+      <div className="border-t border-[#16161a] bg-[#0d0d10]/98 backdrop-blur-md">
         <div className="flex h-12 items-center justify-between gap-4 pr-1">
           <div className="flex h-full min-w-0 flex-1 items-center gap-0">
             <a
               href={`mailto:${personal.email}`}
-              className="flex h-full shrink-0 items-center gap-2 bg-[#f7dfc0] px-4 text-xs font-semibold text-[#171310] hover:bg-[#ece5da]"
+              className="flex h-full shrink-0 items-center gap-2 bg-[#ffddc0] px-4 text-xs font-semibold text-[#0a0a0b] hover:bg-[#e8e8ea]"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#2f6b1f]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3fb950]" />
               AVAILABLE
             </a>
 
             {focused ? (
               <div className="relative flex min-w-0 flex-1 items-center gap-2 px-4">
-                <span className="shrink-0 text-sm text-[#86b06a]">~$</span>
+                <span className="shrink-0 text-sm text-[#3fb950]">~$</span>
                 <div className="relative min-w-0 flex-1">
                   <div className="pointer-events-none absolute inset-0 flex items-center truncate font-mono text-sm">
-                    <span className="text-[#ece5da]">{value}</span>
-                    <span className="text-[#453f38]">{ghost}</span>
+                    <span className="text-[#e8e8ea]">{value}</span>
+                    <span className="text-[#4a4a52]">{ghost}</span>
                     {!value && (
-                      <span className="text-[#453f38]">type a command, or ? for the list</span>
+                      <span className="text-[#4a4a52]">type a command, or ? for the list</span>
                     )}
                   </div>
                   <input
@@ -392,15 +392,15 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={onInputKey}
                     onBlur={() => !entries.length && setFocused(false)}
-                    className="w-full bg-transparent font-mono text-sm text-transparent caret-[#f7dfc0] outline-none"
+                    className="w-full bg-transparent font-mono text-sm text-transparent caret-[#ffddc0] outline-none"
                     spellCheck={false}
                     autoComplete="off"
                   />
                 </div>
-                <span className="hidden shrink-0 items-center gap-3 text-xs text-[#453f38] sm:flex">
-                  <span className="border border-[#262320] px-1.5 py-0.5">↹ tab</span>
-                  <span className="border border-[#262320] px-1.5 py-0.5">↑ history</span>
-                  <span className="border border-[#262320] px-1.5 py-0.5">↵ run</span>
+                <span className="hidden shrink-0 items-center gap-3 text-xs text-[#4a4a52] sm:flex">
+                  <span className="border border-[#242428] px-1.5 py-0.5">↹ tab</span>
+                  <span className="border border-[#242428] px-1.5 py-0.5">↑ history</span>
+                  <span className="border border-[#242428] px-1.5 py-0.5">↵ run</span>
                 </span>
               </div>
             ) : (
@@ -413,16 +413,16 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
                 className="flex h-full min-w-0 flex-1 items-center gap-4 px-4 text-left"
               >
                 {flash ? (
-                  <span className="truncate text-xs text-[#d98d6c]">✕ {flash}</span>
+                  <span className="truncate text-xs text-[#c27070]">✕ {flash}</span>
                 ) : (
                   <>
-                    <span className="text-xs text-[#a89f92]">{pathLabel}</span>
-                    <span className="hidden text-xs text-[#453f38] sm:inline">
+                    <span className="text-xs text-[#a8a8ad]">{pathLabel}</span>
+                    <span className="hidden text-xs text-[#4a4a52] sm:inline">
                       {idx + 1} / {SECTIONS.length}
                     </span>
-                    <span className="hidden truncate text-xs text-[#453f38] md:inline">
-                      press <span className="text-[#a89f92]">/</span> to run a command · try{" "}
-                      <span className="text-[#a89f92]">{helpRows[1].cmd}</span>
+                    <span className="hidden truncate text-xs text-[#4a4a52] md:inline">
+                      press <span className="text-[#a8a8ad]">/</span> to run a command · try{" "}
+                      <span className="text-[#a8a8ad]">{helpRows[1].cmd}</span>
                     </span>
                   </>
                 )}
@@ -434,14 +434,14 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
             <button
               type="button"
               onClick={() => run(":resume")}
-              className="hidden h-full items-center gap-2 px-4 text-xs text-[#a89f92] hover:text-[#ece5da] sm:flex"
+              className="hidden h-full items-center gap-2 px-4 text-xs text-[#a8a8ad] hover:text-[#e8e8ea] sm:flex"
             >
               <Download size={13} strokeWidth={1.5} /> :resume
             </button>
             <button
               type="button"
               onClick={() => goSection("contact")}
-              className="hidden h-full items-center gap-2 px-4 text-xs text-[#a89f92] hover:text-[#ece5da] sm:flex"
+              className="hidden h-full items-center gap-2 px-4 text-xs text-[#a8a8ad] hover:text-[#e8e8ea] sm:flex"
             >
               <Mail size={13} strokeWidth={1.5} /> :contact
             </button>
@@ -449,7 +449,7 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
               type="button"
               onClick={onEnterFullscreen}
               title="Enter full terminal mode"
-              className="flex h-full items-center gap-2 border-l border-[#262320] bg-[#231f1b] px-4 text-xs text-[#ece5da] hover:bg-[#38322b]"
+              className="flex h-full items-center gap-2 border-l border-[#242428] bg-[#111114] px-4 text-xs text-[#e8e8ea] hover:bg-[#16161a]"
             >
               <Maximize2 size={13} strokeWidth={1.5} />
               <span className="hidden sm:inline">fullscreen</span>
@@ -460,7 +460,7 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
                 setFocused(true);
                 window.setTimeout(() => inputRef.current?.focus(), 0);
               }}
-              className="flex h-full items-center gap-2 border-l border-[#262320] bg-[#231f1b] px-4 text-xs text-[#ece5da] hover:bg-[#38322b]"
+              className="flex h-full items-center gap-2 border-l border-[#242428] bg-[#111114] px-4 text-xs text-[#e8e8ea] hover:bg-[#16161a]"
             >
               ⌘K
             </button>

@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import {
   personal,
   projects,
@@ -14,10 +14,24 @@ import {
   aboutCurrently,
   socials,
   stats,
-  experienceImpact,
 } from "../data";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const ROLE_TAGS: Record<string, string[]> = {
+  "v5.0.0": ["next.js", "typescript", "react", "webrtc"],
+  "v4.0.0": ["next.js", "typescript", "tailwind", "rest apis"],
+  "v3.0.0": ["figma", "ux research", "product design"],
+  "v2.0.0": ["figma", "prototyping", "handoff"],
+  "v1.0.0": ["react", "tailwind", "components"],
+};
+
+const CAREER_STATS = [
+  { value: stats.yearsActive, label: "years in production" },
+  { value: stats.projectsShipped, label: "projects shipped" },
+  { value: String(stats.yearsLed), label: "teams led" },
+  { value: "1", label: "design-system shipped" },
+];
 
 const BOOT_LINES = [
   { text: "[BOOT] Initializing portfolio...", color: "#3f3f3f" },
@@ -55,11 +69,16 @@ export default function GUIHome({
       : BOOT_WORDS.map((words) => words.length)
   );
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
-  const [activeProject, setActiveProject] = useState(0);
-  const [activeExperience, setActiveExperience] = useState(0);
+  const [showEarlierRoles, setShowEarlierRoles] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
-  const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const experienceRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const primaryRoles = experience.slice(0, 2);
+  const earlierDesignRoles = experience.filter((role) =>
+    role.role.toLowerCase().includes("designer")
+  );
+  const incubatorRole = experience.find((role) => role.version === "v1.0.0");
+  const featuredProject = projects[0];
+  const archiveProjects = projects.slice(1);
 
   // Boot sequence
   useEffect(() => {
@@ -99,40 +118,6 @@ export default function GUIHome({
 
     return () => timers.forEach(clearTimeout);
   }, [onBootSequenceComplete, showBootSequence]);
-
-  // Active project scroll tracker
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    projectRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) setActiveProject(i);
-        },
-        { threshold: 0.4 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
-  }, []);
-
-  // Active experience scroll tracker
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    experienceRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) setActiveExperience(i);
-        },
-        { threshold: 0.4 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
-  }, []);
 
   // GSAP scroll reveals
   useEffect(() => {
@@ -266,7 +251,7 @@ export default function GUIHome({
             transition={{ duration: 0.56, ease: HERO_ENTRY_EASE }}
             className="max-w-[940px]"
           >
-            <p className="text-[16px] text-[#888] leading-[1.8] mb-10">
+            <p className="text-[16px] font-sans text-[#888] leading-[1.8] mb-10">
               {personal.intro}
             </p>
             <div className="flex flex-wrap items-center gap-5 md:gap-7 text-[15px]">
@@ -309,121 +294,148 @@ export default function GUIHome({
         className="min-h-screen py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-          <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-12 xl:gap-16">
-            {/* Timeline */}
-            <div className="flex-1">
-              {experience.map((role, i) => (
-                <div
-                  key={role.version}
-                  ref={(el) => { experienceRefs.current[i] = el; }}
-                  className="mb-10 reveal-item"
-                >
-                  <div className="flex items-center gap-3 mb-1 flex-wrap">
-                    <span
-                      className="text-[20px] font-bold transition-colors duration-300"
-                      style={{ color: i === activeExperience ? "#ffddc0" : "#c3c7f4" }}
-                    >
-                      ## [{role.version}]
+        <div className="space-y-14">
+          {primaryRoles.map((role) => (
+            <div
+              key={role.version}
+              className="reveal-item grid grid-cols-1 gap-6 border-b border-[#16161a] pb-14 md:grid-cols-[148px_1fr] md:gap-10"
+            >
+              <div className="space-y-1">
+                <div className="text-[13px] text-[#7c7c85]">{role.range.replace(" – ", " — ")}</div>
+                <div className="text-[11px] text-[#4a4a52]">{role.version}</div>
+              </div>
+              <div>
+                <div className="mb-2 flex flex-wrap items-center gap-3">
+                  <h3 className="font-sans text-[26px] font-semibold leading-tight text-[#ffddc0]">
+                    {role.role}
+                  </h3>
+                  {role.version === "v5.0.0" && (
+                    <span className="border border-[#3fb95044] px-2 py-0.5 text-[10px] tracking-[0.12em] text-[#3fb950]">
+                      LATEST
                     </span>
-                    <span className="text-[14px] text-[#555]">
-                      {role.range}
-                    </span>
-                    {i === 0 && (
-                      <span className="bg-[#3fb950] text-[#000] text-[12px] px-2 py-[2px] font-bold">
-                        LATEST
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="text-[16px] text-[#ccc] mb-4 leading-relaxed">
-                    {role.role} —{" "}
-                    <span className="text-[#c3c7f4]">{role.company}</span>
-                  </div>
-
-                  {role.achievements.length > 0 && (
-                    <div className="pl-6 text-[14px] leading-[2] space-y-2">
-                      {role.achievements.map((a, j) => (
-                        <div key={j} className="text-[#888] max-w-[92%]">
-                          <span className="text-[#3fb950]">+</span> {a}
-                        </div>
-                      ))}
-                    </div>
                   )}
                 </div>
-              ))}
-            </div>
-
-            {/* Stats sidebar */}
-            <div className="w-full lg:w-[320px] shrink-0 space-y-6">
-              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[13px] text-[#555] mb-6">
-                  ❯ wc --career
-                </div>
-                <div className="flex flex-col gap-6">
-                  <div>
-                    <div className="text-[13px] text-[#555] mb-1">
-                      YEARS ACTIVE
-                    </div>
-                    <div className="text-[36px] font-bold text-[#ffddc0] leading-none">
-                      {stats.yearsActive}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[13px] text-[#555] mb-1">
-                      PROJECTS SHIPPED
-                    </div>
-                    <div className="text-[36px] font-bold text-[#c3c7f4] leading-none">
-                      {stats.projectsShipped}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[13px] text-[#555] mb-1">
-                      TEAMS LED
-                    </div>
-                    <div className="text-[36px] font-bold text-[#3fb950] leading-none">
-                      {stats.yearsLed}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[13px] text-[#555] mb-5">
-                  ❯ cat impact.log
-                </div>
-                <div className="space-y-6">
-                  {experienceImpact.map((group, gi) => (
-                    <div key={group.company}>
-                      {gi > 0 && <div className="border-t border-[#1e1e1e] mb-5" />}
-                      <div className="text-[11px] tracking-[0.1em] uppercase text-[#444] mb-3 font-medium">
-                        {group.company} · {group.product}
-                      </div>
-                      <div className="space-y-3">
-                        {group.points.map((point) => (
-                          <div
-                            key={`${group.company}-${point.metric}`}
-                            className="flex gap-3 items-baseline"
-                          >
-                            <span className="text-[18px] font-bold text-[#ffddc0] leading-none shrink-0 w-10 text-right tabular-nums">
-                              {point.metric}
-                            </span>
-                            <div>
-                              <div className="text-[13px] text-[#ccc] leading-snug">
-                                {point.summary}
-                              </div>
-                              <div className="text-[11px] text-[#555] mt-[2px]">
-                                {point.context}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                <p className="mb-5 font-sans text-[14px] text-[#7c7c85]">{role.company}</p>
+                <ul className="mb-6 space-y-3">
+                  {role.achievements.map((achievement) => (
+                    <li
+                      key={achievement}
+                      className="flex gap-3 font-sans text-[14px] leading-[1.75] text-[#a8a8ad]"
+                    >
+                      <span className="shrink-0 text-[#3fb950]">›</span>
+                      <span className="max-w-[62ch]">{achievement}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2">
+                  {(ROLE_TAGS[role.version] ?? []).map((tag) => (
+                    <span
+                      key={tag}
+                      className="border border-[#242428] bg-[#111114] px-2.5 py-1 text-[11px] text-[#7c7c85]"
+                    >
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
+          ))}
+
+          {earlierDesignRoles.length > 0 && (
+            <div className="reveal-item">
+              <button
+                type="button"
+                onClick={() => setShowEarlierRoles((open) => !open)}
+                className="flex items-center gap-2 text-[13px] text-[#7c7c85] transition-colors hover:text-[#e8e8ea]"
+              >
+                <span>
+                  {earlierDesignRoles.length} earlier design roles —{" "}
+                  {earlierDesignRoles.map((r) => r.company.split(" ")[0]).join(", ")} · expand
+                </span>
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${showEarlierRoles ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {showEarlierRoles && (
+                <div className="mt-10 space-y-12 border-l border-[#242428] pl-6">
+                  {earlierDesignRoles.map((role) => (
+                    <div key={role.version} className="grid grid-cols-1 gap-4 md:grid-cols-[148px_1fr] md:gap-10">
+                      <div className="space-y-1">
+                        <div className="text-[13px] text-[#7c7c85]">{role.range.replace(" – ", " — ")}</div>
+                        <div className="text-[11px] text-[#4a4a52]">{role.version}</div>
+                      </div>
+                      <div>
+                        <h4 className="font-sans text-[18px] font-medium text-[#e8e8ea]">{role.role}</h4>
+                        <p className="mb-4 mt-1 font-sans text-[13px] text-[#7c7c85]">{role.company}</p>
+                        <ul className="mb-4 space-y-2">
+                          {role.achievements.map((achievement) => (
+                            <li
+                              key={achievement}
+                              className="flex gap-3 font-sans text-[13px] leading-[1.7] text-[#7c7c85]"
+                            >
+                              <span className="text-[#4a4a52]">›</span>
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex flex-wrap gap-2">
+                          {(ROLE_TAGS[role.version] ?? []).map((tag) => (
+                            <span
+                              key={tag}
+                              className="border border-[#242428] bg-[#111114] px-2.5 py-1 text-[11px] text-[#7c7c85]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {incubatorRole && (
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-[148px_1fr] md:gap-10">
+                      <div className="space-y-1">
+                        <div className="text-[13px] text-[#7c7c85]">
+                          {incubatorRole.range.replace(" – ", " — ")}
+                        </div>
+                        <div className="text-[11px] text-[#4a4a52]">{incubatorRole.version}</div>
+                      </div>
+                      <div>
+                        <h4 className="font-sans text-[18px] font-medium text-[#e8e8ea]">
+                          {incubatorRole.role}
+                        </h4>
+                        <p className="mb-4 mt-1 font-sans text-[13px] text-[#7c7c85]">
+                          {incubatorRole.company}
+                        </p>
+                        <ul className="space-y-2">
+                          {incubatorRole.achievements.map((achievement) => (
+                            <li
+                              key={achievement}
+                              className="flex gap-3 font-sans text-[13px] leading-[1.7] text-[#7c7c85]"
+                            >
+                              <span className="text-[#4a4a52]">›</span>
+                              <span>{achievement}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="reveal-item mt-6 grid grid-cols-2 gap-8 border-t border-[#16161a] pt-10 md:grid-cols-4">
+          {CAREER_STATS.map((item) => (
+            <div key={item.label}>
+              <div className="text-[32px] font-bold leading-none text-[#ffddc0]">{item.value}</div>
+              <div className="mt-2 font-sans text-[13px] text-[#7c7c85]">{item.label}</div>
+            </div>
+          ))}
+        </div>
       </SectionCommandReveal>
 
       {/* ════════ PROJECTS — full viewport ════════ */}
@@ -433,139 +445,123 @@ export default function GUIHome({
         className="min-h-screen py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-          <div className="relative">
-            {projects.slice(0, 4).map((project, i) => {
-              const isExpanded = true;
-              const isLast = i === projects.slice(0, 4).length - 1;
-              const isActive = i === activeProject;
-              const dotColor = isActive ? "#ffddc0" : "#c3c7f4";
+        <div id={`project-${featuredProject.id}`} className="reveal-item border border-[#242428] bg-[#111114]">
+          <div className="flex flex-wrap items-center gap-3 border-b border-[#242428] px-5 py-4">
+            <span className="text-[#4a4a52]">●</span>
+            <span className="text-[18px] font-semibold text-[#ffddc0]">{featuredProject.name}</span>
+            <span className="text-[13px] text-[#7c7c85]">{featuredProject.date}</span>
+            {featuredProject.head && (
+              <span className="border border-[#3fb95044] px-2 py-0.5 text-[10px] tracking-[0.14em] text-[#3fb950]">
+                HEAD
+              </span>
+            )}
+          </div>
 
-              return (
-                <div
-                  key={project.id}
-                  id={`project-${project.id}`}
-                  ref={(el) => { projectRefs.current[i] = el; }}
-                  className="flex gap-9 mb-14 reveal-item"
-                >
-                  {/* Timeline */}
-                  <div className="flex flex-col items-center shrink-0 w-5">
-                    <div
-                      className="w-[14px] h-[14px] rounded-full shrink-0 border-2"
-                      style={{
-                        backgroundColor: isExpanded ? dotColor : "transparent",
-                        borderColor: dotColor,
-                      }}
-                    />
-                    {!isLast && (
-                      <div className="w-[2px] flex-1 bg-[#222] mt-1" />
-                    )}
-                  </div>
+          <div className="relative min-h-[220px] w-full overflow-hidden border-b border-[#242428] bg-[#0a0a0b] md:min-h-[280px]">
+            <Image
+              src={featuredProject.image}
+              alt={`${featuredProject.name.replace("feat: ", "")} screenshot`}
+              fill
+              sizes="(max-width: 1280px) 100vw, 70vw"
+              className="object-cover"
+            />
+          </div>
 
-                  {/* Content */}
-                  <div className="flex-1 pb-2">
-                    <div className="flex items-center gap-3 mb-2 flex-wrap">
-                      <span
-                        className="font-bold text-[18px]"
-                        style={{ color: dotColor }}
-                      >
-                        {project.name}
-                      </span>
-                      <span className="text-[14px] text-[#555]">
-                        {project.date}
-                      </span>
-                      {project.head && (
-                        <span className="text-[12px] px-3 py-1 border text-[#3fb950] border-[#3fb95044] bg-[#1a1a2e]">
-                          HEAD
-                        </span>
-                      )}
+          <div className="grid gap-8 p-5 md:p-7 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="mb-6 max-w-[52ch] font-sans text-[15px] leading-[1.75] text-[#a8a8ad]">
+                {featuredProject.excerpt}
+              </p>
+              <div className="mb-5 flex flex-wrap gap-3">
+                {featuredProject.links.map((link, index) => (
+                  <a
+                    key={link.label}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={
+                      index === 0
+                        ? "inline-flex items-center gap-2 border border-[#ffddc0] bg-[#ffddc0] px-5 py-2.5 text-[12px] font-semibold text-[#0a0a0b] transition-colors hover:bg-[#e8e8ea]"
+                        : "inline-flex items-center gap-2 border border-[#242428] px-5 py-2.5 text-[12px] text-[#e8e8ea] transition-colors hover:border-[#ffddc0]"
+                    }
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+              {featuredProject.highlights[0] && (
+                <p className="text-[12px] text-[#7c7c85]">
+                  read: {featuredProject.highlights[0].toLowerCase()} →
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-3 text-[12px]">
+              {[
+                { label: "client", value: featuredProject.highlights[0] },
+                { label: "server", value: featuredProject.stack[0] },
+                {
+                  label: "infra",
+                  value: featuredProject.stack.slice(1, 3).join(" + "),
+                },
+                {
+                  label: "built",
+                  value: `${featuredProject.date} · ${featuredProject.role.toLowerCase()} · live`,
+                },
+              ].map((row) => (
+                <div key={row.label} className="grid grid-cols-[72px_1fr] gap-4">
+                  <span className="text-[#7c7c85]">{row.label}</span>
+                  <span className="font-sans text-[#a8a8ad]">{row.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="border border-[#242428]">
+          {archiveProjects.map((project) => (
+            <div
+              key={project.id}
+              id={`project-${project.id}`}
+              className="reveal-item grid grid-cols-1 gap-4 border-b border-[#242428] px-5 py-5 last:border-b-0 lg:grid-cols-[minmax(220px,0.9fr)_1fr_auto] lg:items-start lg:gap-8"
+            >
+              <div>
+                <div className="mb-1 flex items-start gap-2">
+                  <span className="mt-1 text-[#4a4a52]">●</span>
+                  <div>
+                    <div className="text-[16px] font-medium text-[#e8e8ea]">{project.name}</div>
+                    <div className="mt-1 text-[12px] text-[#7c7c85]">
+                      {project.date} · {project.role.toLowerCase()}
                     </div>
-
-                    <div className="text-[14px] text-[#888] mb-4 leading-relaxed">
-                      {project.excerpt}
-                    </div>
-
-                    {isExpanded ? (
-                      <div className="grid items-stretch gap-7 xl:grid-cols-[minmax(280px,0.8fr)_minmax(420px,1.2fr)]">
-                        <div className="relative min-h-[170px] self-stretch overflow-hidden border border-[#222] bg-[#111] md:p-0 xl:min-h-0">
-                          <Image
-                            src={project.image}
-                            alt={`${project.name.replace("feat: ", "")} screenshot`}
-                            fill
-                            sizes="(max-width: 1280px) 100vw, 35vw"
-                            className="object-cover"
-                          />
-                        </div>
-
-                        {/* Details */}
-                        <div className="flex h-full min-w-0 flex-col">
-                          <div className="flex gap-2 flex-wrap mb-4">
-                            {project.stack.map((tag) => (
-                              <span
-                                key={tag}
-                                className="text-[#c3c7f4] text-[13px] border border-[#333] px-3 py-1"
-                              >
-                                [{tag}]
-                              </span>
-                            ))}
-                          </div>
-                          <div className="text-[14px] text-[#888] leading-relaxed mb-4">
-                            {project.description}
-                          </div>
-                          <div className="mb-4 space-y-1 text-[13px] leading-relaxed text-[#6f737d]">
-                            {project.highlights.map((highlight) => (
-                              <p key={highlight}>- {highlight}</p>
-                            ))}
-                          </div>
-                          <div className="flex flex-wrap gap-3 text-[13px]">
-                            {project.links.map((l, li) => (
-                              <a
-                                key={l.label}
-                                href={l.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className={
-                                  li === 0
-                                    ? "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap border border-[#ffddc0] px-5 py-2.5 leading-none text-[#ffddc0] transition-all duration-200 hover:bg-[#ffddc0] hover:text-[#0a0a0a]"
-                                    : "inline-flex min-h-11 items-center justify-center whitespace-nowrap border border-[#333] px-5 py-2.5 leading-none text-[#a8a8ad] transition-all duration-200 hover:border-[#c3c7f4] hover:text-[#c3c7f4]"
-                                }
-                              >
-                                → {l.label}
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex gap-4 text-[13px] items-center">
-                        <div className="flex gap-2 flex-wrap">
-                          {project.stack.map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[#c3c7f4] text-[13px] border border-[#333] px-3 py-1"
-                            >
-                              [{tag}]
-                            </span>
-                          ))}
-                        </div>
-                        <span className="text-[#555]">·</span>
-                        {project.links.map((l) => (
-                          <a
-                            key={l.label}
-                            href={l.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[#c3c7f4] hover:text-white transition-colors duration-150"
-                          >
-                            → {l.label.toLowerCase()}
-                          </a>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+
+              <div>
+                <p className="mb-3 max-w-[56ch] font-sans text-[14px] leading-[1.7] text-[#a8a8ad]">
+                  {project.excerpt}
+                </p>
+                <div className="text-[12px] text-[#7c7c85]">
+                  {project.stack.slice(0, 5).join(" · ").toLowerCase()}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4 text-[12px] lg:justify-end">
+                {project.links.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-[#a8a8ad] transition-colors hover:text-[#ffddc0]"
+                  >
+                    {link.label} <ArrowUpRight size={12} strokeWidth={1.5} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </SectionCommandReveal>
 
       {/* ════════ ABOUT — full viewport ════════ */}
@@ -582,7 +578,7 @@ export default function GUIHome({
                 <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
                   NAME
                 </div>
-                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.85]">
+                <div className="text-[15px] font-sans text-[#ccc] pl-7 leading-[1.85]">
                   {personal.name} — frontend developer with a product brain.
                 </div>
               </div>
@@ -600,7 +596,7 @@ export default function GUIHome({
                 <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
                   DESCRIPTION
                 </div>
-                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.9] space-y-6">
+                <div className="text-[15px] font-sans text-[#ccc] pl-7 leading-[1.9] space-y-6">
                   <p>
                     Frontend is where I live, but I&apos;ve never been able to stop at the component boundary. Two years of building real products will do that - you start caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually experiences between the click and the render.
                   </p>
@@ -685,7 +681,7 @@ export default function GUIHome({
                 <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-3">
                   CURRENTLY READING
                 </div>
-                <p className="text-[13px] leading-relaxed text-[#a8a8ad]">
+                <p className="text-[13px] font-sans leading-relaxed text-[#a8a8ad]">
                   {aboutCurrently.reading} — Kleppmann
                 </p>
               </div>
@@ -706,7 +702,7 @@ export default function GUIHome({
                 <span className="text-[#7c7c85]">Connecting to shivani.dev…</span>
                 <span className="text-[#3fb950]">Connection established.</span>
               </div>
-              <p className="reveal-item mb-6 max-w-[54ch] text-2xl leading-snug text-[#e8e8ea]">
+              <p className="reveal-item mb-6 max-w-[54ch] font-sans text-2xl leading-snug text-[#e8e8ea]">
                 Always open to interesting conversations about frontend, design systems, or your next product.
               </p>
               <div className="reveal-item mb-9 flex flex-wrap items-center gap-6 text-xs text-[#7c7c85]">

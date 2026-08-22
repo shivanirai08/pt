@@ -24,6 +24,7 @@
   --color-background: var(--color-bg-dark);
   --color-foreground: var(--color-text);
   --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
 }
 
 * {

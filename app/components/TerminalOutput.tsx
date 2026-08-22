@@ -41,9 +41,9 @@ const careerStats = [
 function Prompt({ cmd }: { cmd: string }) {
   return (
     <div className="text-sm">
-      <span className="text-[#86b06a]">shivanirai@portfolio</span>
-      <span className="text-[#5d564e]">:~$</span>{" "}
-      <span className="text-[#ece5da]">{cmd}</span>
+      <span className="text-[#3fb950]">shivanirai@portfolio</span>
+      <span className="text-[#4a4a52]">:~$</span>{" "}
+      <span className="text-[#e8e8ea]">{cmd}</span>
     </div>
   );
 }
@@ -59,7 +59,7 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       <Prompt cmd={entry.cmd} />
 
       {entry.kind === "text" && (
-        <div className="flex flex-col gap-1 pl-1 text-sm leading-relaxed text-[#a89f92]">
+        <div className="flex flex-col gap-1 pl-1 font-sans text-sm leading-relaxed text-[#a8a8ad]">
           {entry.lines?.map((line, i) => (
             <span key={i}>{line}</span>
           ))}
@@ -67,9 +67,9 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       )}
 
       {entry.kind === "ok" && (
-        <div className="flex flex-col gap-1 border-l-2 border-[#3f5b32] pl-4 text-sm leading-relaxed">
+        <div className="flex flex-col gap-1 border-l-2 border-[#3fb95044] pl-4 font-sans text-sm leading-relaxed">
           {entry.lines?.map((line, i) => (
-            <span key={i} className={i === 0 ? "text-[#86b06a]" : "text-[#a89f92]"}>
+            <span key={i} className={i === 0 ? "text-[#3fb950]" : "text-[#a8a8ad]"}>
               {line}
             </span>
           ))}
@@ -77,17 +77,17 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       )}
 
       {entry.kind === "error" && (
-        <div className="flex flex-col gap-2 border-l-2 border-[#6b3a2e] pl-4">
-          <span className="text-sm text-[#d98d6c]">{entry.lines?.[0]}</span>
+        <div className="flex flex-col gap-2 border-l-2 border-[#c2707044] pl-4">
+          <span className="text-sm text-[#c27070]">{entry.lines?.[0]}</span>
           {entry.suggestions && entry.suggestions.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#6b625a]">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#7c7c85]">
               <span>did you mean</span>
               {entry.suggestions.map((s) => (
                 <button
                   key={s}
                   type="button"
                   onClick={() => onSuggestion?.(s)}
-                  className="border border-[#38322b] bg-[#121110] px-2 py-1 text-[#ece5da] hover:border-[#8a7654]"
+                  className="border border-[#242428] bg-[#111114] px-2 py-1 text-[#e8e8ea] hover:border-[#ffddc0]"
                 >
                   {s}
                 </button>
@@ -99,8 +99,8 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       )}
 
       {entry.kind === "ls" && (
-        <div className="border border-[#262320] bg-[#121110]">
-          <div className="flex gap-4 border-b border-[#262320] bg-[#1a1715] px-4 py-2 text-xs tracking-widest text-[#6b625a]">
+        <div className="border border-[#242428] bg-[#111114]">
+          <div className="flex gap-4 border-b border-[#242428] bg-[#0d0d10] px-4 py-2 text-xs tracking-widest text-[#7c7c85]">
             <span className="w-24 shrink-0">MODE</span>
             <span className="w-12 shrink-0">YEAR</span>
             <span className="w-32 shrink-0">NAME</span>
@@ -112,27 +112,27 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
               key={p.id}
               type="button"
               onClick={() => onSuggestion?.(`cd ${p.id}`)}
-              className="flex w-full gap-4 border-b border-[#262320] px-4 py-2.5 text-left text-xs last:border-b-0 hover:bg-[#1a1715]"
+              className="flex w-full gap-4 border-b border-[#242428] px-4 py-2.5 text-left text-xs last:border-b-0 hover:bg-[#0d0d10]"
             >
-              <span className="w-24 shrink-0 text-[#453f38]">drwxr-xr-x</span>
-              <span className="w-12 shrink-0 text-[#6b625a]">{p.date}</span>
-              <span className="w-32 shrink-0 text-[#f7dfc0]">{p.id}/</span>
-              <span className="hidden flex-1 truncate text-[#a89f92] sm:block">
+              <span className="w-24 shrink-0 text-[#4a4a52]">drwxr-xr-x</span>
+              <span className="w-12 shrink-0 text-[#7c7c85]">{p.date}</span>
+              <span className="w-32 shrink-0 text-[#ffddc0]">{p.id}/</span>
+              <span className="hidden flex-1 truncate font-sans text-[#a8a8ad] sm:block">
                 {p.excerpt}
               </span>
-              <span className="w-20 shrink-0 text-right text-[#86b06a]">
+              <span className="w-20 shrink-0 text-right text-[#3fb950]">
                 {p.head ? "live · HEAD" : "live"}
               </span>
             </button>
           ))}
-          <div className="px-4 py-2 text-xs text-[#453f38]">
+          <div className="px-4 py-2 text-xs text-[#4a4a52]">
             {projects.length} dirs · cd &lt;name&gt; to jump to a project
           </div>
         </div>
       )}
 
       {entry.kind === "skills" && (
-        <div className="flex flex-col gap-2 border border-[#262320] bg-[#121110] p-4">
+        <div className="flex flex-col gap-2 border border-[#242428] bg-[#111114] p-4">
           {skills.map((s) => (
             <div key={s.name} className="flex items-center gap-4 text-xs">
               <span className="w-32 shrink-0 text-[#a89f92]">{s.name}</span>
@@ -141,7 +141,7 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
                   <span
                     key={i}
                     className={`h-2 flex-1 ${
-                      i < Math.round(s.level * 18) ? "bg-[#f7dfc0]" : "bg-[#231f1b]"
+                      i < Math.round(s.level * 18) ? "bg-[#ffddc0]" : "bg-[#16161a]"
                     }`}
                   />
                 ))}
@@ -155,26 +155,26 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       )}
 
       {entry.kind === "career" && (
-        <div className="grid grid-cols-2 gap-px border border-[#262320] bg-[#262320] sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-px border border-[#242428] bg-[#242428] sm:grid-cols-4">
           {careerStats.map((c) => (
-            <div key={c.label} className="flex flex-col gap-1 bg-[#121110] px-4 py-3">
-              <span className="text-lg font-semibold text-[#f7dfc0]">{c.value}</span>
-              <span className="text-xs text-[#6b625a]">{c.label}</span>
+            <div key={c.label} className="flex flex-col gap-1 bg-[#111114] px-4 py-3">
+              <span className="text-lg font-semibold text-[#ffddc0]">{c.value}</span>
+              <span className="text-xs text-[#7c7c85]">{c.label}</span>
             </div>
           ))}
         </div>
       )}
 
       {entry.kind === "help" && (
-        <div className="border border-[#262320] bg-[#121110]">
+        <div className="border border-[#242428] bg-[#111114]">
           {helpRows.map((r) => (
             <div
               key={r.cmd}
-              className="flex gap-4 border-b border-[#262320] px-4 py-2 text-xs last:border-b-0"
+              className="flex gap-4 border-b border-[#242428] px-4 py-2 text-xs last:border-b-0"
             >
-              <span className="w-32 shrink-0 text-[#f7dfc0]">{r.cmd}</span>
-              <span className="w-8 shrink-0 text-[#453f38]">{r.key}</span>
-              <span className="flex-1 text-[#a89f92]">{r.desc}</span>
+              <span className="w-32 shrink-0 text-[#ffddc0]">{r.cmd}</span>
+              <span className="w-8 shrink-0 text-[#4a4a52]">{r.key}</span>
+              <span className="flex-1 font-sans text-[#a8a8ad]">{r.desc}</span>
             </div>
           ))}
         </div>
