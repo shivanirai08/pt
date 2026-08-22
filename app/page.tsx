@@ -6,7 +6,10 @@ import { Minimize2 } from "lucide-react";
 import Shell from "./components/Shell";
 import CommandBar from "./components/CommandBar";
 import StatusBar from "./components/StatusBar";
+import TerminalScrollback from "./components/TerminalScrollback";
 import HelpOverlay from "./components/HelpOverlay";
+import type { Entry } from "./components/TerminalOutput";
+import { SHELL_NAV, SHELL_X } from "./lib/shell";
 import GUIHome from "./gui/Home";
 import CLIAbout from "./cli/About";
 import CLIProjects from "./cli/Projects";
@@ -52,7 +55,8 @@ export default function Page() {
   const [cliInvalidMessage, setCLIInvalidMessage] = useState("");
   const [commandMode, setCommandMode] = useState(false);
   const [cmd, setCmd] = useState("");
-  const [cliCommandHistory, setCLICommandHistory] = useState<string[]>([]);
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [terminalEntries, setTerminalEntries] = useState<Entry[]>([]);
   const [cliHistoryIndex, setCLIHistoryIndex] = useState<number | null>(null);
   const [cliHistoryDraft, setCLIHistoryDraft] = useState("");
   const [cliCommandEcho, setCLICommandEcho] = useState("");
@@ -62,6 +66,7 @@ export default function Page() {
   const [hasPlayedGUIBoot, setHasPlayedGUIBoot] = useState(false);
   const [activeGUISection, setActiveGUISection] = useState<GUISection>("experience");
   const cliCommandTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const terminalEntryCounter = useRef(0);
 
   useLayoutEffect(() => {
     if (typeof window === "undefined") return;
@@ -150,7 +155,7 @@ export default function Page() {
 
   const enterCLIFullscreen = useCallback(() => {
     clearCLICommandPlayback();
-    setCommandMode(false);
+    setCommandMode(true);
     setCmd("");
     setCLIView("home");
     setCLICommandEcho("");
@@ -218,7 +223,7 @@ export default function Page() {
     setCommandMode(false);
     if (!input) return;
 
-    setCLICommandHistory((previous) => [...previous, rawInput]);
+    setCommandHistory((previous) => [...previous, rawInput]);
 
     if (input === "help" || input === "?") {
       runCLICommandAnimation(rawInput, () => setHelpOpen(true));
@@ -249,30 +254,30 @@ export default function Page() {
   }, [cmd, exitCLIFullscreen, fetchCLIUnknownMessage, navigateCLI, runCLICommandAnimation]);
 
   const handleCLIHistoryUp = useCallback(() => {
-    if (!cliCommandHistory.length) return;
+    if (!commandHistory.length) return;
     if (cliHistoryIndex === null) {
       setCLIHistoryDraft(cmd);
-      const nextIndex = cliCommandHistory.length - 1;
+      const nextIndex = commandHistory.length - 1;
       setCLIHistoryIndex(nextIndex);
-      setCmd(cliCommandHistory[nextIndex]);
+      setCmd(commandHistory[nextIndex]);
       return;
     }
     const nextIndex = Math.max(0, cliHistoryIndex - 1);
     setCLIHistoryIndex(nextIndex);
-    setCmd(cliCommandHistory[nextIndex]);
-  }, [cliCommandHistory, cliHistoryIndex, cmd]);
+    setCmd(commandHistory[nextIndex]);
+  }, [commandHistory, cliHistoryIndex, cmd]);
 
   const handleCLIHistoryDown = useCallback(() => {
-    if (!cliCommandHistory.length || cliHistoryIndex === null) return;
-    if (cliHistoryIndex >= cliCommandHistory.length - 1) {
+    if (!commandHistory.length || cliHistoryIndex === null) return;
+    if (cliHistoryIndex >= commandHistory.length - 1) {
       setCLIHistoryIndex(null);
       setCmd(cliHistoryDraft);
       return;
     }
     const nextIndex = cliHistoryIndex + 1;
     setCLIHistoryIndex(nextIndex);
-    setCmd(cliCommandHistory[nextIndex]);
-  }, [cliCommandHistory, cliHistoryDraft, cliHistoryIndex]);
+    setCmd(commandHistory[nextIndex]);
+  }, [commandHistory, cliHistoryDraft, cliHistoryIndex]);
 
   const handleCommandChange = useCallback((value: string) => {
     setCmd(value);
@@ -380,7 +385,15 @@ export default function Page() {
             </div>
           </footer>
         </Shell>
-        <CommandBar onEnterFullscreen={enterCLIFullscreen} />
+        <CommandBar
+          entries={terminalEntries}
+          setEntries={setTerminalEntries}
+          history={commandHistory}
+          setHistory={setCommandHistory}
+          entryCounter={terminalEntryCounter}
+          onEnterFullscreen={enterCLIFullscreen}
+          time={clock}
+        />
         <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} unified />
       </>
     );
@@ -389,7 +402,7 @@ export default function Page() {
   return (
     <div className="min-h-dvh overflow-x-hidden bg-[#0b0a09] text-[#ece5da]">
       <header className="sticky top-0 z-40 border-b border-[#24211d] bg-[#0b0a09]/92 backdrop-blur">
-        <div className="mx-auto flex h-[68px] w-full max-w-[2400px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className={`${SHELL_NAV} flex h-[68px] items-center justify-between ${SHELL_X}`}>
           <span className="text-[16px] font-bold tracking-tight">{personal.initials}.</span>
           <div className="flex items-center gap-4">
             <span className="text-[12px] uppercase tracking-[0.18em] text-[#453f38]">
@@ -460,26 +473,38 @@ export default function Page() {
           </AnimatePresence>
         </main>
 
-        <div className="pointer-events-none fixed bottom-5 left-4 right-4 z-40 sm:left-6 sm:right-6 lg:left-10 lg:right-10 xl:left-14 xl:right-14">
-          <StatusBar
-            commandMode={commandMode}
-            commandValue={cmd}
-            onCommandChange={handleCommandChange}
-            onCommandSubmit={executeCommand}
-            onCommandCancel={() => {
-              setCommandMode(false);
-              setCmd("");
-              setCLIHistoryIndex(null);
-              setCLIHistoryDraft("");
-            }}
-            onCommandFocus={() => setCommandMode(true)}
-            onCommandBlur={() => setCommandMode(false)}
-            onCommandHistoryUp={handleCLIHistoryUp}
-            onCommandHistoryDown={handleCLIHistoryDown}
-            toast={toast}
-            time={clock}
-            cliMode
-          />
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
+          {terminalEntries.length > 0 && (
+            <TerminalScrollback
+              entries={terminalEntries}
+              onClear={() => setTerminalEntries([])}
+              maxHeight="max-h-[38vh]"
+            />
+          )}
+          <div className={`pointer-events-auto ${SHELL_X} pb-5`}>
+            <div className={SHELL_NAV}>
+              <StatusBar
+                commandMode={commandMode}
+                commandValue={cmd}
+                onCommandChange={handleCommandChange}
+                onCommandSubmit={executeCommand}
+                onCommandCancel={() => {
+                  setCommandMode(false);
+                  setCmd("");
+                  setCLIHistoryIndex(null);
+                  setCLIHistoryDraft("");
+                }}
+                onCommandFocus={() => setCommandMode(true)}
+                onCommandBlur={() => setCommandMode(false)}
+                onCommandHistoryUp={handleCLIHistoryUp}
+                onCommandHistoryDown={handleCLIHistoryDown}
+                toast={toast}
+                time={clock}
+                cliMode
+                animate
+              />
+            </div>
+          </div>
         </div>
       </motion.div>
 

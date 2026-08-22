@@ -256,6 +256,29 @@ export const skills: Skill[] = [
   { name: "socket.io", years: 2, projects: 8, level: 0.65, category: "tooling" },
 ];
 
+export type SkillProcessRow = {
+  pid: string;
+  skill: string;
+  years: string;
+  projects: string;
+  state: "RUNNING" | "IDLE" | "LEARNING";
+};
+
+export const skillProcessRows: SkillProcessRow[] = [
+  { pid: "01", skill: "--react", years: "4y 08m", projects: "24", state: "RUNNING" },
+  { pid: "02", skill: "--typescript", years: "3y 02m", projects: "18", state: "RUNNING" },
+  { pid: "03", skill: "--css", years: "4y 00m", projects: "22", state: "RUNNING" },
+  { pid: "04", skill: "--javascript", years: "4y 00m", projects: "24", state: "RUNNING" },
+  { pid: "05", skill: "--tailwind", years: "3y 00m", projects: "18", state: "RUNNING" },
+  { pid: "06", skill: "--figma", years: "3y 06m", projects: "20", state: "RUNNING" },
+  { pid: "07", skill: "--next.js", years: "2y 04m", projects: "9", state: "IDLE" },
+  { pid: "08", skill: "--redux", years: "2y 02m", projects: "12", state: "IDLE" },
+  { pid: "09", skill: "--socket.io", years: "2y 01m", projects: "8", state: "IDLE" },
+  { pid: "97", skill: "--three.js", years: "0y 06m", projects: "1", state: "LEARNING" },
+  { pid: "98", skill: "--rust", years: "0y 03m", projects: "-", state: "LEARNING" },
+  { pid: "99", skill: "--webgpu", years: "0y 00m", projects: "-", state: "LEARNING" },
+];
+
 export const secondaryTools = [
   "Git", "Tailwind CSS", "Supabase", "WebRTC", "Redux Toolkit", "REST APIs", "Vite", "MongoDB",
 ];

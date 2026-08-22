@@ -3,10 +3,10 @@
 import {
   personal,
   projects,
-  skills,
   stats,
   experienceImpact,
 } from "../data";
+import SkillsProcessTable from "./SkillsProcessTable";
 
 export type Entry = {
   id: number;
@@ -131,28 +131,7 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
         </div>
       )}
 
-      {entry.kind === "skills" && (
-        <div className="flex flex-col gap-2 border border-[#242428] bg-[#111114] p-4">
-          {skills.map((s) => (
-            <div key={s.name} className="flex items-center gap-4 text-xs">
-              <span className="w-32 shrink-0 text-[#a89f92]">{s.name}</span>
-              <span className="flex flex-1 gap-px">
-                {Array.from({ length: 18 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={`h-2 flex-1 ${
-                      i < Math.round(s.level * 18) ? "bg-[#ffddc0]" : "bg-[#16161a]"
-                    }`}
-                  />
-                ))}
-              </span>
-              <span className="w-16 shrink-0 text-right text-[#453f38]">
-                {s.years}y · {s.projects}p
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
+      {entry.kind === "skills" && <SkillsProcessTable compact />}
 
       {entry.kind === "career" && (
         <div className="grid grid-cols-2 gap-px border border-[#242428] bg-[#242428] sm:grid-cols-4">

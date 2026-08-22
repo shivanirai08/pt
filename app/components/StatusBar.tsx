@@ -16,10 +16,14 @@ type Props = {
   toast: string;
   time: string;
   cliMode?: boolean;
+  placeholder?: string;
+  actions?: React.ReactNode;
+  animate?: boolean;
 };
 
 export default function StatusBar(props: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const animate = props.animate ?? props.cliMode ?? false;
 
   useEffect(() => {
     if (props.commandMode) inputRef.current?.focus();
@@ -46,41 +50,43 @@ export default function StatusBar(props: Props) {
     }
   };
 
-  return (
-    <div className="pointer-events-auto w-full border border-[#242428] bg-[#070708]/96 backdrop-blur-lg overflow-hidden">
-      <motion.div
-        initial={{ clipPath: "inset(0 50% 0 50%)" }}
-        animate={{ clipPath: "inset(0 0% 0 0%)" }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={
-          "flex h-14 w-full items-center justify-center gap-3 px-4 text-[12px] transition-colors duration-200" +
-          (props.commandMode
-            ? "bg-[#101014]/95"
-            : "bg-[#0d0d10]/95")
+  const rowClass =
+    "flex h-14 w-full items-center gap-3 text-[12px] transition-colors duration-200 px-10" +
+    (props.commandMode ? " bg-[#101014]/95" : " bg-[#0d0d10]/95");
+
+  const inner = (
+    <>
+      <span className="hidden shrink-0 text-[#d4b483] sm:inline">shivanirai@portfolio:~$</span>
+      <span className="shrink-0 text-[#d4b483] sm:hidden">~$</span>
+      <span className="shrink-0 font-medium text-[#d4b483]">:</span>
+      <input
+        ref={inputRef}
+        className="min-w-0 flex-1 bg-transparent text-[#e8e8ea] outline-none placeholder:text-[#4a4a52] caret-[#d4b483]"
+        value={props.commandValue}
+        onChange={(e) => props.onCommandChange(e.target.value)}
+        onKeyDown={handleKey}
+        onFocus={props.onCommandFocus}
+        onBlur={props.onCommandBlur}
+        placeholder={
+          props.placeholder ??
+          (props.cliMode
+            ? "type a command, use ↑/↓ history, 1-5, or :help"
+            : "type a command, or ? for the list")
         }
-      >
-        <span className="hidden text-[#d4b483] sm:inline">shivanirai@portfolio:~$</span>
-        <span className="text-[#d4b483] sm:hidden">~$</span>
-        <span className="text-[#d4b483] font-medium">:</span>
-        <input
-          ref={inputRef}
-          className="flex-1 bg-transparent text-[#e8e8ea] outline-none placeholder:text-[#4a4a52] caret-[#d4b483]"
-          value={props.commandValue}
-          onChange={(e) => props.onCommandChange(e.target.value)}
-          onKeyDown={handleKey}
-          onFocus={props.onCommandFocus}
-          onBlur={props.onCommandBlur}
-          placeholder="type a command, use ↑/↓ history, 1-5, or :help"
-        />
-        {props.toast ? (
-          <motion.span
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden whitespace-nowrap text-[11px] text-[#c27070] md:inline"
-          >
-            {props.toast}
-          </motion.span>
-        ) : (
+        spellCheck={false}
+        autoComplete="off"
+      />
+      {props.actions ? <div className="flex shrink-0 items-center">{props.actions}</div> : null}
+      {props.toast ? (
+        <motion.span
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="hidden whitespace-nowrap text-[11px] text-[#c27070] md:inline"
+        >
+          {props.toast}
+        </motion.span>
+      ) : (
+        !props.actions && (
           <div className="hidden items-center gap-3 text-[10px] tracking-[0.08em] text-[#7c7c85] md:flex">
             <span>{props.time}</span>
             <span className="text-[#4a4a52]">|</span>
@@ -93,8 +99,25 @@ export default function StatusBar(props: Props) {
               {props.cliMode ? "unified" : "GUI"}
             </span>
           </div>
-        )}
-      </motion.div>
+        )
+      )}
+    </>
+  );
+
+  return (
+    <div className="pointer-events-auto w-full overflow-hidden border border-[#242428] bg-[#070708]/96 backdrop-blur-lg">
+      {animate ? (
+        <motion.div
+          initial={{ clipPath: "inset(0 50% 0 50%)" }}
+          animate={{ clipPath: "inset(0 0% 0 0%)" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className={rowClass}
+        >
+          {inner}
+        </motion.div>
+      ) : (
+        <div className={rowClass}>{inner}</div>
+      )}
     </div>
   );
 }

@@ -1,9 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Download, Mail, Maximize2, X } from "lucide-react";
-import TerminalOutput, { helpRows, whoamiLines, type Entry } from "./TerminalOutput";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Download, Mail, Maximize2 } from "lucide-react";
+import { helpRows, whoamiLines, type Entry } from "./TerminalOutput";
+import TerminalScrollback from "./TerminalScrollback";
+import StatusBar from "./StatusBar";
 import { personal, projects } from "../data";
+import { SHELL_NAV, SHELL_X } from "../lib/shell";
+
+export type { Entry };
 
 type Spec = {
   id: string;
@@ -69,38 +74,35 @@ function distance(a: string, b: string) {
 }
 
 type Props = {
+  entries: Entry[];
+  setEntries: React.Dispatch<React.SetStateAction<Entry[]>>;
+  history: string[];
+  setHistory: React.Dispatch<React.SetStateAction<string[]>>;
+  entryCounter: React.MutableRefObject<number>;
   onEnterFullscreen: () => void;
+  time: string;
 };
 
-export default function CommandBar({ onEnterFullscreen }: Props) {
+export default function CommandBar({
+  entries,
+  setEntries,
+  history,
+  setHistory,
+  entryCounter,
+  onEnterFullscreen,
+  time,
+}: Props) {
   const [focused, setFocused] = useState(false);
   const [value, setValue] = useState("");
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
   const [flash, setFlash] = useState<string | null>(null);
   const [active, setActive] = useState("hero");
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const counter = useRef(0);
 
   const matches = useMemo(() => {
     const q = value.trim().toLowerCase();
     if (!q) return [];
     return SPECS.filter((s) => s.names.some((n) => n.startsWith(q))).slice(0, 4);
   }, [value]);
-
-  const ghost = useMemo(() => {
-    const q = value.trim().toLowerCase();
-    if (!q || matches.length === 0) return "";
-    const hit = matches[0].names.find((n) => n.startsWith(q));
-    return hit ? hit.slice(q.length) : "";
-  }, [value, matches]);
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [entries]);
 
   useEffect(() => {
     const els = SECTIONS.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
@@ -121,10 +123,13 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const push = useCallback((e: Omit<Entry, "id">) => {
-    counter.current += 1;
-    setEntries((prev) => [...prev, { ...e, id: counter.current }]);
-  }, []);
+  const push = useCallback(
+    (e: Omit<Entry, "id">) => {
+      entryCounter.current += 1;
+      setEntries((prev) => [...prev, { ...e, id: entryCounter.current }]);
+    },
+    [entryCounter, setEntries]
+  );
 
   const fetchUnknownMessage = useCallback(async (commandText: string) => {
     const fallback = "unknown command. terminal unimpressed.";
@@ -151,6 +156,7 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
       setHistory((prev) => [...prev, cmd]);
       setHistIdx(-1);
       setValue("");
+      setFocused(true);
       const q = cmd.toLowerCase();
 
       if (q === "clear" || q === "⌃l") {
@@ -233,7 +239,7 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
         setFlash(`command not found: ${cmd}`);
       })();
     },
-    [fetchUnknownMessage, goSection, onEnterFullscreen, push]
+    [fetchUnknownMessage, goSection, onEnterFullscreen, push, setEntries, setHistory]
   );
 
   useEffect(() => {
@@ -245,7 +251,6 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
   useEffect(() => {
     function onFocusCommand() {
       setFocused(true);
-      window.setTimeout(() => inputRef.current?.focus(), 0);
     }
     window.addEventListener("portfolio:focus-command", onFocusCommand);
     return () => window.removeEventListener("portfolio:focus-command", onFocusCommand);
@@ -258,102 +263,107 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setFocused(true);
-        window.setTimeout(() => inputRef.current?.focus(), 0);
         return;
       }
       if (e.key === "/" && !typing) {
         e.preventDefault();
         setFocused(true);
-        window.setTimeout(() => inputRef.current?.focus(), 0);
       }
       if (e.key === "Escape") {
         setFocused(false);
-        inputRef.current?.blur();
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  function onInputKey(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      run(value);
-    } else if (e.key === "Tab") {
-      e.preventDefault();
-      if (ghost) setValue(value.trim() + ghost);
-      else if (entries.length) {
-        const last = entries[entries.length - 1];
-        if (last.kind === "error" && last.suggestions?.[0]) setValue(last.suggestions[0]);
-      }
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      if (!history.length) return;
-      const next = histIdx < 0 ? history.length - 1 : Math.max(0, histIdx - 1);
+  const handleHistoryUp = useCallback(() => {
+    if (!history.length) return;
+    const next = histIdx < 0 ? history.length - 1 : Math.max(0, histIdx - 1);
+    setHistIdx(next);
+    setValue(history[next]);
+  }, [histIdx, history]);
+
+  const handleHistoryDown = useCallback(() => {
+    if (histIdx < 0) return;
+    const next = histIdx + 1;
+    if (next >= history.length) {
+      setHistIdx(-1);
+      setValue("");
+    } else {
       setHistIdx(next);
       setValue(history[next]);
-    } else if (e.key === "ArrowDown") {
-      e.preventDefault();
-      if (histIdx < 0) return;
-      const next = histIdx + 1;
-      if (next >= history.length) {
-        setHistIdx(-1);
-        setValue("");
-      } else {
-        setHistIdx(next);
-        setValue(history[next]);
-      }
     }
-  }
+  }, [histIdx, history]);
+
+  const handleSubmit = useCallback(() => {
+    run(value);
+  }, [run, value]);
 
   const idx = SECTIONS.indexOf(active);
   const pathLabel = active === "hero" ? "~" : `~/${active}`;
+  const idlePlaceholder = flash
+    ? `✕ ${flash}`
+    : `${pathLabel} · ${idx + 1}/${SECTIONS.length} · press / or ⌘K · try ${helpRows[1].cmd}`;
+
+  const barActions = (
+    <>
+      <button
+        type="button"
+        onClick={() => run(":resume")}
+        className="hidden h-14 items-center gap-2 border-l border-[#242428] px-3 text-xs text-[#7c7c85] hover:text-[#a8a8ad] sm:flex"
+      >
+        <Download size={13} strokeWidth={1.5} /> :resume
+      </button>
+      <button
+        type="button"
+        onClick={() => goSection("contact")}
+        className="hidden h-14 items-center gap-2 border-l border-[#242428] px-3 text-xs text-[#7c7c85] hover:text-[#a8a8ad] sm:flex"
+      >
+        <Mail size={13} strokeWidth={1.5} /> :contact
+      </button>
+      <button
+        type="button"
+        onClick={onEnterFullscreen}
+        title="Enter full terminal mode"
+        className="flex h-14 items-center gap-2 border-l border-[#242428] px-3 text-xs text-[#7c7c85] hover:text-[#a8a8ad]"
+      >
+        <Maximize2 size={13} strokeWidth={1.5} />
+        <span className="hidden sm:inline">fullscreen</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => setFocused(true)}
+        className="flex h-14 items-center gap-2 border-l border-[#242428] px-3 text-xs text-[#7c7c85] hover:text-[#a8a8ad]"
+      >
+        ⌘K
+      </button>
+    </>
+  );
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40">
+      <div className="px-2">
       {entries.length > 0 && focused && (
-        <div className="border-t border-[#16161a] bg-[#0a0a0b]/98 backdrop-blur-md">
-          <div className="flex items-center justify-between border-b border-[#16161a] bg-[#0d0d10] px-5 py-2">
-            <div className="flex items-center gap-3 text-xs text-[#7c7c85]">
-              <span className="flex gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
-                <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
-                <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
-              </span>
-              <span>shivanirai@portfolio: ~ — zsh</span>
-            </div>
-            <div className="flex items-center gap-4 text-xs text-[#4a4a52]">
-              <button type="button" onClick={() => setEntries([])} className="hover:text-[#a8a8ad]">
-                clear
-              </button>
-              <button
-                type="button"
-                onClick={() => setFocused(false)}
-                className="flex items-center gap-1 hover:text-[#a8a8ad]"
-              >
-                esc <X size={12} strokeWidth={1.5} />
-              </button>
-            </div>
-          </div>
-          <div ref={scrollRef} className="max-h-[46vh] overflow-y-auto bg-[#0a0a0b] px-5 py-4">
-            <div className="mx-auto flex max-w-5xl flex-col gap-6">
-              {entries.map((e) => (
-                <TerminalOutput key={e.id} entry={e} onSuggestion={run} />
-              ))}
-            </div>
-          </div>
-        </div>
+        <TerminalScrollback
+          entries={entries}
+          onSuggestion={run}
+          onClear={() => setEntries([])}
+          onClose={() => setFocused(false)}
+        />
       )}
-
+      </div>
+  
       {focused && matches.length > 0 && (
-        <div className="border-t border-[#16161a] bg-[#0d0d10]">
-          <div className="mx-auto max-w-5xl">
+        <div className={`border-t border-[#16161a] bg-[#0d0d10] ${SHELL_X}`}>
+          <div className={SHELL_NAV}>
             {matches.map((m, i) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => run(m.names[0])}
-                className={`flex w-full items-center justify-between px-5 py-2 text-left text-xs ${
-                  i === 0 ? "bg-[#111114] text-[#ffddc0]" : "text-[#a8a8ad] hover:bg-[#111114]"
+                className={`flex w-full items-center justify-between py-2 text-left text-xs ${
+                  i === 0 ? "text-[#a8a8ad]" : "text-[#7c7c85] hover:text-[#a8a8ad]"
                 }`}
               >
                 <span>{m.names[0]}</span>
@@ -364,107 +374,34 @@ export default function CommandBar({ onEnterFullscreen }: Props) {
         </div>
       )}
 
-      <div className="border-t border-[#16161a] bg-[#0d0d10]/98 backdrop-blur-md">
-        <div className="flex h-12 items-center justify-between gap-4 pr-1">
-          <div className="flex h-full min-w-0 flex-1 items-center gap-0">
-            <a
-              href={`mailto:${personal.email}`}
-              className="flex h-full shrink-0 items-center gap-2 bg-[#ffddc0] px-4 text-xs font-semibold text-[#0a0a0b] hover:bg-[#e8e8ea]"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#3fb950]" />
-              AVAILABLE
-            </a>
-
-            {focused ? (
-              <div className="relative flex min-w-0 flex-1 items-center gap-2 px-4">
-                <span className="shrink-0 text-sm text-[#3fb950]">~$</span>
-                <div className="relative min-w-0 flex-1">
-                  <div className="pointer-events-none absolute inset-0 flex items-center truncate font-mono text-sm">
-                    <span className="text-[#e8e8ea]">{value}</span>
-                    <span className="text-[#4a4a52]">{ghost}</span>
-                    {!value && (
-                      <span className="text-[#4a4a52]">type a command, or ? for the list</span>
-                    )}
-                  </div>
-                  <input
-                    ref={inputRef}
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    onKeyDown={onInputKey}
-                    onBlur={() => !entries.length && setFocused(false)}
-                    className="w-full bg-transparent font-mono text-sm text-transparent caret-[#ffddc0] outline-none"
-                    spellCheck={false}
-                    autoComplete="off"
-                  />
-                </div>
-                <span className="hidden shrink-0 items-center gap-3 text-xs text-[#4a4a52] sm:flex">
-                  <span className="border border-[#242428] px-1.5 py-0.5">↹ tab</span>
-                  <span className="border border-[#242428] px-1.5 py-0.5">↑ history</span>
-                  <span className="border border-[#242428] px-1.5 py-0.5">↵ run</span>
-                </span>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setFocused(true);
-                  window.setTimeout(() => inputRef.current?.focus(), 0);
-                }}
-                className="flex h-full min-w-0 flex-1 items-center gap-4 px-4 text-left"
-              >
-                {flash ? (
-                  <span className="truncate text-xs text-[#c27070]">✕ {flash}</span>
-                ) : (
-                  <>
-                    <span className="text-xs text-[#a8a8ad]">{pathLabel}</span>
-                    <span className="hidden text-xs text-[#4a4a52] sm:inline">
-                      {idx + 1} / {SECTIONS.length}
-                    </span>
-                    <span className="hidden truncate text-xs text-[#4a4a52] md:inline">
-                      press <span className="text-[#a8a8ad]">/</span> to run a command · try{" "}
-                      <span className="text-[#a8a8ad]">{helpRows[1].cmd}</span>
-                    </span>
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-
-          <div className="flex h-full shrink-0 items-center">
-            <button
-              type="button"
-              onClick={() => run(":resume")}
-              className="hidden h-full items-center gap-2 px-4 text-xs text-[#a8a8ad] hover:text-[#e8e8ea] sm:flex"
-            >
-              <Download size={13} strokeWidth={1.5} /> :resume
-            </button>
-            <button
-              type="button"
-              onClick={() => goSection("contact")}
-              className="hidden h-full items-center gap-2 px-4 text-xs text-[#a8a8ad] hover:text-[#e8e8ea] sm:flex"
-            >
-              <Mail size={13} strokeWidth={1.5} /> :contact
-            </button>
-            <button
-              type="button"
-              onClick={onEnterFullscreen}
-              title="Enter full terminal mode"
-              className="flex h-full items-center gap-2 border-l border-[#242428] bg-[#111114] px-4 text-xs text-[#e8e8ea] hover:bg-[#16161a]"
-            >
-              <Maximize2 size={13} strokeWidth={1.5} />
-              <span className="hidden sm:inline">fullscreen</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setFocused(true);
-                window.setTimeout(() => inputRef.current?.focus(), 0);
-              }}
-              className="flex h-full items-center gap-2 border-l border-[#242428] bg-[#111114] px-4 text-xs text-[#e8e8ea] hover:bg-[#16161a]"
-            >
-              ⌘K
-            </button>
-          </div>
+      <div className={`pb-2 px-2`}>
+        <div className={SHELL_NAV}>
+          <StatusBar
+            commandMode={focused}
+            commandValue={focused ? value : ""}
+            onCommandChange={(v) => {
+              setFocused(true);
+              setValue(v);
+              setHistIdx(-1);
+            }}
+            onCommandSubmit={handleSubmit}
+            onCommandCancel={() => {
+              setFocused(false);
+              setValue("");
+              setHistIdx(-1);
+            }}
+            onCommandFocus={() => setFocused(true)}
+            onCommandBlur={() => {
+              if (!entries.length) setFocused(false);
+            }}
+            onCommandHistoryUp={handleHistoryUp}
+            onCommandHistoryDown={handleHistoryDown}
+            toast={flash && focused ? flash : ""}
+            time={time}
+            placeholder={focused ? "type a command, or ? for the list" : idlePlaceholder}
+            actions={barActions}
+            animate={false}
+          />
         </div>
       </div>
     </div>

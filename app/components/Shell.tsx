@@ -1,6 +1,7 @@
 "use client";
 
 import { personal } from "../data";
+import { SHELL_NAV, SHELL_X } from "../lib/shell";
 
 type GUISection = "about" | "projects" | "experience" | "contact";
 
@@ -24,7 +25,7 @@ export default function Shell({
   return (
     <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
       <header className="sticky top-0 z-40 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
-        <div className="mx-auto flex h-[68px] w-full max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 xl:px-16">
+        <div className={`${SHELL_NAV} flex h-[68px] items-center justify-between ${SHELL_X}`}>
           <button
             type="button"
             onClick={() => document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" })}
@@ -77,7 +78,7 @@ export default function Shell({
         </div>
       </header>
 
-      <main className="pb-14">{children}</main>
+      <main className="pb-24">{children}</main>
     </div>
   );
 }
