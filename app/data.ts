@@ -185,15 +185,13 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     version: "v5.0.0",
-    range: "Jan 2026 – May 2026",
+    range: "Jan 2026 – June 2026",
     role: "Frontend Engineer",
     company: "Hikigai Inc. (Full-Time Remote)",
     achievements: [
-      "Joined a Health AI startup and learned WebRTC by building live audio consultations for doctors and patients. I picked up how peer connections work, why Safari needs extra care, and how to add fallback flows when a network keeps dropping.",
-      "Moved through the full product cycle: PRDs, design handoffs, frontend-backend integration, QA, bug fixes, demos, and production deploys. Frontend started feeling like real ownership here.",
-      "Integrated AI-generated SOAP summaries into five clinical modules through REST APIs, mapping how clinical data shows up on screen for doctors and patients.",
-      "Built a reusable React + TypeScript component library for the patient-doctor assignment workflow. Learned to think in patterns the whole team could reuse.",
-      "Code reviews became a regular learning habit: reading production code, catching edge cases early, and giving useful feedback in review cycles.",
+      "Built WebRTC audio/video consultations for a Health AI platform, handling peer connections, Safari compatibility, and fallback flows for unstable networks.",
+      "Worked across the full product cycle from PRD to production deploy, and built a reusable React + TypeScript component library for the patient-doctor workflow.",
+      "Integrated AI-generated SOAP summaries into five clinical modules through REST APIs.",
     ],
   },
   {
@@ -202,11 +200,9 @@ export const experience: Experience[] = [
     role: "Frontend Developer Intern",
     company: "QuantumNXT · Quantum Leap Technology (Remote)",
     achievements: [
-      "First internship on a real enterprise product, BOI, a sustainability platform for tracking carbon emissions. Shipped features that actual businesses use.",
-      "Shipped 5+ end-to-end user flows, including a dynamic emission calculator wired to a C# / ASP.NET backend across three emission categories. Learned to read API contracts and handle backend responses cleanly on the frontend.",
-      "Worked in sprints and fixed 15+ UI/UX bugs across four dashboard views. Learned to prioritize, test properly, and ship stable fixes.",
-      "Debugged cross-browser issues on Chrome, Firefox, and Edge. It changed how I write CSS and how seriously I take testing before pushing.",
-      "Worked inside an existing codebase with a real team and learned how enterprise UI gets built: dashboard-heavy layouts, consistent patterns, and flows that feel clear to non-technical users.",
+      "Built 5+ user flows for BOI, an enterprise sustainability platform, including a dynamic emission calculator on a C# / ASP.NET backend.",
+      "Fixed 15+ UI/UX bugs across four dashboard views in sprint-based development.",
+      "Resolved cross-browser issues on Chrome, Firefox, and Edge while working inside an existing enterprise codebase.",
     ],
   },
   {
