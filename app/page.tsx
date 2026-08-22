@@ -60,7 +60,7 @@ export default function Page() {
   const [toast, setToast] = useState("");
   const [clock, setClock] = useState("");
   const [hasPlayedGUIBoot, setHasPlayedGUIBoot] = useState(false);
-  const [activeGUISection, setActiveGUISection] = useState<GUISection>("about");
+  const [activeGUISection, setActiveGUISection] = useState<GUISection>("experience");
   const cliCommandTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useLayoutEffect(() => {
@@ -94,11 +94,11 @@ export default function Page() {
 
   useEffect(() => {
     if (viewMode !== "unified") return;
-    const sections = ["about", "projects", "experience", "contact"] as const;
+    const sections = ["experience", "projects", "about", "contact"] as const;
     let frameId = 0;
     const syncScrollState = () => {
       const markerY = window.scrollY + 180;
-      let currentSection: GUISection = "about";
+      let currentSection: GUISection = "experience";
       sections.forEach((sectionId) => {
         const el = document.getElementById(sectionId);
         if (el && el.offsetTop <= markerY) currentSection = sectionId;
@@ -362,16 +362,20 @@ export default function Page() {
             showBootSequence={!hasPlayedGUIBoot}
             onBootSequenceComplete={handleGUIBootComplete}
           />
+
           <footer className="relative mt-24 overflow-visible py-2 sm:py-4 md:py-8 lg:py-10">
-            <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[-56px] -translate-x-1/2">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-[-56px] -translate-x-1/2"
+            >
               <div
-                className="select-none whitespace-nowrap font-['Press_Start_2P',cursive] font-bold uppercase leading-none text-[#f7dfc0]/[0.12]"
+                className="select-none whitespace-nowrap font-['Press_Start_2P',cursive] font-bold uppercase leading-none text-[#ffddc0]/[0.12]"
                 style={{ fontSize: "clamp(20px, 4vw - 5px, 72px)" }}
               >
                 Design.Develop.Deliver.
               </div>
             </div>
-            <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 pb-16 text-center text-[13px] text-[#5d564e] sm:px-8 lg:px-12 xl:px-16">
+            <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 pb-16 text-center text-[13px] text-[#5b5b62] sm:px-8 lg:px-12 xl:px-16">
               Made with sharp pixels, late-night focus, and probably one more coffee.
             </div>
           </footer>

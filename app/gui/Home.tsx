@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { ArrowUpRight, Mail } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
   personal,
   projects,
@@ -31,16 +31,6 @@ const HERO_ENTRY_HIDDEN = { opacity: 0, y: "100vh" };
 const HERO_ENTRY_VISIBLE = { opacity: 1, y: 0 };
 const HERO_INTRO_DOCKED = { opacity: 1, y: -22 };
 
-const CONNECTION_LINES: ConnectionLine[] = [
-  { text: "Connecting to shivani.dev...", color: "#888" },
-  { text: "Connection established.", color: "#3fb950" },
-];
-
-const CONTACT_SEQUENCE_DELAYS = {
-  connected: 1400,
-  reveal: 2200,
-};
-
 type GUIHomeProps = {
   showBootSequence: boolean;
   onBootSequenceComplete: () => void;
@@ -54,13 +44,6 @@ type SectionCommandRevealProps = {
   children: React.ReactNode;
 };
 
-type ConnectionLine = {
-  text: string;
-  color: string;
-  suffix?: string;
-  suffixColor?: string;
-};
-
 export default function GUIHome({
   showBootSequence,
   onBootSequenceComplete,
@@ -72,13 +55,9 @@ export default function GUIHome({
       : BOOT_WORDS.map((words) => words.length)
   );
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
-  const [contactPhase, setContactPhase] = useState(0);
-  const [contactConnected, setContactConnected] = useState(false);
-  const [emailCopied, setEmailCopied] = useState(false);
   const [activeProject, setActiveProject] = useState(0);
   const [activeExperience, setActiveExperience] = useState(0);
   const mainRef = useRef<HTMLDivElement>(null);
-  const contactSequenceStartedRef = useRef(false);
   const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
   const experienceRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -120,34 +99,6 @@ export default function GUIHome({
 
     return () => timers.forEach(clearTimeout);
   }, [onBootSequenceComplete, showBootSequence]);
-
-  // Contact SSH animation
-  useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !contactSequenceStartedRef.current) {
-          contactSequenceStartedRef.current = true;
-          setContactPhase(1);
-          observer.disconnect();
-
-          timers.push(
-            setTimeout(() => setContactPhase(2), CONTACT_SEQUENCE_DELAYS.connected)
-          );
-          timers.push(
-            setTimeout(() => setContactConnected(true), CONTACT_SEQUENCE_DELAYS.reveal)
-          );
-        }
-      },
-      { threshold: 0.3 }
-    );
-    const el = document.getElementById("contact-terminal");
-    if (el) observer.observe(el);
-    return () => {
-      observer.disconnect();
-      timers.forEach(clearTimeout);
-    };
-  }, []);
 
   // Active project scroll tracker
   useEffect(() => {
@@ -217,16 +168,6 @@ export default function GUIHome({
     }, mainRef);
     return () => ctx.revert();
   }, []);
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(personal.email);
-      setEmailCopied(true);
-      setTimeout(() => setEmailCopied(false), 1800);
-    } catch {
-      window.location.href = `mailto:${personal.email}`;
-    }
-  };
 
   return (
     <div ref={mainRef} className="text-[14px] md:text-[15px]">
@@ -361,126 +302,125 @@ export default function GUIHome({
         </div>
       </section>
 
-      {/* ════════ ABOUT — full viewport ════════ */}
+      {/* ════════ EXPERIENCE — full viewport ════════ */}
       <SectionCommandReveal
-        id="about"
-        command="❯ man shivani"
+        id="experience"
+        command="❯ cat CHANGELOG.md"
         className="min-h-screen py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-          <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-16 xl:gap-20">
-            {/* Left — man page content */}
-            <div className="flex-1 space-y-10">
-              <div className="reveal-item">
-                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
-                  NAME
-                </div>
-                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.85]">
-                  {personal.name} — frontend developer with a product brain.
-                </div>
-              </div>
-
-              <div className="reveal-item">
-                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
-                  SYNOPSIS
-                </div>
-                <div className="text-[15px] pl-7 leading-[1.85]">
-                  <span className="text-[#c3c7f4]">{personal.synopsis}</span>
-                </div>
-              </div>
-
-              <div className="reveal-item">
-                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
-                  DESCRIPTION
-                </div>
-                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.9] space-y-6">
-                  <p>
-                    Frontend is where I live, but I&apos;ve never been able to stop at the component boundary. Two years of building real products will do that - you start caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually experiences between the click and the render.
-                  </p>
-                  <p>
-                    Next.js by default. Figma when I need to think out loud. Strong opinions about padding, motion, and whether that shade of grey is actually neutral. All held loosely, none of them quiet.
-                  </p>
-                </div>
-              </div>
-
-              <div className="reveal-item">
-                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
-                  ENVIRONMENT
-                </div>
-                <div className="text-[15px] pl-7 leading-[1.85]">
-                  <div>
-                    <span className="text-[#c3c7f4]">$LOCATION</span> ={" "}
-                    <span className="text-[#888]">{personal.location}</span>
+          <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-12 xl:gap-16">
+            {/* Timeline */}
+            <div className="flex-1">
+              {experience.map((role, i) => (
+                <div
+                  key={role.version}
+                  ref={(el) => { experienceRefs.current[i] = el; }}
+                  className="mb-10 reveal-item"
+                >
+                  <div className="flex items-center gap-3 mb-1 flex-wrap">
+                    <span
+                      className="text-[20px] font-bold transition-colors duration-300"
+                      style={{ color: i === activeExperience ? "#ffddc0" : "#c3c7f4" }}
+                    >
+                      ## [{role.version}]
+                    </span>
+                    <span className="text-[14px] text-[#555]">
+                      {role.range}
+                    </span>
+                    {i === 0 && (
+                      <span className="bg-[#3fb950] text-[#000] text-[12px] px-2 py-[2px] font-bold">
+                        LATEST
+                      </span>
+                    )}
                   </div>
-                  <div>
-                    <span className="text-[#c3c7f4]">$EDITOR</span> ={" "}
-                    <span className="text-[#888]">{personal.editor}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#c3c7f4]">$AVAILABLE</span> ={" "}
-                    <span className="text-[#3fb950]">true</span>
-                  </div>
-                </div>
-              </div>
 
-              <div className="reveal-item">
-                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
-                  SEE ALSO
+                  <div className="text-[16px] text-[#ccc] mb-4 leading-relaxed">
+                    {role.role} —{" "}
+                    <span className="text-[#c3c7f4]">{role.company}</span>
+                  </div>
+
+                  {role.achievements.length > 0 && (
+                    <div className="pl-6 text-[14px] leading-[2] space-y-2">
+                      {role.achievements.map((a, j) => (
+                        <div key={j} className="text-[#888] max-w-[92%]">
+                          <span className="text-[#3fb950]">+</span> {a}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="text-[15px] pl-7">
-                  <a
-                    href="#projects"
-                    className="text-[#c3c7f4] underline hover:text-white transition-colors duration-150"
-                  >
-                    projects(1)
-                  </a>
-                  ,{" "}
-                  <a
-                    href="#experience"
-                    className="text-[#c3c7f4] underline hover:text-white transition-colors duration-150"
-                  >
-                    experience(5)
-                  </a>
-                  ,{" "}
-                  <a
-                    href="#contact"
-                    className="text-[#c3c7f4] underline hover:text-white transition-colors duration-150"
-                  >
-                    contact(8)
-                  </a>
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* Right — skills */}
-            <div className="w-full lg:w-[430px] shrink-0" id="skills-panel">
-              <div className="mb-6 reveal-item">
-                <div className="text-[#ffddc0] font-bold text-[16px] mb-6">
-                  OPTIONS (Skills)
+            {/* Stats sidebar */}
+            <div className="w-full lg:w-[320px] shrink-0 space-y-6">
+              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
+                <div className="text-[13px] text-[#555] mb-6">
+                  ❯ wc --career
                 </div>
-                <div className="text-[12px] text-[#7c7c85] mb-3">
-                  <span className="text-[#7c7c85]">&gt;</span> ls ~/stack/
-                </div>
-                <div className="border border-[#242428] bg-[#111114] p-5 space-y-3">
-                  {aboutStack.map((row) => (
-                    <div key={row.label} className="flex gap-4 text-[14px] leading-relaxed">
-                      <span className="text-[#8fb88f] w-[95px] shrink-0">{row.label}</span>
-                      <span className="text-[#a8a8ad]">{row.items}</span>
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <div className="text-[13px] text-[#555] mb-1">
+                      YEARS ACTIVE
                     </div>
-                  ))}
-                </div>
-                <div className="mt-4 text-[12px] text-[#7c7c85]">
-                  tip · type <span className="text-[#d4b483]">~ :projects</span> to see these in action.
+                    <div className="text-[36px] font-bold text-[#ffddc0] leading-none">
+                      {stats.yearsActive}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-[#555] mb-1">
+                      PROJECTS SHIPPED
+                    </div>
+                    <div className="text-[36px] font-bold text-[#c3c7f4] leading-none">
+                      {stats.projectsShipped}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-[#555] mb-1">
+                      TEAMS LED
+                    </div>
+                    <div className="text-[36px] font-bold text-[#3fb950] leading-none">
+                      {stats.yearsLed}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-3">
-                  CURRENTLY READING
+                <div className="text-[13px] text-[#555] mb-5">
+                  ❯ cat impact.log
                 </div>
-                <p className="text-[13px] leading-relaxed text-[#a8a8ad]">
-                  {aboutCurrently.reading} — Kleppmann
-                </p>
+                <div className="space-y-6">
+                  {experienceImpact.map((group, gi) => (
+                    <div key={group.company}>
+                      {gi > 0 && <div className="border-t border-[#1e1e1e] mb-5" />}
+                      <div className="text-[11px] tracking-[0.1em] uppercase text-[#444] mb-3 font-medium">
+                        {group.company} · {group.product}
+                      </div>
+                      <div className="space-y-3">
+                        {group.points.map((point) => (
+                          <div
+                            key={`${group.company}-${point.metric}`}
+                            className="flex gap-3 items-baseline"
+                          >
+                            <span className="text-[18px] font-bold text-[#ffddc0] leading-none shrink-0 w-10 text-right tabular-nums">
+                              {point.metric}
+                            </span>
+                            <div>
+                              <div className="text-[13px] text-[#ccc] leading-snug">
+                                {point.summary}
+                              </div>
+                              <div className="text-[11px] text-[#555] mt-[2px]">
+                                {point.context}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -628,125 +568,126 @@ export default function GUIHome({
           </div>
       </SectionCommandReveal>
 
-      {/* ════════ EXPERIENCE — full viewport ════════ */}
+      {/* ════════ ABOUT — full viewport ════════ */}
       <SectionCommandReveal
-        id="experience"
-        command="❯ cat CHANGELOG.md"
+        id="about"
+        command="❯ man shivani"
         className="min-h-screen py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-          <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-12 xl:gap-16">
-            {/* Timeline */}
-            <div className="flex-1">
-              {experience.map((role, i) => (
-                <div
-                  key={role.version}
-                  ref={(el) => { experienceRefs.current[i] = el; }}
-                  className="mb-10 reveal-item"
-                >
-                  <div className="flex items-center gap-3 mb-1 flex-wrap">
-                    <span
-                      className="text-[20px] font-bold transition-colors duration-300"
-                      style={{ color: i === activeExperience ? "#ffddc0" : "#c3c7f4" }}
-                    >
-                      ## [{role.version}]
-                    </span>
-                    <span className="text-[14px] text-[#555]">
-                      {role.range}
-                    </span>
-                    {i === 0 && (
-                      <span className="bg-[#3fb950] text-[#000] text-[12px] px-2 py-[2px] font-bold">
-                        LATEST
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="text-[16px] text-[#ccc] mb-4 leading-relaxed">
-                    {role.role} —{" "}
-                    <span className="text-[#c3c7f4]">{role.company}</span>
-                  </div>
-
-                  {role.achievements.length > 0 && (
-                    <div className="pl-6 text-[14px] leading-[2] space-y-2">
-                      {role.achievements.map((a, j) => (
-                        <div key={j} className="text-[#888] max-w-[92%]">
-                          <span className="text-[#3fb950]">+</span> {a}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-16 xl:gap-20">
+            {/* Left — man page content */}
+            <div className="flex-1 space-y-10">
+              <div className="reveal-item">
+                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
+                  NAME
                 </div>
-              ))}
-            </div>
-
-            {/* Stats sidebar */}
-            <div className="w-full lg:w-[320px] shrink-0 space-y-6">
-              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[13px] text-[#555] mb-6">
-                  ❯ wc --career
+                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.85]">
+                  {personal.name} — frontend developer with a product brain.
                 </div>
-                <div className="flex flex-col gap-6">
+              </div>
+
+              <div className="reveal-item">
+                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
+                  SYNOPSIS
+                </div>
+                <div className="text-[15px] pl-7 leading-[1.85]">
+                  <span className="text-[#c3c7f4]">{personal.synopsis}</span>
+                </div>
+              </div>
+
+              <div className="reveal-item">
+                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
+                  DESCRIPTION
+                </div>
+                <div className="text-[15px] text-[#ccc] pl-7 leading-[1.9] space-y-6">
+                  <p>
+                    Frontend is where I live, but I&apos;ve never been able to stop at the component boundary. Two years of building real products will do that - you start caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually experiences between the click and the render.
+                  </p>
+                  <p>
+                    Next.js by default. Figma when I need to think out loud. Strong opinions about padding, motion, and whether that shade of grey is actually neutral. All held loosely, none of them quiet.
+                  </p>
+                </div>
+              </div>
+
+              <div className="reveal-item">
+                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
+                  ENVIRONMENT
+                </div>
+                <div className="text-[15px] pl-7 leading-[1.85]">
                   <div>
-                    <div className="text-[13px] text-[#555] mb-1">
-                      YEARS ACTIVE
-                    </div>
-                    <div className="text-[36px] font-bold text-[#ffddc0] leading-none">
-                      {stats.yearsActive}
-                    </div>
+                    <span className="text-[#c3c7f4]">$LOCATION</span> ={" "}
+                    <span className="text-[#888]">{personal.location}</span>
                   </div>
                   <div>
-                    <div className="text-[13px] text-[#555] mb-1">
-                      PROJECTS SHIPPED
-                    </div>
-                    <div className="text-[36px] font-bold text-[#c3c7f4] leading-none">
-                      {stats.projectsShipped}
-                    </div>
+                    <span className="text-[#c3c7f4]">$EDITOR</span> ={" "}
+                    <span className="text-[#888]">{personal.editor}</span>
                   </div>
                   <div>
-                    <div className="text-[13px] text-[#555] mb-1">
-                      TEAMS LED
-                    </div>
-                    <div className="text-[36px] font-bold text-[#3fb950] leading-none">
-                      {stats.yearsLed}
-                    </div>
+                    <span className="text-[#c3c7f4]">$AVAILABLE</span> ={" "}
+                    <span className="text-[#3fb950]">true</span>
                   </div>
                 </div>
               </div>
 
-              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
-                <div className="text-[13px] text-[#555] mb-5">
-                  ❯ cat impact.log
+              <div className="reveal-item">
+                <div className="text-[#ffddc0] font-bold text-[16px] mb-2">
+                  SEE ALSO
                 </div>
-                <div className="space-y-6">
-                  {experienceImpact.map((group, gi) => (
-                    <div key={group.company}>
-                      {gi > 0 && <div className="border-t border-[#1e1e1e] mb-5" />}
-                      <div className="text-[11px] tracking-[0.1em] uppercase text-[#444] mb-3 font-medium">
-                        {group.company} · {group.product}
-                      </div>
-                      <div className="space-y-3">
-                        {group.points.map((point) => (
-                          <div
-                            key={`${group.company}-${point.metric}`}
-                            className="flex gap-3 items-baseline"
-                          >
-                            <span className="text-[18px] font-bold text-[#ffddc0] leading-none shrink-0 w-10 text-right tabular-nums">
-                              {point.metric}
-                            </span>
-                            <div>
-                              <div className="text-[13px] text-[#ccc] leading-snug">
-                                {point.summary}
-                              </div>
-                              <div className="text-[11px] text-[#555] mt-[2px]">
-                                {point.context}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                <div className="text-[15px] pl-7">
+                  <a
+                    href="#experience"
+                    className="text-[#c3c7f4] underline hover:text-white transition-colors duration-150"
+                  >
+                    experience(3)
+                  </a>
+                  ,{" "}
+                  <a
+                    href="#projects"
+                    className="text-[#c3c7f4] underline hover:text-white transition-colors duration-150"
+                  >
+                    projects(2)
+                  </a>
+                  ,{" "}
+                  <a
+                    href="#contact"
+                    className="text-[#c3c7f4] underline hover:text-white transition-colors duration-150"
+                  >
+                    contact(5)
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right — skills */}
+            <div className="w-full lg:w-[430px] shrink-0" id="skills-panel">
+              <div className="mb-6 reveal-item">
+                <div className="text-[#ffddc0] font-bold text-[16px] mb-6">
+                  OPTIONS (Skills)
+                </div>
+                <div className="text-[12px] text-[#7c7c85] mb-3">
+                  <span className="text-[#7c7c85]">&gt;</span> ls ~/stack/
+                </div>
+                <div className="border border-[#242428] bg-[#111114] p-5 space-y-3">
+                  {aboutStack.map((row) => (
+                    <div key={row.label} className="flex gap-4 text-[14px] leading-relaxed">
+                      <span className="text-[#8fb88f] w-[95px] shrink-0">{row.label}</span>
+                      <span className="text-[#a8a8ad]">{row.items}</span>
                     </div>
                   ))}
                 </div>
+                <div className="mt-4 text-[12px] text-[#7c7c85]">
+                  tip · type <span className="text-[#d4b483]">:projects</span> to see these in action.
+                </div>
+              </div>
+
+              <div className="reveal-item border border-[#222] bg-[#111] p-6 md:p-7">
+                <div className="text-[11px] text-[#7c7c85] tracking-[0.2em] mb-3">
+                  CURRENTLY READING
+                </div>
+                <p className="text-[13px] leading-relaxed text-[#a8a8ad]">
+                  {aboutCurrently.reading} — Kleppmann
+                </p>
               </div>
             </div>
           </div>
@@ -759,129 +700,58 @@ export default function GUIHome({
         className="py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-          <div className="flex items-center justify-center py-10">
-            <div className="max-w-[680px] w-full text-center">
-              {/* Terminal connection animation */}
-              <div
-                id="contact-terminal"
-                className="relative mb-10 border border-[#222] bg-[#0d0d0d] p-6 text-left text-[14px] leading-loose reveal-section md:p-7 xl:p-11"
-              >
-                <div
-                  className={`transition-all duration-400 ${
-                    contactConnected
-                      ? "pointer-events-none absolute inset-x-6 top-6 opacity-0 md:inset-x-7 md:top-7 xl:inset-x-11 xl:top-11"
-                      : "opacity-100"
-                  }`}
-                >
-                  <div
-                    className={`transition-all duration-300 ${
-                      contactPhase >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
-                    }`}
-                    style={{ color: CONNECTION_LINES[0].color }}
-                  >
-                    {CONNECTION_LINES[0].text}
-                    {contactPhase === 1 ? (
-                      <span className="ml-1 inline-block h-[15px] w-[10px] animate-pulse bg-[#ffddc0] align-[-2px]" />
-                    ) : null}
-                  </div>
-
-                  {CONNECTION_LINES.slice(1).map((line, index) => {
-                    const visibleAtPhase = index + 2;
-                    const showWaitingCursor =
-                      Boolean(line.suffix) && contactPhase === visibleAtPhase;
-                    const showSuffix =
-                      Boolean(line.suffix) && contactPhase > visibleAtPhase;
-
-                    return (
-                      <div
-                        key={line.text}
-                        className={`transition-all duration-300 ${
-                          contactPhase >= visibleAtPhase
-                            ? "opacity-100 translate-y-0"
-                            : "opacity-0 translate-y-1"
-                        }`}
-                        style={{ color: line.color }}
-                      >
-                        {line.text}
-                        {showWaitingCursor ? (
-                          <span className="inline-block h-[15px] w-[10px] animate-pulse bg-[#ffddc0] align-[-2px]" />
-                        ) : null}
-                        {showSuffix ? (
-                          <span style={{ color: line.suffixColor }}>
-                            {line.suffix}
-                          </span>
-                        ) : null}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Welcome message */}
-                <div
-                  className={`text-center transition-all duration-500 delay-300 ${
-                    contactConnected
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-2"
-                  }`}
-                >
-                  <div className="text-[15px] text-[#ccc]">
-                    Welcome! I&apos;m always open to interesting conversations
-                  </div>
-                  <div className="text-[15px] text-[#ccc]">
-                    about frontend, design systems, or your next project.
-                  </div>
-                  <div className="mt-3 text-[14px] text-[#888]">
-                    Response time:{" "}
-                    <span className="text-[#3fb950]">&lt; 24 hours</span> ·
-                    Timezone:{" "}
-                    <span className="text-[#ccc]">{personal.timezone}</span>
-                  </div>
-                </div>
+          <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
+            <div>
+              <div className="reveal-item mb-8 flex flex-col gap-1 text-sm">
+                <span className="text-[#7c7c85]">Connecting to shivani.dev…</span>
+                <span className="text-[#3fb950]">Connection established.</span>
               </div>
-
-              {/* CTAs */}
-              <div
-                className={`mb-7 flex flex-col justify-center gap-5 transition-all duration-500 sm:flex-row ${
-                  contactConnected ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-3"
-                }`}
-              >
+              <p className="reveal-item mb-6 max-w-[54ch] text-2xl leading-snug text-[#e8e8ea]">
+                Always open to interesting conversations about frontend, design systems, or your next product.
+              </p>
+              <div className="reveal-item mb-9 flex flex-wrap items-center gap-6 text-xs text-[#7c7c85]">
+                <span>
+                  response time{" "}
+                  <span className="text-[#a8a8ad]">{personal.responseTime}</span>
+                </span>
+                <span>
+                  timezone{" "}
+                  <span className="text-[#a8a8ad]">{personal.timezone}</span>
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#3fb950]" />
+                  <span className="text-[#3fb950]">open to work</span>
+                </span>
+              </div>
+              <div className="reveal-item flex flex-wrap gap-3">
                 <a
                   href={`mailto:${personal.email}`}
-                  className="inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap bg-[#ffddc0] px-11 py-4 text-[15px] font-bold leading-none text-[#0a0a0a] transition-colors duration-200 hover:bg-white"
+                  className="inline-flex items-center gap-2 border border-[#ffddc0] bg-[#ffddc0] px-5 py-3 text-xs font-semibold text-[#0a0a0a] transition-colors hover:border-[#e8e8ea] hover:bg-[#e8e8ea]"
                 >
-                  <Mail size={14} /> Send Email →
+                  Send email <ArrowUpRight size={14} strokeWidth={2} />
                 </a>
                 <button
                   type="button"
-                  onClick={handleCopyEmail}
-                  className="inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap border border-[#333] px-11 py-4 text-[15px] leading-none text-[#c3c7f4] transition-colors duration-200 hover:border-[#c3c7f4]"
+                  className="inline-flex items-center gap-2 border border-[#38322b] px-5 py-3 text-xs text-[#e8e8ea] transition-colors hover:border-[#ffddc0]"
                 >
-                  <Mail size={14} /> {emailCopied ? "Copied" : "Copy Email"}
+                  Download résumé
                 </button>
               </div>
+            </div>
 
-              {/* Social links */}
-              <div
-                className={`flex justify-center gap-8 text-[14px] transition-all duration-500 ${
-                  contactConnected ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 translate-y-3"
-                }`}
-              >
-                {socials.map((s, i) => (
-                  <span key={s.name}>
-                    <a
-                      href={s.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#c3c7f4] hover:text-white transition-colors duration-150"
-                    >
-                      {s.name}
-                    </a>
-                    {i < socials.length - 1 && (
-                      <span className="text-[#888] ml-7">·</span>
-                    )}
-                  </span>
-                ))}
-              </div>
+            <div className="reveal-item border border-[#242428] bg-[#111114]">
+              {socials.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-between border-b border-[#242428] px-5 py-4 text-xs last:border-b-0 transition-colors hover:bg-[#151519]"
+                >
+                  <span className="text-[#a8a8ad] capitalize">{s.name}</span>
+                  <ArrowUpRight size={14} strokeWidth={1.5} className="text-[#7c7c85]" />
+                </a>
+              ))}
             </div>
           </div>
       </SectionCommandReveal>

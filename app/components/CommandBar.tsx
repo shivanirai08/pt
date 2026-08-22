@@ -48,7 +48,7 @@ const SPECS: Spec[] = [
   { id: "fullscreen", names: ["fullscreen", "cli", "terminal"], desc: "enter full terminal mode" },
 ];
 
-const SECTIONS = ["hero", "about", "projects", "experience", "contact"];
+const SECTIONS = ["hero", "experience", "projects", "about", "contact"];
 
 function distance(a: string, b: string) {
   const m = a.length;

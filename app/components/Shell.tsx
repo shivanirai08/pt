@@ -4,7 +4,7 @@ import { personal } from "../data";
 
 type GUISection = "about" | "projects" | "experience" | "contact";
 
-const NAV: GUISection[] = ["about", "projects", "experience", "contact"];
+const NAV: GUISection[] = ["experience", "projects", "about", "contact"];
 
 type Props = {
   activeSection: GUISection;
