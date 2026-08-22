@@ -44,7 +44,6 @@ const CONTACT_SEQUENCE_DELAYS = {
 type GUIHomeProps = {
   showBootSequence: boolean;
   onBootSequenceComplete: () => void;
-  onSwitchToCLI: () => void;
 };
 
 type SectionCommandRevealProps = {
@@ -65,7 +64,6 @@ type ConnectionLine = {
 export default function GUIHome({
   showBootSequence,
   onBootSequenceComplete,
-  onSwitchToCLI,
 }: GUIHomeProps) {
   const [bootPhase, setBootPhase] = useState(showBootSequence ? 0 : 5);
   const [bootWordCounts, setBootWordCounts] = useState<number[]>(
@@ -353,13 +351,10 @@ export default function GUIHome({
             }`}
           >
             <div className="text-[12px] text-[#888]">
-              <span className="text-[#555]">[tip]</span> prefer terminals?   press <kbd>~</kbd> or switch to{" "}
-              <button
-                onClick={onSwitchToCLI}
-                className="underline decoration-dashed underline-offset-2 text-[#aaa] hover:text-[#ffddc0] transition-colors duration-150"
-              >
-                CLI mode
-              </button>
+              <span className="text-[#555]">[tip]</span> press{" "}
+              <kbd className="border border-[#333] px-1.5 py-0.5 text-[#aaa]">/</kbd> or{" "}
+              <kbd className="border border-[#333] px-1.5 py-0.5 text-[#aaa]">⌘K</kbd> to run
+              commands — the page keeps scrolling underneath
             </div>
             <div className="text-[12px] text-[#666]">↓ scroll to explore</div>
           </div>
@@ -508,6 +503,7 @@ export default function GUIHome({
               return (
                 <div
                   key={project.id}
+                  id={`project-${project.id}`}
                   ref={(el) => { projectRefs.current[i] = el; }}
                   className="flex gap-9 mb-14 reveal-item"
                 >

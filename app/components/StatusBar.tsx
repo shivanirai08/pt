@@ -15,6 +15,7 @@ type Props = {
   onCommandHistoryDown: () => void;
   toast: string;
   time: string;
+  cliMode?: boolean;
 };
 
 export default function StatusBar(props: Props) {
@@ -88,7 +89,8 @@ export default function StatusBar(props: Props) {
             </span>
             <span className="text-[#4a4a52]">|</span>
             <span>
-              <span className="text-[#ffddc0]">~</span> GUI
+              <span className="text-[#ffddc0]">{props.cliMode ? "exit" : "~"}</span>{" "}
+              {props.cliMode ? "unified" : "GUI"}
             </span>
           </div>
         )}

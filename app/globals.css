@@ -1,23 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
 :root {
   --color-primary: #FFFFFF;
-  --color-bg: #000000;
-  --color-secondary: #A4A4A4;
-  --color-surface: #323232;
-  --color-accent: #FFDDC0;
-  --color-bg-dark: #0a0a0b;
-  --color-text: #e8e8ea;
-  --color-muted: #a8a8ad;
-  --color-dim: #7c7c85;
-  --color-faint: #4a4a52;
-  --color-border: #242428;
-  --color-card: #111114;
-  --color-warm: #d4b483;
+  --color-bg: #0B0A09;
+  --color-secondary: #A89F92;
+  --color-surface: #121110;
+  --color-accent: #F7DFC0;
+  --color-bg-dark: #0B0A09;
+  --color-text: #ECE5DA;
+  --color-muted: #A89F92;
+  --color-dim: #6B625A;
+  --color-faint: #453F38;
+  --color-border: #262320;
+  --color-card: #121110;
+  --color-warm: #F7DFC0;
   --color-blue: #89b4e8;
-  --color-green: #8fb88f;
-  --color-line: #16161a;
+  --color-green: #86B06A;
+  --color-line: #1E1B18;
 }
 
 @theme inline {
@@ -42,6 +42,11 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-bottom: 56px;
 }
 
 button,
@@ -95,8 +100,4 @@ body::after {
 /* Headers above scanlines */
 header {
   z-index: 10000 !important;
-}
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
 }

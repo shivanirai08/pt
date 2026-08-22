@@ -4,9 +4,9 @@ import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
-type Props = { open: boolean; onClose: () => void };
+type Props = { open: boolean; onClose: () => void; unified?: boolean };
 
-export default function HelpOverlay({ open, onClose }: Props) {
+export default function HelpOverlay({ open, onClose, unified }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,8 +35,11 @@ export default function HelpOverlay({ open, onClose }: Props) {
       items: [
         { key: "1-5", desc: "jump between About, Projects, Experience, Skills, and Contact" },
         { key: "← / →", desc: "move through sections in order" },
-        { key: ":", desc: "open the command bar" },
-        { key: "~", desc: "switch to GUI mode" },
+        { key: "/", desc: "focus the command bar" },
+        { key: "⌘K", desc: "focus the command bar" },
+        ...(unified
+          ? [{ key: "fullscreen", desc: "enter full terminal mode" }]
+          : [{ key: "~ / exit", desc: "return to unified view" }]),
       ],
     },
     {
@@ -118,9 +121,9 @@ export default function HelpOverlay({ open, onClose }: Props) {
                 <span className="text-[#d7d7dc]">
                   press
                   <kbd className="mx-1 inline-flex min-w-6 justify-center border border-[#5a4630] bg-[#241b12] px-1.5 py-0.5 text-[10px] text-[#ffddc0]">
-                    ~
+                    /
                   </kbd>
-                  for GUI
+                  {unified ? " to run commands on the page" : " or exit to return"}
                 </span>
               </div>
             </div>
