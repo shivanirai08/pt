@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { experience, stats, experienceImpact } from "../data";
+import { experience } from "../data";
 
 const stagger = {
   hidden: {},
@@ -29,107 +29,35 @@ export default function CLIExperience() {
         <span className="text-[#a8a8ad]">CHANGELOG.md</span>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_260px] md:gap-10">
-        <div>
-          {experience.map((e, i) => (
-            <motion.div
-              key={e.version}
-              variants={fadeUp}
-              className="mb-12 relative"
-            >
-              <div className="flex items-baseline gap-3 mb-3 flex-wrap">
-                <span className="text-[16px] text-[#d4b483] font-medium">
-                  ## [{e.version}]
+      <div>
+        {experience.map((e, i) => (
+          <motion.div key={e.version} variants={fadeUp} className="relative mb-12">
+            <div className="mb-3 flex flex-wrap items-baseline gap-3">
+              <span className="text-[16px] font-medium text-[#d4b483]">## [{e.version}]</span>
+              <span className="text-[12px] text-[#7c7c85]">{e.range}</span>
+              {i === 0 && (
+                <span className="bg-[#8fb88f] px-1.5 py-0.5 text-[10px] font-medium tracking-wide text-[#0a0a0b]">
+                  LATEST
                 </span>
-                <span className="text-[12px] text-[#7c7c85]">{e.range}</span>
-                {i === 0 && (
-                  <span className="text-[10px] bg-[#8fb88f] text-[#0a0a0b] px-1.5 py-0.5 font-medium tracking-wide">
-                    LATEST
-                  </span>
-                )}
-              </div>
-              <div className="text-[15px] text-[#e8e8ea] mb-4 leading-relaxed">
-                {e.role}{" "}
-                {e.company && (
-                  <span className="text-[#7c7c85]">— {e.company}</span>
-                )}
-              </div>
-              {e.achievements.length > 0 && (
-                <ul className="space-y-3 pl-2">
-                  {e.achievements.map((a) => (
-                    <li key={a} className="flex gap-3 text-[#a8a8ad] leading-[1.9] max-w-[96%]">
-                      <span className="text-[#8fb88f] shrink-0">+</span>
-                      <span>{a}</span>
-                    </li>
-                  ))}
-                </ul>
               )}
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.aside variants={fadeUp} className="space-y-6">
-          <div className="border border-[#242428] p-5 bg-[#111114]">
-            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-4">
-              <span className="text-[#d4b483]">&gt;</span> wc --lines career
             </div>
-            <div className="space-y-4">
-              <Stat label="YEARS ACTIVE" value={stats.yearsActive} />
-              <Stat label="PROJECTS SHIPPED" value={stats.projectsShipped} />
-              <Stat label="YEARS LED" value={String(stats.yearsLed)} />
+            <div className="mb-4 text-[15px] leading-relaxed text-[#e8e8ea]">
+              {e.role}{" "}
+              {e.company && <span className="text-[#7c7c85]">— {e.company}</span>}
             </div>
-          </div>
-
-          <div className="border border-[#242428] p-5 bg-[#111114]">
-            <div className="text-[10.5px] text-[#7c7c85] tracking-[0.2em] mb-4">
-              <span className="text-[#d4b483]">&gt;</span> cat impact.log
-            </div>
-            <div className="space-y-5">
-              {experienceImpact.map((group, gi) => (
-                <div key={group.company}>
-                  {gi > 0 && <div className="border-t border-[#1c1c20] mb-4" />}
-                  <div className="text-[10px] tracking-[0.12em] uppercase text-[#3f3f47] mb-2.5 font-medium">
-                    {group.company} · {group.product}
-                  </div>
-                  <div className="space-y-2.5">
-                    {group.points.map((point) => (
-                      <div
-                        key={`${group.company}-${point.metric}`}
-                        className="flex gap-3 items-baseline"
-                      >
-                        <span className="text-[16px] font-bold text-[#d4b483] leading-none shrink-0 w-9 text-right tabular-nums">
-                          {point.metric}
-                        </span>
-                        <div>
-                          <div className="text-[12px] text-[#c8c8cc] leading-snug">
-                            {point.summary}
-                          </div>
-                          <div className="text-[10.5px] text-[#3f3f47] mt-[2px]">
-                            {point.context}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.aside>
+            {e.achievements.length > 0 && (
+              <ul className="space-y-3 pl-2">
+                {e.achievements.map((a) => (
+                  <li key={a} className="flex max-w-[96%] gap-3 leading-[1.9] text-[#a8a8ad]">
+                    <span className="shrink-0 text-[#8fb88f]">+</span>
+                    <span>{a}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </motion.div>
+        ))}
       </div>
     </motion.div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <div className="text-[10px] text-[#7c7c85] tracking-[0.18em] mb-1">
-        {label}
-      </div>
-      <div className="text-[28px] text-[#e8e8ea] leading-none tracking-tight">
-        {value}
-      </div>
-    </div>
   );
 }
