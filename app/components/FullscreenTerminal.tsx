@@ -105,9 +105,11 @@ export default function FullscreenTerminal({
   }, [onExit]);
 
   return (
-    <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
-      <header className="sticky top-0 z-30 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
-        <div className={`${SHELL_NAV} flex h-[68px] items-center justify-between ${SHELL_X} ${SHELL_PAD}`}>
+    <div className="flex h-dvh flex-col overflow-hidden bg-[#0a0a0b] text-[#e8e8ea]">
+      <header className="z-30 shrink-0 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">
+        <div
+          className={`${SHELL_NAV} flex h-[68px] items-center justify-between ${SHELL_X} ${SHELL_PAD}`}
+        >
           <span className="text-[16px] font-bold tracking-tight">{personal.initials}.</span>
           <span className="text-[12px] uppercase tracking-[0.18em] text-[#4a4a52]">
             terminal · fullscreen
@@ -115,8 +117,8 @@ export default function FullscreenTerminal({
         </div>
       </header>
 
-      <div className="fixed inset-x-0 bottom-0 z-40">
-        <div className={SHELL_PAD}>
+      <div className={`flex min-h-0 flex-1 flex-col ${SHELL_PAD} pt-2`}>
+        <div className="min-h-0 flex-1">
           <TerminalScrollback
             entries={entries}
             onSuggestion={run}
@@ -126,53 +128,53 @@ export default function FullscreenTerminal({
             variant="fullscreen"
           />
         </div>
+      </div>
 
-        {focused && matches.length > 0 && (
-          <div className={`border-t border-[#16161a] bg-[#0d0d10] ${SHELL_PAD}`}>
-            <div className={SHELL_NAV}>
-              {matches.map((m, i) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => run(m.names[0])}
-                  className={`flex w-full items-center justify-between py-2 text-left text-xs ${
-                    i === 0 ? "text-[#a8a8ad]" : "text-[#7c7c85] hover:text-[#a8a8ad]"
-                  }`}
-                >
-                  <span>{m.names[0]}</span>
-                  <span className="text-[#4a4a52]">{m.desc}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className={`pb-2 ${SHELL_PAD}`}>
+      {focused && matches.length > 0 && (
+        <div className={`shrink-0 border-t border-[#16161a] bg-[#0d0d10] ${SHELL_PAD}`}>
           <div className={SHELL_NAV}>
-            <StatusBar
-              commandMode={focused}
-              commandValue={value}
-              onCommandChange={(v) => {
-                setFocused(true);
-                setValue(v);
-                setHistIdx(-1);
-              }}
-              onCommandSubmit={() => run(value)}
-              onCommandCancel={() => {
-                setValue("");
-                setHistIdx(-1);
-              }}
-              onCommandFocus={() => setFocused(true)}
-              onCommandBlur={() => setFocused(true)}
-              onCommandHistoryUp={handleHistoryUp}
-              onCommandHistoryDown={handleHistoryDown}
-              toast={flash ?? ""}
-              time={time}
-              placeholder="type a command, use ↑/↓ history, or :help"
-              cliMode
-              animate={false}
-            />
+            {matches.map((m, i) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => run(m.names[0])}
+                className={`flex w-full items-center justify-between py-2 text-left text-xs ${
+                  i === 0 ? "text-[#a8a8ad]" : "text-[#7c7c85] hover:text-[#a8a8ad]"
+                }`}
+              >
+                <span>{m.names[0]}</span>
+                <span className="text-[#4a4a52]">{m.desc}</span>
+              </button>
+            ))}
           </div>
+        </div>
+      )}
+
+      <div className={`shrink-0 ${SHELL_PAD} pb-2`}>
+        <div className={SHELL_NAV}>
+          <StatusBar
+            commandMode={focused}
+            commandValue={value}
+            onCommandChange={(v) => {
+              setFocused(true);
+              setValue(v);
+              setHistIdx(-1);
+            }}
+            onCommandSubmit={() => run(value)}
+            onCommandCancel={() => {
+              setValue("");
+              setHistIdx(-1);
+            }}
+            onCommandFocus={() => setFocused(true)}
+            onCommandBlur={() => setFocused(true)}
+            onCommandHistoryUp={handleHistoryUp}
+            onCommandHistoryDown={handleHistoryDown}
+            toast={flash ?? ""}
+            time={time}
+            placeholder="type a command, use ↑/↓ history, or :help"
+            cliMode
+            animate={false}
+          />
         </div>
       </div>
     </div>

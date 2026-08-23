@@ -17,6 +17,7 @@ export default function Page() {
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [terminalEntries, setTerminalEntries] = useState<Entry[]>([]);
   const [terminalDraft, setTerminalDraft] = useState("");
+  const [dockOpen, setDockOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [clock, setClock] = useState("");
   const [hasPlayedGUIBoot, setHasPlayedGUIBoot] = useState(false);
@@ -92,6 +93,7 @@ export default function Page() {
   const exitCLIFullscreen = useCallback(() => {
     setViewMode("unified");
     setTerminalDraft("");
+    setDockOpen(true);
   }, []);
 
   const handleGUIBootComplete = useCallback(() => setHasPlayedGUIBoot(true), []);
@@ -168,6 +170,8 @@ export default function Page() {
             onEnterFullscreen={enterCLIFullscreen}
             onOpenHelp={() => setHelpOpen(true)}
             time={clock}
+            initiallyOpen={dockOpen}
+            onDockOpenChange={setDockOpen}
           />
           <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} unified />
         </>

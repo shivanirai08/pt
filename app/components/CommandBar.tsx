@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { Download, Mail, Maximize2 } from "lucide-react";
 import { helpRows, type Entry } from "./TerminalOutput";
 import TerminalScrollback from "./TerminalScrollback";
@@ -22,6 +21,8 @@ type Props = {
   onEnterFullscreen: (draft?: string) => void;
   onOpenHelp: () => void;
   time: string;
+  initiallyOpen?: boolean;
+  onDockOpenChange?: (open: boolean) => void;
 };
 
 export default function CommandBar({
@@ -33,14 +34,24 @@ export default function CommandBar({
   onEnterFullscreen,
   onOpenHelp,
   time,
+  initiallyOpen = false,
+  onDockOpenChange,
 }: Props) {
-  const [focused, setFocused] = useState(false);
+  const [focused, setFocused] = useState(initiallyOpen);
   const [value, setValue] = useState("");
   const [histIdx, setHistIdx] = useState(-1);
   const [flash, setFlash] = useState<string | null>(null);
   const [active, setActive] = useState("hero");
 
   const matches = useMemo(() => matchTerminalCommands(value), [value]);
+
+  const setDockFocused = useCallback(
+    (open: boolean) => {
+      setFocused(open);
+      onDockOpenChange?.(open);
+    },
+    [onDockOpenChange]
+  );
 
   useEffect(() => {
     const els = SECTIONS.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
@@ -73,7 +84,7 @@ export default function CommandBar({
     (raw: string) => {
       setValue("");
       setHistIdx(-1);
-      setFocused(true);
+      setDockFocused(true);
       runTerminalCommand(raw, {
         mode: "gui",
         push,
@@ -85,7 +96,7 @@ export default function CommandBar({
         setFlash,
       });
     },
-    [goSection, onEnterFullscreen, onOpenHelp, push, setEntries, setHistory]
+    [goSection, onEnterFullscreen, onOpenHelp, push, setDockFocused, setEntries, setHistory]
   );
 
   useEffect(() => {
@@ -96,11 +107,11 @@ export default function CommandBar({
 
   useEffect(() => {
     function onFocusCommand() {
-      setFocused(true);
+      setDockFocused(true);
     }
     window.addEventListener("portfolio:focus-command", onFocusCommand);
     return () => window.removeEventListener("portfolio:focus-command", onFocusCommand);
-  }, []);
+  }, [setDockFocused]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -108,20 +119,20 @@ export default function CommandBar({
       const typing = tag === "INPUT" || tag === "TEXTAREA";
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setFocused(true);
+        setDockFocused(true);
         return;
       }
       if (e.key === "/" && !typing) {
         e.preventDefault();
-        setFocused(true);
+        setDockFocused(true);
       }
       if (e.key === "Escape") {
-        setFocused(false);
+        setDockFocused(false);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [setDockFocused]);
 
   const handleHistoryUp = useCallback(() => {
     if (!history.length) return;
@@ -179,7 +190,7 @@ export default function CommandBar({
       </button>
       <button
         type="button"
-        onClick={() => setFocused(true)}
+        onClick={() => setDockFocused(true)}
         className="flex h-14 items-center gap-2 border-l border-[#242428] px-3 text-xs text-[#7c7c85] hover:text-[#a8a8ad]"
       >
         ⌘K
@@ -190,13 +201,14 @@ export default function CommandBar({
   return (
     <div className="fixed inset-x-0 bottom-0 z-40">
       <div className={SHELL_PAD}>
-        {entries.length > 0 && focused && (
+        {focused && (
           <TerminalScrollback
             entries={entries}
             onSuggestion={run}
             onClear={() => setEntries([])}
-            onClose={() => setFocused(false)}
+            onClose={() => setDockFocused(false)}
             layoutId="terminal-panel"
+            forceShow
           />
         )}
       </div>
@@ -227,20 +239,18 @@ export default function CommandBar({
             commandMode={focused}
             commandValue={focused ? value : ""}
             onCommandChange={(v) => {
-              setFocused(true);
+              setDockFocused(true);
               setValue(v);
               setHistIdx(-1);
             }}
             onCommandSubmit={() => run(value)}
             onCommandCancel={() => {
-              setFocused(false);
+              setDockFocused(false);
               setValue("");
               setHistIdx(-1);
             }}
-            onCommandFocus={() => setFocused(true)}
-            onCommandBlur={() => {
-              if (!entries.length) setFocused(false);
-            }}
+            onCommandFocus={() => setDockFocused(true)}
+            onCommandBlur={() => {}}
             onCommandHistoryUp={handleHistoryUp}
             onCommandHistoryDown={handleHistoryDown}
             toast={flash && focused ? flash : ""}
