@@ -84,10 +84,7 @@ export default function GUIHome({
   const projectHoverRef = useRef(false);
 
   const primaryRoles = experience.slice(0, 2);
-  const earlierDesignRoles = experience.filter(
-    (role) => role.role === "Product Designer"
-  );
-  const incubatorRole = experience.find((role) => role.version === "v1.0.0");
+  const earlierRoles = experience.slice(2);
 
   // Boot sequence
   useEffect(() => {
@@ -371,16 +368,15 @@ export default function GUIHome({
             </div>
           ))}
 
-          {earlierDesignRoles.length > 0 && (
+          {earlierRoles.length > 0 && (
             <div className="reveal-item">
               <button
                 type="button"
                 onClick={() => setShowEarlierRoles((open) => !open)}
-                className="flex items-center gap-2 text-[13px] text-[#7c7c85] transition-colors hover:text-[#e8e8ea]"
+                className="inline-flex items-center gap-2 border border-[#38322b] bg-[#151519] px-3 py-2 text-[13px] text-[#ffddc0] transition-colors hover:border-[#ffddc0] hover:bg-[#1a1a1f]"
               >
                 <span>
-                  {earlierDesignRoles.length} earlier design roles —{" "}
-                  {earlierDesignRoles.map((r) => r.company.split(" ")[0]).join(", ")} · expand
+                  {earlierRoles.length} earlier roles · {showEarlierRoles ? "collapse" : "expand"}
                 </span>
                 <ChevronDown
                   size={14}
@@ -390,7 +386,7 @@ export default function GUIHome({
 
               {showEarlierRoles && (
                 <div className="mt-10 space-y-12 border-l border-[#242428] pl-6">
-                  {earlierDesignRoles.map((role) => (
+                  {earlierRoles.map((role) => (
                     <div key={role.version} className="grid grid-cols-1 gap-4 md:grid-cols-[148px_1fr] md:gap-10">
                       <div className="space-y-1">
                         <div className="text-[13px] text-[#7c7c85]">{role.range.replace(" – ", " — ")}</div>
@@ -423,35 +419,6 @@ export default function GUIHome({
                       </div>
                     </div>
                   ))}
-                  {incubatorRole && (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-[148px_1fr] md:gap-10">
-                      <div className="space-y-1">
-                        <div className="text-[13px] text-[#7c7c85]">
-                          {incubatorRole.range.replace(" – ", " — ")}
-                        </div>
-                        <div className="text-[11px] text-[#4a4a52]">{incubatorRole.version}</div>
-                      </div>
-                      <div>
-                        <h4 className="font-sans text-[18px] font-medium text-[#e8e8ea]">
-                          {incubatorRole.role}
-                        </h4>
-                        <p className="mb-4 mt-1 font-sans text-[13px] text-[#7c7c85]">
-                          {incubatorRole.company}
-                        </p>
-                        <ul className="space-y-2">
-                          {incubatorRole.achievements.map((achievement) => (
-                            <li
-                              key={achievement}
-                              className="flex gap-3 font-sans text-[13px] leading-[1.7] text-[#7c7c85]"
-                            >
-                              <span className="text-[#4a4a52]">›</span>
-                              <span>{achievement}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </div>

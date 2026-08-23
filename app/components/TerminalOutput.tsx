@@ -172,7 +172,7 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       )}
 
       {entry.kind === "section" && entry.section && (
-        <div className="border border-[#242428] bg-[#111114] p-4">
+        <div className="w-full pl-1">
           {entry.section === "about" && <CLIAbout />}
           {entry.section === "projects" && <CLIProjects />}
           {entry.section === "experience" && <CLIExperience />}

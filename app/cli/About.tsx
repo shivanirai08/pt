@@ -19,7 +19,7 @@ export default function CLIAbout() {
       variants={stagger}
       initial="hidden"
       animate="show"
-      className="max-w-[1040px] mx-auto text-[13px]"
+      className="w-full text-[13px]"
     >
       {/* command header */}
       <motion.div

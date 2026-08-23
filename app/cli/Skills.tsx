@@ -14,7 +14,7 @@ const fadeUp = {
 
 export default function CLISkills() {
   return (
-    <motion.div variants={stagger} initial="hidden" animate="show" className="mx-auto max-w-[1040px]">
+    <motion.div variants={stagger} initial="hidden" animate="show" className="w-full">
       <motion.div variants={fadeUp}>
         <SkillsProcessTable />
       </motion.div>

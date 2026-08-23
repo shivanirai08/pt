@@ -116,7 +116,7 @@ export default function CLIContact() {
   };
 
   return (
-    <motion.div variants={stagger} initial="hidden" animate="show" className="mx-auto max-w-[960px] text-[13.5px] leading-[1.75]">
+    <motion.div variants={stagger} initial="hidden" animate="show" className="w-full text-[13.5px] leading-[1.75]">
       {/* SSH header — same style as other sections */}
       <motion.div
         variants={fadeUp}
