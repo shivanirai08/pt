@@ -7,13 +7,20 @@ import {
   experienceImpact,
 } from "../data";
 import SkillsProcessTable from "./SkillsProcessTable";
+import CLIAbout from "../cli/About";
+import CLIProjects from "../cli/Projects";
+import CLIExperience from "../cli/Experience";
+import CLIContact from "../cli/Contact";
+
+export type TerminalSection = "about" | "projects" | "experience" | "contact";
 
 export type Entry = {
   id: number;
   cmd: string;
-  kind: "text" | "ls" | "skills" | "career" | "help" | "error" | "ok";
+  kind: "text" | "ls" | "skills" | "career" | "help" | "error" | "ok" | "section";
   lines?: string[];
   suggestions?: string[];
+  section?: TerminalSection;
 };
 
 export const helpRows: { cmd: string; key: string; desc: string }[] = [
@@ -77,8 +84,13 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
       )}
 
       {entry.kind === "error" && (
-        <div className="flex flex-col gap-2 border-l-2 border-[#c2707044] pl-4">
-          <span className="text-sm text-[#c27070]">{entry.lines?.[0]}</span>
+        <div className="flex flex-col gap-3 pl-1">
+          <div className="font-['Press_Start_2P',cursive] text-[18px] leading-none tracking-tight text-[#ffddc0] sm:text-[22px] pt-3">
+            FOUR-O-FOUR
+          </div>
+          {entry.lines?.[0] ? (
+            <span className="text-sm text-[#a89f92]">{entry.lines[0]}</span>
+          ) : null}
           {entry.suggestions && entry.suggestions.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 text-xs text-[#7c7c85]">
               <span>did you mean</span>
@@ -156,6 +168,15 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
               <span className="flex-1 font-sans text-[#a8a8ad]">{r.desc}</span>
             </div>
           ))}
+        </div>
+      )}
+
+      {entry.kind === "section" && entry.section && (
+        <div className="border border-[#242428] bg-[#111114] p-4">
+          {entry.section === "about" && <CLIAbout />}
+          {entry.section === "projects" && <CLIProjects />}
+          {entry.section === "experience" && <CLIExperience />}
+          {entry.section === "contact" && <CLIContact />}
         </div>
       )}
     </div>
