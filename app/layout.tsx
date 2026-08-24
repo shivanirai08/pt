@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Shivani Rai",
-  description: "Terminal-themed portfolio with a unified command layer and fullscreen CLI mode.",
+  description: "Software developer portfolio — design, build, and ship complete products.",
 };
 
 export default function RootLayout({

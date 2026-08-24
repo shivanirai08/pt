@@ -18,11 +18,11 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const ROLE_TAGS: Record<string, string[]> = {
-  "v5.0.0": ["next.js", "typescript", "react", "webrtc"],
-  "v4.0.0": ["next.js", "typescript", "tailwind", "rest apis"],
+  "v5.0.0": ["react", "typescript", "webrtc", "rest apis"],
+  "v4.0.0": ["react", "typescript", "rest apis", "asp.net"],
   "v3.0.0": ["figma", "ux research", "product design"],
   "v2.0.0": ["figma", "prototyping", "handoff"],
-  "v1.0.0": ["react", "tailwind", "components"],
+  "v1.0.0": ["react", "node.js", "tailwind", "components"],
 };
 
 const CAREER_STATS = [
@@ -427,7 +427,7 @@ export default function GUIHome({
                   NAME
                 </div>
                 <div className="text-[15px] font-sans text-[#ccc] pl-7 leading-[1.85]">
-                  {personal.name} — frontend developer with a product brain.
+                  {personal.name} — {personal.tagline}.
                 </div>
               </div>
 
@@ -445,12 +445,8 @@ export default function GUIHome({
                   DESCRIPTION
                 </div>
                 <div className="text-[15px] font-sans text-[#ccc] pl-7 leading-[1.9] space-y-6">
-                  <p>
-                    Frontend is where I live, but I&apos;ve never been able to stop at the component boundary. Two years of building real products will do that - you start caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually experiences between the click and the render.
-                  </p>
-                  <p>
-                    Next.js by default. Figma when I need to think out loud. Strong opinions about padding, motion, and whether that shade of grey is actually neutral. All held loosely, none of them quiet.
-                  </p>
+                  <p>{personal.description}</p>
+                  <p>{personal.bio}</p>
                 </div>
               </div>
 
@@ -551,7 +547,7 @@ export default function GUIHome({
                 <span className="text-[#3fb950]">Connection established.</span>
               </div>
               <p className="reveal-item mb-6 max-w-[54ch] font-sans text-2xl leading-snug text-[#e8e8ea]">
-                Always open to interesting conversations about frontend, design systems, or your next product.
+                Always open to interesting conversations about software, design systems, or your next product.
               </p>
               <div className="reveal-item mb-9 flex flex-wrap items-center gap-6 text-xs text-[#7c7c85]">
                 <span>

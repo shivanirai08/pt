@@ -9,16 +9,16 @@ export const personal = {
   timezone: "IST (UTC+5:30)",
   editor: "VS Code",
   email: "raishivani1406@gmail.com",
-  tagline: "frontend developer with a product brain",
+  tagline: "software developer with a product brain",
   headline: "I design, build, and ship.",
   intro:
-    "I turn design thinking into fast, scalable frontend systems.",
+    "I turn ideas into complete products — interfaces, APIs, and everything in between.",
   synopsis: "shivani [--design] [--develop] [--deploy] <ideas>",
   description:
-    "Frontend is where I live, but I've never been able to stop at the component boundary. Two years of building real products pushed me past it. I started caring about why the API call takes 800ms, how the data model holds up at scale, and what the user actually feels between the click and the render.",
+    "I build end to end — React on the surface, Node and Python underneath, and the data model holding it together. Two years of shipping real products taught me the job doesn't stop at the component boundary: why the API takes 800ms, how auth scales, what the user feels between click and render.",
   bio:
-    "I reach for Next.js by default, and open Figma when I need to think out loud. I obsess over the details that most people ship past: the 200ms that feels slow, the grey that isn't quite neutral, the motion that either earns its place or gets cut.",
-  role: "Frontend Developer · Product Designer",
+    "I reach for Next.js and Express by default, open Figma when I need to think out loud, and reach for Python when the problem needs FastAPI or logic that shouldn't live in the browser. I obsess over the details most people ship past: the 200ms that feels slow, the schema that won't bend at scale, the motion that either earns its place or gets cut.",
+  role: "Software Developer · Product Designer",
   pronouns: "she/her",
   status: "open_to_work",
   responseTime: "< 24h",
@@ -26,12 +26,13 @@ export const personal = {
 };
 
 export const aboutStack = [
-  { label: "core/", items: "react · typescript · next.js · javascript" },
+  { label: "core/", items: "react · typescript · next.js · javascript · python" },
   { label: "styling/", items: "tailwind · css · framer-motion" },
   { label: "state/", items: "zustand · react-query · redux toolkit" },
-  { label: "backend/", items: "node · supabase · mongodb · rest apis" },
-  { label: "realtime/", items: "socket.io · webrtc" },
-  { label: "tools/", items: "figma · git · vercel · vite" },
+  { label: "backend/", items: "node · express · fastapi · rest apis · jwt" },
+  { label: "data/", items: "mongodb · postgresql · redis · supabase" },
+  { label: "realtime/", items: "socket.io · webrtc · websockets" },
+  { label: "tools/", items: "figma · git · docker · aws · vercel" },
   { label: "exploring/", items: "rust · three.js · webgpu" },
 ];
 
@@ -92,7 +93,7 @@ export const projects: Project[] = [
     description:
       "CodeCollab lets developers code together in real time with live cursors, line locking, voice, chat, and GitHub integration in one screen. Built with Next.js 15, Monaco Editor, and Supabase Realtime for presence sync. Redux Toolkit manages shared session state across all panels simultaneously.",
     stack: ["Next.js 15", "Supabase", "Monaco Editor", "Redux Toolkit", "TypeScript"],
-    role: "Full Stack",
+    role: "Software Developer",
     status: "live",
     links: [
       { label: "Live", url: "http://codecollab.tech" },
@@ -114,18 +115,18 @@ export const projects: Project[] = [
     excerpt:
       "1v1 coding battles and contest management. Built for competitive programmers.",
     description:
-      "CodeClash matches two players head to head with three DSA questions and decides a winner in real time. Supports full contest creation end to end. Built with Next.js, TypeScript, and a queue-based pairing system. JWT handles role-based auth separating participants from organisers.",
-    stack: ["Next.js", "TypeScript", "Redux", "Tailwind CSS", "JWT"],
-    role: "Full Stack",
+      "Competitive programming platform with public and private contests in ACM-ICPC and Codeforces-style formats. React and TypeScript on the frontend, Node.js on the backend with PostgreSQL schemas, JWT auth, and Redis Pub/Sub plus BullMQ for scalable code execution across Python, JavaScript, Java, and C++. Real-time leaderboards via WebSocket updates.",
+    stack: ["React", "TypeScript", "Node.js", "PostgreSQL", "Redis", "Docker", "AWS"],
+    role: "Software Developer",
     status: "live",
     links: [
       { label: "Live", url: "https://codeclash.notsg.space/" },
       { label: "GitHub", url: "https://github.com/shivanirai08/codeclash" },
     ],
     highlights: [
-      "Queue-based matchmaking in under 10 seconds, no major CP platform does this natively",
-      "Auto-evaluated submissions across 4 languages with near zero wait time",
-      "Contest setup to publish in under 2 minutes at any scale",
+      "Real-time leaderboards via WebSocket with Redis Pub/Sub and BullMQ job queues",
+      "Auto-evaluated submissions across Python, JavaScript, Java, and C++ at scale",
+      "PostgreSQL schemas, JWT auth, and Docker deployment on AWS",
     ],
   },
   {
@@ -138,7 +139,7 @@ export const projects: Project[] = [
     description:
       "Multiplayer chess where guests and logged-in users both get into a match in under 30 seconds. Solo players practice against Stockfish AI across three difficulty tiers. Built with Next.js, Socket.io for move sync, and Node.js with MongoDB for game state and player stats.",
     stack: ["Next.js", "TypeScript", "Socket.io", "Stockfish", "Node.js", "MongoDB"],
-    role: "Full Stack",
+    role: "Software Developer",
     status: "live",
     links: [
       { label: "Live", url: "http://chess-xi-ivory.vercel.app" },
@@ -160,7 +161,7 @@ export const projects: Project[] = [
     description:
       "Classence lets the same person teach and learn from one account without separate logins. Teachers manage classes, live sessions, announcements, and assignments. Students join and submit from the same dashboard. Built with React, Node.js, MongoDB, and WebRTC for live classes without any third-party dependency.",
     stack: ["React", "Redux Toolkit", "Node.js", "MongoDB", "WebRTC", "Tailwind CSS"],
-    role: "Full Stack",
+    role: "Software Developer",
     status: "live",
     links: [
       { label: "Live", url: "https://classence-frontened-8e7d.vercel.app/" },
@@ -185,23 +186,23 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     version: "v5.0.0",
-    range: "Jan 2026 – June 2026",
-    role: "Frontend Engineer",
+    range: "Jan 2026 – July 2026",
+    role: "Software Developer",
     company: "Hikigai Inc. (Full-Time Remote)",
     achievements: [
-      "Built WebRTC audio/video consultations for a Health AI platform, handling peer connections, Safari compatibility, and fallback flows for unstable networks.",
-      "Worked across the full product cycle from PRD to production deploy, and built a reusable React + TypeScript component library for the patient-doctor workflow.",
-      "Integrated AI-generated SOAP summaries into five clinical modules through REST APIs.",
+      "Designed and built WebRTC audio consultation modules for a Health AI platform, managing peer connection lifecycles and cross-browser compatibility across Chrome, Safari, and Firefox.",
+      "Collaborated across the full SDLC — design, frontend and backend integration, QA, and deployment — and built a reusable React + TypeScript component library for the patient-doctor workflow.",
+      "Integrated AI-generated SOAP summaries through REST APIs across five clinical modules.",
     ],
   },
   {
     version: "v4.0.0",
     range: "Nov 2025 – Jan 2026",
-    role: "Frontend Developer Intern",
+    role: "Software Developer Intern",
     company: "QuantumNXT · Quantum Leap Technology (Remote)",
     achievements: [
-      "Built 5+ user flows for BOI, an enterprise sustainability platform, including a dynamic emission calculator on a C# / ASP.NET backend.",
-      "Fixed 15+ UI/UX bugs across four dashboard views in sprint-based development.",
+      "Developed 5+ end-to-end user flows and a dynamic emission calculator consuming REST APIs on a C# / ASP.NET backend for BOI, an enterprise sustainability platform.",
+      "Fixed 15+ critical UI/UX bugs across four dashboard views in sprint-based development.",
       "Resolved cross-browser issues on Chrome, Firefox, and Edge while working inside an existing enterprise codebase.",
     ],
   },
@@ -228,11 +229,11 @@ export const experience: Experience[] = [
   {
     version: "v1.0.0",
     range: "Oct 2024 – Present",
-    role: "Frontend Developer & Designer",
+    role: "Software Developer",
     company: "Software Incubator, SDC",
     achievements: [
-      "Improved UI consistency by 20% using reusable React and Tailwind CSS components across a large-scale codebase.",
-      "Zero regression defects across 4 sprints for a 45-person team.",
+      "Building platforms within a 45-person cross-functional team; developed reusable React and Tailwind CSS components alongside backend-integrated features under agile workflows.",
+      "Contributed to shared design system conventions and shipped zero regression defects across 4 sprints.",
     ],
   },
 ];
@@ -242,18 +243,20 @@ export type Skill = {
   years: number;
   projects: number;
   level: number;
-  category: "frontend" | "design" | "tooling";
+  category: "product" | "backend" | "design" | "tooling";
 };
 
 export const skills: Skill[] = [
-  { name: "next.js", years: 3, projects: 18, level: 0.95, category: "frontend" },
-  { name: "css", years: 4, projects: 22, level: 0.95, category: "frontend" },
-  { name: "javascript", years: 4, projects: 24, level: 0.92, category: "frontend" },
-  { name: "react", years: 4, projects: 24, level: 0.9, category: "frontend" },
-  { name: "typescript", years: 3, projects: 18, level: 0.88, category: "frontend" },
+  { name: "react", years: 4, projects: 24, level: 0.92, category: "product" },
+  { name: "typescript", years: 3, projects: 18, level: 0.9, category: "product" },
+  { name: "next.js", years: 3, projects: 18, level: 0.88, category: "product" },
+  { name: "node.js", years: 3, projects: 12, level: 0.85, category: "backend" },
+  { name: "javascript", years: 4, projects: 24, level: 0.88, category: "product" },
+  { name: "python", years: 2, projects: 8, level: 0.78, category: "backend" },
+  { name: "express", years: 2, projects: 10, level: 0.8, category: "backend" },
   { name: "figma", years: 3, projects: 20, level: 0.88, category: "design" },
-  { name: "redux", years: 2, projects: 12, level: 0.75, category: "frontend" },
-  { name: "socket.io", years: 2, projects: 8, level: 0.65, category: "tooling" },
+  { name: "postgresql", years: 2, projects: 6, level: 0.72, category: "backend" },
+  { name: "socket.io", years: 2, projects: 8, level: 0.7, category: "tooling" },
 ];
 
 export type SkillProcessRow = {
@@ -267,20 +270,20 @@ export type SkillProcessRow = {
 export const skillProcessRows: SkillProcessRow[] = [
   { pid: "01", skill: "--react", years: "4y 08m", projects: "24", state: "RUNNING" },
   { pid: "02", skill: "--typescript", years: "3y 02m", projects: "18", state: "RUNNING" },
-  { pid: "03", skill: "--css", years: "4y 00m", projects: "22", state: "RUNNING" },
+  { pid: "03", skill: "--node.js", years: "3y 00m", projects: "12", state: "RUNNING" },
   { pid: "04", skill: "--javascript", years: "4y 00m", projects: "24", state: "RUNNING" },
-  { pid: "05", skill: "--tailwind", years: "3y 00m", projects: "18", state: "RUNNING" },
-  { pid: "06", skill: "--figma", years: "3y 06m", projects: "20", state: "RUNNING" },
-  { pid: "07", skill: "--next.js", years: "2y 04m", projects: "9", state: "IDLE" },
-  { pid: "08", skill: "--redux", years: "2y 02m", projects: "12", state: "IDLE" },
-  { pid: "09", skill: "--socket.io", years: "2y 01m", projects: "8", state: "IDLE" },
-  { pid: "97", skill: "--three.js", years: "0y 06m", projects: "1", state: "LEARNING" },
-  { pid: "98", skill: "--rust", years: "0y 03m", projects: "-", state: "LEARNING" },
-  { pid: "99", skill: "--webgpu", years: "0y 00m", projects: "-", state: "LEARNING" },
+  { pid: "05", skill: "--next.js", years: "3y 00m", projects: "18", state: "RUNNING" },
+  { pid: "06", skill: "--express", years: "2y 04m", projects: "10", state: "RUNNING" },
+  { pid: "07", skill: "--python", years: "2y 02m", projects: "8", state: "IDLE" },
+  { pid: "08", skill: "--figma", years: "3y 06m", projects: "20", state: "IDLE" },
+  { pid: "09", skill: "--postgresql", years: "2y 01m", projects: "6", state: "IDLE" },
+  { pid: "97", skill: "--fastapi", years: "0y 08m", projects: "2", state: "LEARNING" },
+  { pid: "98", skill: "--docker", years: "0y 06m", projects: "3", state: "LEARNING" },
+  { pid: "99", skill: "--redis", years: "0y 04m", projects: "2", state: "LEARNING" },
 ];
 
 export const secondaryTools = [
-  "Git", "Tailwind CSS", "Supabase", "WebRTC", "Redux Toolkit", "REST APIs", "Vite", "MongoDB",
+  "Git", "Tailwind CSS", "MongoDB", "Redis", "WebRTC", "Redux Toolkit", "REST APIs", "Docker", "AWS",
 ];
 
 export const certifications = [
@@ -306,7 +309,7 @@ export const experienceImpact: ExperienceImpact[] = [
       {
         metric: "5",
         summary: "clinical modules connected with AI-generated SOAP summaries",
-        context: "REST APIs across the patient-doctor workflow",
+        context: "REST APIs · frontend and backend integration across the patient-doctor workflow",
       },
       {
         metric: "3",

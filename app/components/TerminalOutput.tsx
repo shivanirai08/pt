@@ -185,7 +185,7 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
 
 export function whoamiLines() {
   return [
-    `${personal.fullName.toLowerCase()} · frontend engineer · ${personal.location.toLowerCase()}`,
+    `${personal.fullName.toLowerCase()} · software developer · ${personal.location.toLowerCase()}`,
     `2 yrs shipping · currently at Hikigai Inc. · $AVAILABLE = ${personal.availability}`,
   ];
 }
