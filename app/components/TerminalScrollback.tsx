@@ -2,9 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Minimize2, X } from "lucide-react";
+import { Maximize2, Minimize2, X } from "lucide-react";
 import TerminalOutput, { type Entry } from "./TerminalOutput";
 import { SHELL_NAV, SHELL_X } from "../lib/shell";
+
+const chromeBtn =
+  "inline-flex items-center gap-1 border border-[#2a2a30] bg-[#151519] px-2 py-1 text-[11px] text-[#7c7c85] transition-colors hover:border-[#3a3a40] hover:text-[#a8a8ad]";
 
 type Props = {
   entries: Entry[];
@@ -12,6 +15,7 @@ type Props = {
   onClear?: () => void;
   onClose?: () => void;
   onMinimize?: () => void;
+  onFullscreen?: () => void;
   maxHeight?: string;
   layoutId?: string;
   variant?: "docked" | "fullscreen";
@@ -24,6 +28,7 @@ export default function TerminalScrollback({
   onClear,
   onClose,
   onMinimize,
+  onFullscreen,
   maxHeight = "max-h-[46vh]",
   layoutId,
   variant = "docked",
@@ -43,38 +48,44 @@ export default function TerminalScrollback({
       <div
         className={`flex shrink-0 items-center justify-between border-b border-[#242428] bg-[#0d0d10] py-2.5 ${SHELL_X}`}
       >
-        <div className={`${SHELL_NAV} flex items-center justify-between`}>
-          <div className="flex items-center gap-3 text-xs text-[#7c7c85]">
+        <div className={`${SHELL_NAV} flex items-center justify-between gap-3`}>
+          <div className="flex min-w-0 items-center gap-3 text-xs text-[#7c7c85]">
             <span className="flex gap-1.5">
               <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
               <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
               <span className="h-2 w-2 rounded-full bg-[#4a4a52]" />
             </span>
-            <span>shivanirai@portfolio: ~ — zsh</span>
+            <span className="truncate">shivanirai@portfolio: ~ — zsh</span>
           </div>
-          <div className="flex items-center gap-4 text-xs text-[#7c7c85]">
+          <div className="flex shrink-0 items-center gap-1.5">
             {onClear ? (
-              <button type="button" onClick={onClear} className="hover:text-[#a8a8ad]">
+              <button type="button" onClick={onClear} className={chromeBtn}>
                 clear
+              </button>
+            ) : null}
+            {onFullscreen ? (
+              <button
+                type="button"
+                onClick={onFullscreen}
+                className={chromeBtn}
+                title="Enter full terminal mode"
+              >
+                fullscreen <Maximize2 size={11} strokeWidth={1.5} />
               </button>
             ) : null}
             {onMinimize ? (
               <button
                 type="button"
                 onClick={onMinimize}
-                className="flex items-center gap-1 hover:text-[#a8a8ad]"
+                className={chromeBtn}
                 title="Minimize to portfolio"
               >
-                minimize <Minimize2 size={12} strokeWidth={1.5} />
+                minimize <Minimize2 size={11} strokeWidth={1.5} />
               </button>
             ) : null}
             {onClose ? (
-              <button
-                type="button"
-                onClick={onClose}
-                className="flex items-center gap-1 hover:text-[#a8a8ad]"
-              >
-                esc <X size={12} strokeWidth={1.5} />
+              <button type="button" onClick={onClose} className={chromeBtn}>
+                esc <X size={11} strokeWidth={1.5} />
               </button>
             ) : null}
           </div>

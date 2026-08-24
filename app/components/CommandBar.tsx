@@ -207,6 +207,7 @@ export default function CommandBar({
             onSuggestion={run}
             onClear={() => setEntries([])}
             onClose={() => setDockFocused(false)}
+            onFullscreen={openFullscreen}
             layoutId="terminal-panel"
             forceShow
           />
