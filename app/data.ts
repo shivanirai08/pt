@@ -60,6 +60,7 @@ export const aboutEnv = {
 
 export const socials = [
   { name: "github", handle: "shivanirai08", url: "https://github.com/shivanirai08" },
+  { name: "leetcode", handle: "shivanirai08", url: "https://leetcode.com/u/shivanirai08/" },
   { name: "twitter", handle: "shivanirai08", url: "https://x.com/shivanirai08" },
   { name: "behance", handle: "shivanirai08", url: "https://www.behance.net/shivanirai08" },
   { name: "linkedin", handle: "shivanirai08", url: "https://linkedin.com/in/shivanirai08" },

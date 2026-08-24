@@ -39,6 +39,7 @@ const CONTACT_LINKS = [
   { label: "email", value: personal.email, href: `mailto:${personal.email}` },
   { label: "twitter", value: "shivanirai08", href: socials.find((s) => s.name === "twitter")?.url ?? "#" },
   { label: "linkedin", value: "shivanirai08", href: socials.find((s) => s.name === "linkedin")?.url ?? "#" },
+  { label: "leetcode", value: "shivanirai08", href: socials.find((s) => s.name === "leetcode")?.url ?? "#" },
 ];
 
 export default function CLIContact() {
