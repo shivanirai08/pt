@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import { personal, projects } from "../data";
+import type { PortfolioContent } from "../types/portfolio";
 import type { Entry } from "../components/TerminalOutput";
 import { whoamiLines } from "../components/TerminalOutput";
 
@@ -11,10 +11,10 @@ type Spec = {
   desc: string;
   section?: TerminalSection;
   kind?: Entry["kind"];
-  lines?: string[];
+  lines?: (content: PortfolioContent) => string[];
 };
 
-export const TERMINAL_SPECS: Spec[] = [
+const TERMINAL_SPECS: Spec[] = [
   { id: "about", names: [":about", "about", "1"], desc: "man page — who I am", section: "about" },
   { id: "projects", names: [":projects", "projects", "2"], desc: "shipped work, newest first", section: "projects" },
   { id: "experience", names: [":experience", "experience", "3"], desc: "changelog of roles", section: "experience" },
@@ -26,7 +26,7 @@ export const TERMINAL_SPECS: Spec[] = [
     names: ["whoami"],
     desc: "the one-line version",
     kind: "text",
-    lines: whoamiLines(),
+    lines: (content) => whoamiLines(content.personal, content.experience[0]?.company),
   },
   { id: "ls", names: ["ls ~/projects", "ls -la", "ls"], desc: "work as a directory listing", kind: "ls" },
   { id: "wc", names: ["wc --career", "wc"], desc: "the numbers", kind: "career" },
@@ -35,14 +35,14 @@ export const TERMINAL_SPECS: Spec[] = [
     names: [":resume", "resume", "r"],
     desc: "download pdf",
     kind: "text",
-    lines: ["fetching shivani-rai-resume.pdf …", "1 file · 184 KB · download started"],
+    lines: () => ["fetching shivani-rai-resume.pdf …", "1 file · 184 KB · download started"],
   },
   {
     id: "hire",
     names: ["sudo hire shivani", "hire"],
     desc: "skip the small talk",
     kind: "ok",
-    lines: ["permission granted.", `opening mail to ${personal.email} — response under 24h`],
+    lines: (content) => ["permission granted.", `opening mail to ${content.personal.email} — response under 24h`],
   },
   { id: "clear", names: ["clear"], desc: "wipe the scrollback" },
   { id: "exit", names: ["exit", "gui", "minimize", "~"], desc: "return to portfolio view" },
@@ -86,6 +86,7 @@ export async function fetchTerminalMessage(commandText: string) {
 }
 
 export type RunTerminalContext = {
+  content: PortfolioContent;
   mode: "gui" | "fullscreen";
   push: (entry: Omit<Entry, "id">) => void;
   setEntries: Dispatch<SetStateAction<Entry[]>>;
@@ -102,6 +103,11 @@ export function runTerminalCommand(raw: string, ctx: RunTerminalContext) {
   if (!cmd) return;
   ctx.setHistory((prev) => [...prev, cmd]);
   const q = cmd.toLowerCase();
+  const { content, projects, personal } = {
+    content: ctx.content,
+    projects: ctx.content.projects,
+    personal: ctx.content.personal,
+  };
 
   if (q === "clear" || q === "⌃l") {
     ctx.setEntries([]);
@@ -171,11 +177,11 @@ export function runTerminalCommand(raw: string, ctx: RunTerminalContext) {
       return;
     }
     if (spec.id === "hire") {
-      ctx.push({ cmd, kind: "ok", lines: spec.lines });
+      ctx.push({ cmd, kind: "ok", lines: spec.lines?.(content) });
       window.location.href = `mailto:${personal.email}`;
       return;
     }
-    ctx.push({ cmd, kind: spec.kind ?? "text", lines: spec.lines });
+    ctx.push({ cmd, kind: spec.kind ?? "text", lines: spec.lines?.(content) });
     return;
   }
 

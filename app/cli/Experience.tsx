@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { experience } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const stagger = {
   hidden: {},
@@ -13,6 +13,7 @@ const fadeUp = {
 };
 
 export default function CLIExperience() {
+  const { experience } = usePortfolio();
   return (
     <motion.div
       variants={stagger}

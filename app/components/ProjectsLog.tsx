@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
-import { projects, type Project } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
+import type { Project } from "../types/portfolio";
 
 export const RECENT_PROJECT_COUNT = 3;
 
@@ -15,8 +16,8 @@ const PROJECT_CATEGORY: Record<string, string> = {
   classence: "education",
 };
 
-function initialExpanded() {
-  return new Set(projects.slice(0, RECENT_PROJECT_COUNT).map((project) => project.id));
+function initialExpanded(projectIds: string[]) {
+  return new Set(projectIds.slice(0, RECENT_PROJECT_COUNT));
 }
 
 type Props = {
@@ -24,7 +25,10 @@ type Props = {
 };
 
 export default function ProjectsLog({ density = "gui" }: Props) {
-  const [expanded, setExpanded] = useState<Set<string>>(initialExpanded);
+  const { projects } = usePortfolio();
+  const [expanded, setExpanded] = useState<Set<string>>(() =>
+    initialExpanded(projects.map((project) => project.id))
+  );
   const isCli = density === "cli";
 
   const setOpen = useCallback((id: string, open: boolean) => {

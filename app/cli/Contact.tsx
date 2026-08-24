@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { personal, socials } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 8 },
@@ -35,7 +35,10 @@ const STEP_HINT: Record<StepKey, string> = {
 
 type FormValues = Record<StepKey, string>;
 
-const CONTACT_LINKS = [
+const buildContactLinks = (
+  personal: ReturnType<typeof usePortfolio>["personal"],
+  socials: ReturnType<typeof usePortfolio>["socials"]
+) => [
   { label: "email", value: personal.email, href: `mailto:${personal.email}` },
   { label: "twitter", value: "shivanirai08", href: socials.find((s) => s.name === "twitter")?.url ?? "#" },
   { label: "linkedin", value: "shivanirai08", href: socials.find((s) => s.name === "linkedin")?.url ?? "#" },
@@ -43,6 +46,8 @@ const CONTACT_LINKS = [
 ];
 
 export default function CLIContact() {
+  const { personal, socials } = usePortfolio();
+  const links = buildContactLinks(personal, socials);
   const [connectionPhase, setConnectionPhase] = useState(0);
   const [showContent, setShowContent] = useState(false);
   const [currentStep, setCurrentStep] = useState<Step>(0);
@@ -159,7 +164,7 @@ export default function CLIContact() {
             <motion.div variants={fadeUp} className="mb-6">
               <div className="text-[11px] text-[#7c7c85] tracking-[0.22em] font-medium mb-2">REACH</div>
               <div className="pl-6 space-y-1">
-                {CONTACT_LINKS.map((link) => (
+                {links.map((link) => (
                   <div key={link.label} className="flex items-center gap-3">
                     <span className="w-[64px] text-[#d4b483]">{link.label}</span>
                     <span className="text-[#4a4a52]">=</span>

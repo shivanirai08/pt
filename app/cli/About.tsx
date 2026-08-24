@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { personal, socials, aboutStack, aboutPhilosophy, aboutCurrently, aboutEnv } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const stagger = {
   hidden: {},
@@ -14,6 +14,7 @@ const fadeUp = {
 };
 
 export default function CLIAbout() {
+  const { personal, socials, aboutStack, aboutPhilosophy, aboutCurrently, aboutEnv } = usePortfolio();
   return (
     <motion.div
       variants={stagger}
@@ -192,6 +193,7 @@ function EnvRow({ k, v }: { k: string; v: string }) {
 }
 
 function FindMeEmail() {
+  const { personal } = usePortfolio();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {

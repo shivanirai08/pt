@@ -6,14 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import ProjectsLog from "../components/ProjectsLog";
-import {
-  personal,
-  experience,
-  aboutStack,
-  aboutCurrently,
-  socials,
-  stats,
-} from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,12 +18,14 @@ const ROLE_TAGS: Record<string, string[]> = {
   "v1.0.0": ["react", "node.js", "tailwind", "components"],
 };
 
-const CAREER_STATS = [
-  { value: stats.yearsActive, label: "years in production" },
-  { value: stats.projectsShipped, label: "projects shipped" },
-  { value: String(stats.yearsLed), label: "teams led" },
-  { value: "1", label: "design-system shipped" },
-];
+function careerStats(stats: { yearsActive: string; projectsShipped: string; yearsLed: number }) {
+  return [
+    { value: stats.yearsActive, label: "years in production" },
+    { value: stats.projectsShipped, label: "projects shipped" },
+    { value: String(stats.yearsLed), label: "teams led" },
+    { value: "1", label: "design-system shipped" },
+  ];
+}
 
 const BOOT_LINES = [
   { text: "[BOOT] Initializing portfolio...", color: "#3f3f3f" },
@@ -61,6 +56,7 @@ export default function GUIHome({
   showBootSequence,
   onBootSequenceComplete,
 }: GUIHomeProps) {
+  const { personal, experience, aboutStack, aboutCurrently, socials, stats } = usePortfolio();
   const [bootPhase, setBootPhase] = useState(showBootSequence ? 0 : 5);
   const [bootWordCounts, setBootWordCounts] = useState<number[]>(
     showBootSequence
@@ -393,7 +389,7 @@ export default function GUIHome({
         </div>
 
         <div className="reveal-item mt-6 grid grid-cols-2 gap-8 border-t border-[#16161a] pt-10 md:grid-cols-4">
-          {CAREER_STATS.map((item) => (
+          {careerStats(stats).map((item) => (
             <div key={item.label}>
               <div className="text-[32px] font-bold leading-none text-[#ffddc0]">{item.value}</div>
               <div className="mt-2 font-sans text-[13px] text-[#7c7c85]">{item.label}</div>

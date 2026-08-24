@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TerminalScrollback from "./TerminalScrollback";
 import StatusBar from "./StatusBar";
-import { personal } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 import type { Entry } from "./TerminalOutput";
 import { matchTerminalCommands, runTerminalCommand } from "../lib/terminalCommands";
 import { SHELL_NAV, SHELL_PAD, SHELL_X } from "../lib/shell";
@@ -31,6 +31,8 @@ export default function FullscreenTerminal({
   onExit,
   onOpenHelp,
 }: Props) {
+  const content = usePortfolio();
+  const { personal } = content;
   const [value, setValue] = useState(initialDraft);
   const [histIdx, setHistIdx] = useState(-1);
   const [focused, setFocused] = useState(true);
@@ -58,6 +60,7 @@ export default function FullscreenTerminal({
       setHistIdx(-1);
       setFocused(true);
       runTerminalCommand(raw, {
+        content,
         mode: "fullscreen",
         push,
         setEntries,
@@ -67,7 +70,7 @@ export default function FullscreenTerminal({
         setFlash,
       });
     },
-    [onExit, onOpenHelp, push, setEntries, setHistory]
+    [content, onExit, onOpenHelp, push, setEntries, setHistory]
   );
 
   const handleHistoryUp = useCallback(() => {

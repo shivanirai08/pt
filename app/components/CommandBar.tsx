@@ -6,6 +6,7 @@ import { helpRows, type Entry } from "./TerminalOutput";
 import TerminalScrollback from "./TerminalScrollback";
 import StatusBar from "./StatusBar";
 import { matchTerminalCommands, runTerminalCommand } from "../lib/terminalCommands";
+import { usePortfolio } from "../context/PortfolioContext";
 import { SHELL_NAV, SHELL_PAD } from "../lib/shell";
 
 export type { Entry };
@@ -37,6 +38,7 @@ export default function CommandBar({
   initiallyOpen = false,
   onDockOpenChange,
 }: Props) {
+  const content = usePortfolio();
   const [focused, setFocused] = useState(initiallyOpen);
   const [value, setValue] = useState("");
   const [histIdx, setHistIdx] = useState(-1);
@@ -86,6 +88,7 @@ export default function CommandBar({
       setHistIdx(-1);
       setDockFocused(true);
       runTerminalCommand(raw, {
+        content,
         mode: "gui",
         push,
         setEntries,
@@ -96,7 +99,7 @@ export default function CommandBar({
         setFlash,
       });
     },
-    [goSection, onEnterFullscreen, onOpenHelp, push, setDockFocused, setEntries, setHistory]
+    [content, goSection, onEnterFullscreen, onOpenHelp, push, setDockFocused, setEntries, setHistory]
   );
 
   useEffect(() => {

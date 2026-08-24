@@ -1,6 +1,6 @@
 "use client";
 
-import { personal } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 import { SHELL_NAV, SHELL_X } from "../lib/shell";
 
 type GUISection = "about" | "projects" | "experience" | "contact";
@@ -22,6 +22,7 @@ export default function Shell({
   onOpenHelp,
   children,
 }: Props) {
+  const { personal } = usePortfolio();
   return (
     <div className="min-h-dvh bg-[#0a0a0b] text-[#e8e8ea]">
       <header className="sticky top-0 z-40 border-b border-[#16161a] bg-[#0a0a0b]/92 backdrop-blur">

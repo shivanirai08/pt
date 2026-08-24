@@ -8,6 +8,7 @@ import FullscreenTerminal from "./components/FullscreenTerminal";
 import HelpOverlay from "./components/HelpOverlay";
 import type { Entry } from "./components/TerminalOutput";
 import GUIHome from "./gui/Home";
+import { PortfolioProvider } from "./context/PortfolioContext";
 
 type ViewMode = "unified" | "cli";
 type GUISection = "about" | "projects" | "experience" | "contact";
@@ -127,6 +128,7 @@ export default function Page() {
   }, [helpOpen, viewMode]);
 
   return (
+    <PortfolioProvider>
     <LayoutGroup id="terminal">
       {viewMode === "unified" ? (
         <>
@@ -192,5 +194,6 @@ export default function Page() {
         </>
       )}
     </LayoutGroup>
+    </PortfolioProvider>
   );
 }

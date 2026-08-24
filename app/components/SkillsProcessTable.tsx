@@ -1,6 +1,7 @@
 "use client";
 
-import { skillProcessRows } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
+import type { SkillProcessRow } from "../types/portfolio";
 
 function stateClass(state: string) {
   if (state === "RUNNING") return "text-[#3fb950]";
@@ -8,7 +9,7 @@ function stateClass(state: string) {
   return "text-[#8b8b92]";
 }
 
-function ProcessRow({ row }: { row: (typeof skillProcessRows)[number] }) {
+function ProcessRow({ row }: { row: SkillProcessRow }) {
   return (
     <div className="grid grid-cols-[44px_minmax(0,1fr)_110px] gap-2 text-[#a8a8ad] md:grid-cols-[52px_1.2fr_80px_80px_120px] md:gap-3">
       <span>{row.pid}</span>
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export default function SkillsProcessTable({ compact = false }: Props) {
+  const { skillProcessRows } = usePortfolio();
   const runningCount = skillProcessRows.filter((r) => r.state === "RUNNING").length;
   const learningCount = skillProcessRows.filter((r) => r.state === "LEARNING").length;
 

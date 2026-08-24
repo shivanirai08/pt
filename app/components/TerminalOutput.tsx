@@ -1,16 +1,12 @@
 "use client";
 
-import {
-  personal,
-  projects,
-  stats,
-  experienceImpact,
-} from "../data";
+import type { Personal } from "../types/portfolio";
 import SkillsProcessTable from "./SkillsProcessTable";
 import CLIAbout from "../cli/About";
 import CLIProjects from "../cli/Projects";
 import CLIExperience from "../cli/Experience";
 import CLIContact from "../cli/Contact";
+import { usePortfolio } from "../context/PortfolioContext";
 
 export type TerminalSection = "about" | "projects" | "experience" | "contact";
 
@@ -38,13 +34,6 @@ export const helpRows: { cmd: string; key: string; desc: string }[] = [
   { cmd: "fullscreen", key: "⛶", desc: "enter full terminal mode" },
 ];
 
-const careerStats = [
-  { label: "years active", value: stats.yearsActive },
-  { label: "projects shipped", value: String(stats.projectsShipped) },
-  { label: "teams led", value: String(stats.yearsLed) },
-  { label: "impact groups", value: String(experienceImpact.length) },
-];
-
 function Prompt({ cmd }: { cmd: string }) {
   return (
     <div className="text-sm">
@@ -61,6 +50,15 @@ type Props = {
 };
 
 export default function TerminalOutput({ entry, onSuggestion }: Props) {
+  const { projects, stats, experienceImpact } = usePortfolio();
+
+  const careerStats = [
+    { label: "years active", value: stats.yearsActive },
+    { label: "projects shipped", value: String(stats.projectsShipped) },
+    { label: "teams led", value: String(stats.yearsLed) },
+    { label: "impact groups", value: String(experienceImpact.length) },
+  ];
+
   return (
     <div className="flex flex-col gap-2">
       <Prompt cmd={entry.cmd} />
@@ -85,7 +83,7 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
 
       {entry.kind === "error" && (
         <div className="flex flex-col gap-3 pl-1">
-          <div className="font-['Press_Start_2P',cursive] text-[18px] leading-none tracking-tight text-[#ffddc0] sm:text-[22px] pt-3">
+          <div className="pt-3 font-['Press_Start_2P',cursive] text-[18px] leading-none tracking-tight text-[#ffddc0] sm:text-[22px]">
             FOUR-O-FOUR
           </div>
           {entry.lines?.[0] ? (
@@ -183,9 +181,10 @@ export default function TerminalOutput({ entry, onSuggestion }: Props) {
   );
 }
 
-export function whoamiLines() {
+export function whoamiLines(personal: Personal, currentCompany?: string) {
+  const company = currentCompany?.split("(")[0]?.trim() ?? "Hikigai Inc.";
   return [
     `${personal.fullName.toLowerCase()} · software developer · ${personal.location.toLowerCase()}`,
-    `2 yrs shipping · currently at Hikigai Inc. · $AVAILABLE = ${personal.availability}`,
+    `2 yrs shipping · currently at ${company} · $AVAILABLE = ${personal.availability}`,
   ];
 }
