@@ -4,17 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
+import ProjectsLog from "../components/ProjectsLog";
 import {
   personal,
-  projects,
   experience,
   aboutStack,
   aboutCurrently,
   socials,
   stats,
-  type Project,
 } from "../data";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -33,13 +31,6 @@ const CAREER_STATS = [
   { value: String(stats.yearsLed), label: "teams led" },
   { value: "1", label: "design-system shipped" },
 ];
-
-const PROJECT_CATEGORY: Record<string, string> = {
-  codecollab: "realtime",
-  codeclash: "realtime",
-  "chess-platform": "realtime",
-  classence: "education",
-};
 
 const BOOT_LINES = [
   { text: "[BOOT] Initializing portfolio...", color: "#3f3f3f" },
@@ -78,10 +69,7 @@ export default function GUIHome({
   );
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
   const [showEarlierRoles, setShowEarlierRoles] = useState(false);
-  const [activeProject, setActiveProject] = useState(0);
   const mainRef = useRef<HTMLDivElement>(null);
-  const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const projectHoverRef = useRef(false);
 
   const primaryRoles = experience.slice(0, 2);
   const earlierRoles = experience.slice(2);
@@ -124,27 +112,6 @@ export default function GUIHome({
 
     return () => timers.forEach(clearTimeout);
   }, [onBootSequenceComplete, showBootSequence]);
-
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-
-    projectRefs.current.forEach((el, index) => {
-      if (!el) return;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (projectHoverRef.current) return;
-          if (entries[0]?.isIntersecting) setActiveProject(index);
-        },
-        { rootMargin: "-35% 0px -45% 0px", threshold: 0.15 }
-      );
-
-      observer.observe(el);
-      observers.push(observer);
-    });
-
-    return () => observers.forEach((observer) => observer.disconnect());
-  }, []);
 
   // GSAP scroll reveals
   useEffect(() => {
@@ -442,120 +409,7 @@ export default function GUIHome({
         className="min-h-screen py-20 md:py-24 xl:py-32"
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
-        <div className="relative">
-          {projects.map((project, index) => {
-            const isExpanded = activeProject === index;
-            const isLast = index === projects.length - 1;
-
-            return (
-              <div
-                key={project.id}
-                id={`project-${project.id}`}
-                ref={(el) => {
-                  projectRefs.current[index] = el;
-                }}
-                className="reveal-item flex gap-5 md:gap-7"
-                onMouseEnter={() => {
-                  projectHoverRef.current = true;
-                  setActiveProject(index);
-                }}
-                onMouseLeave={() => {
-                  projectHoverRef.current = false;
-                }}
-                onClick={() => {
-                  if (!isExpanded) setActiveProject(index);
-                }}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setActiveProject(index);
-                  }
-                }}
-              >
-                <div className="flex w-4 shrink-0 flex-col items-center pt-2">
-                  <span
-                    className="h-2 w-2 shrink-0 rounded-full transition-colors duration-300"
-                    style={{ backgroundColor: isExpanded ? "#ffddc0" : "#4a4a52" }}
-                  />
-                  {!isLast && <div className="mt-1 w-px flex-1 bg-[#242428]" />}
-                </div>
-
-                <div className={`min-w-0 flex-1 ${isLast ? "pb-2" : "pb-14"}`}>
-                  <div className="mb-3 flex flex-wrap items-center gap-3">
-                    <span
-                      className={`text-[17px] font-semibold transition-colors duration-300 ${
-                        isExpanded ? "text-[#ffddc0]" : "text-[#e8e8ea]"
-                      }`}
-                    >
-                      {project.name}
-                    </span>
-                    {isExpanded && (
-                      <>
-                        <span className="text-[13px] text-[#7c7c85]">{project.date}</span>
-                        {project.head && (
-                          <span className="border border-[#3fb95044] px-2 py-0.5 text-[10px] tracking-[0.14em] text-[#3fb950]">
-                            HEAD
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  <AnimatePresence initial={false} mode="wait">
-                    {isExpanded ? (
-                      <motion.div
-                        key={`${project.id}-expanded`}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                      >
-                        <ProjectExpanded project={project} />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key={`${project.id}-collapsed`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.18 }}
-                        className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(200px,0.85fr)_1fr_auto] lg:items-start lg:gap-8"
-                      >
-                        <div className="text-[12px] text-[#7c7c85]">
-                          {project.date} · {PROJECT_CATEGORY[project.id] ?? project.role.toLowerCase()}
-                        </div>
-                        <div>
-                          <p className="max-w-[56ch] font-sans text-[14px] leading-[1.7] text-[#a8a8ad]">
-                            {project.excerpt}
-                          </p>
-                          <p className="mt-2 text-[12px] text-[#7c7c85]">
-                            {project.stack.slice(0, 5).join(" · ").toLowerCase()}
-                          </p>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-4 text-[12px] lg:justify-end">
-                          {project.links.map((link) => (
-                            <a
-                              key={link.label}
-                              href={link.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1 text-[#a8a8ad] transition-colors hover:text-[#ffddc0]"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {link.label} <ArrowUpRight size={12} strokeWidth={1.5} />
-                            </a>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <ProjectsLog density="gui" />
       </SectionCommandReveal>
 
       {/* ════════ ABOUT — full viewport ════════ */}
@@ -745,71 +599,6 @@ export default function GUIHome({
             </div>
           </div>
       </SectionCommandReveal>
-    </div>
-  );
-}
-
-function ProjectExpanded({ project }: { project: Project }) {
-  const specRows = [
-    { label: "client", value: project.highlights[0] ?? project.excerpt },
-    { label: "server", value: project.stack[0] ?? "—" },
-    { label: "infra", value: project.stack.slice(1, 3).join(" + ") || "—" },
-    {
-      label: "built",
-      value: project.stack.join(" · ").toLowerCase(),
-    },
-  ];
-
-  return (
-    <div>
-      <div className="relative mb-8 min-h-[220px] w-full overflow-hidden bg-[#0a0a0b] md:min-h-[300px]">
-        <Image
-          src={project.image}
-          alt={`${project.name.replace("feat: ", "")} screenshot`}
-          fill
-          sizes="(max-width: 1280px) 100vw, 70vw"
-          className="object-cover"
-        />
-      </div>
-
-      <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div>
-          <p className="mb-6 max-w-[52ch] font-sans text-[15px] leading-[1.75] text-[#a8a8ad]">
-            {project.excerpt}
-          </p>
-          <div className="mb-4 flex flex-wrap gap-3">
-            {project.links.map((link, index) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                className={
-                  index === 0
-                    ? "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap border border-[#ffddc0] px-5 py-2.5 text-[13px] leading-none text-[#ffddc0] transition-all duration-200 hover:bg-[#ffddc0] hover:text-[#0a0a0a]"
-                    : "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap border border-[#333] px-5 py-2.5 text-[13px] leading-none text-[#a8a8ad] transition-all duration-200 hover:border-[#c3c7f4] hover:text-[#c3c7f4]"
-                }
-              >
-                {link.label} <ArrowUpRight size={13} />
-              </a>
-            ))}
-          </div>
-          {project.highlights[0] && (
-            <p className="text-[12px] text-[#7c7c85]">
-              read: {project.highlights[0].toLowerCase()} →
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-3 text-[12px]">
-          {specRows.map((row) => (
-            <div key={row.label} className="grid grid-cols-[72px_1fr] gap-4">
-              <span className="text-[#7c7c85]">{row.label}</span>
-              <span className="font-sans leading-relaxed text-[#a8a8ad]">{row.value}</span>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

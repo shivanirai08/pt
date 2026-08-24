@@ -133,12 +133,13 @@ export function runTerminalCommand(raw: string, ctx: RunTerminalContext) {
     const slug = q.slice(3).replace(/\//g, "").trim();
     const hit = projects.find((p) => p.id === slug);
     if (hit) {
+      window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("portfolio:open-project", { detail: { id: hit.id } }));
+        document.getElementById(`project-${hit.id}`)?.scrollIntoView({ behavior: "smooth" });
+      }, ctx.mode === "gui" ? 400 : 80);
       if (ctx.mode === "gui" && ctx.goSection) {
         ctx.push({ cmd, kind: "text", lines: [`opening ~/projects/${hit.id}`] });
         ctx.goSection("projects");
-        window.setTimeout(() => {
-          document.getElementById(`project-${hit.id}`)?.scrollIntoView({ behavior: "smooth" });
-        }, 400);
       } else {
         ctx.push({ cmd, kind: "section", section: "projects" });
       }
