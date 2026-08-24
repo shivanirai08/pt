@@ -29,11 +29,21 @@ export default function StatusBar(props: Props) {
     if (props.commandMode) inputRef.current?.focus();
   }, [props.commandMode]);
 
+  useEffect(() => {
+    function onFocusCommand() {
+      // Always pull focus to the live prompt — even if the dock is already open
+      // and commandMode didn't change (e.g. / or ⌘K after blur/submit).
+      window.requestAnimationFrame(() => inputRef.current?.focus());
+    }
+    window.addEventListener("portfolio:focus-command", onFocusCommand);
+    return () => window.removeEventListener("portfolio:focus-command", onFocusCommand);
+  }, []);
+
   const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      inputRef.current?.blur();
       props.onCommandSubmit();
+      window.requestAnimationFrame(() => inputRef.current?.focus());
     }
     if (e.key === "Escape") {
       e.preventDefault();

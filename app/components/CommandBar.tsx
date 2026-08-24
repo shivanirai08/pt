@@ -120,11 +120,13 @@ export default function CommandBar({
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setDockFocused(true);
+        window.dispatchEvent(new CustomEvent("portfolio:focus-command"));
         return;
       }
       if (e.key === "/" && !typing) {
         e.preventDefault();
         setDockFocused(true);
+        window.dispatchEvent(new CustomEvent("portfolio:focus-command"));
       }
       if (e.key === "Escape") {
         setDockFocused(false);
@@ -190,7 +192,10 @@ export default function CommandBar({
       </button>
       <button
         type="button"
-        onClick={() => setDockFocused(true)}
+        onClick={() => {
+          setDockFocused(true);
+          window.dispatchEvent(new CustomEvent("portfolio:focus-command"));
+        }}
         className="flex h-14 items-center gap-2 border-l border-[#242428] px-3 text-xs text-[#7c7c85] hover:text-[#a8a8ad]"
       >
         ⌘K
