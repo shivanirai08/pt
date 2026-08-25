@@ -566,12 +566,14 @@ export default function GUIHome({
                 >
                   Send email <ArrowUpRight size={14} strokeWidth={2} />
                 </a>
-                <button
-                  type="button"
+                <a
+                  href={personal.resumeUrl}
+                  target="_blank"
+                  rel="noreferrer"
                   className="inline-flex items-center gap-2 border border-[#38322b] px-5 py-3 text-xs text-[#e8e8ea] transition-colors hover:border-[#ffddc0]"
                 >
-                  Download résumé
-                </button>
+                  Download résumé <ArrowUpRight size={14} strokeWidth={2} />
+                </a>
               </div>
             </div>
 

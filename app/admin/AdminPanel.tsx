@@ -289,6 +289,11 @@ export default function AdminPanel() {
               <Field label="Full name" value={content.personal.fullName} onChange={(v) => updatePersonal("fullName", v)} />
               <Field label="Role" value={content.personal.role} onChange={(v) => updatePersonal("role", v)} />
               <Field label="Email" value={content.personal.email} onChange={(v) => updatePersonal("email", v)} />
+              <Field
+                label="Resume URL"
+                value={content.personal.resumeUrl}
+                onChange={(v) => updatePersonal("resumeUrl", v)}
+              />
               <Field label="Tagline" value={content.personal.tagline} onChange={(v) => updatePersonal("tagline", v)} />
               <Field label="Location" value={content.personal.location} onChange={(v) => updatePersonal("location", v)} />
               <div className="sm:col-span-2">

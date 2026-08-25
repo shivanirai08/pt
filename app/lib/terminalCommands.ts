@@ -33,9 +33,9 @@ const TERMINAL_SPECS: Spec[] = [
   {
     id: "resume",
     names: [":resume", "resume", "r"],
-    desc: "download pdf",
+    desc: "open resume pdf",
     kind: "text",
-    lines: () => ["fetching shivani-rai-resume.pdf …", "1 file · 184 KB · download started"],
+    lines: () => ["opening resume pdf in a new tab…"],
   },
   {
     id: "hire",
@@ -179,6 +179,11 @@ export function runTerminalCommand(raw: string, ctx: RunTerminalContext) {
     if (spec.id === "hire") {
       ctx.push({ cmd, kind: "ok", lines: spec.lines?.(content) });
       window.location.href = `mailto:${personal.email}`;
+      return;
+    }
+    if (spec.id === "resume") {
+      ctx.push({ cmd, kind: "text", lines: spec.lines?.(content) });
+      window.open(personal.resumeUrl, "_blank", "noopener,noreferrer");
       return;
     }
     ctx.push({ cmd, kind: spec.kind ?? "text", lines: spec.lines?.(content) });

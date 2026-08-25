@@ -9,7 +9,15 @@ const CONTENT_PATH =
 export async function readPortfolioContent(): Promise<PortfolioContent> {
   try {
     const raw = await fs.readFile(CONTENT_PATH, "utf-8");
-    return JSON.parse(raw) as PortfolioContent;
+    const parsed = JSON.parse(raw) as PortfolioContent;
+    return {
+      ...defaultPortfolioContent,
+      ...parsed,
+      personal: {
+        ...defaultPortfolioContent.personal,
+        ...parsed.personal,
+      },
+    };
   } catch {
     await writePortfolioContent(defaultPortfolioContent);
     return defaultPortfolioContent;

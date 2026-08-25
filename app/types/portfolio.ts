@@ -7,6 +7,7 @@ export type Personal = {
   timezone: string;
   editor: string;
   email: string;
+  resumeUrl: string;
   tagline: string;
   headline: string;
   intro: string;
@@ -116,6 +117,8 @@ export const defaultPortfolioContent: PortfolioContent = {
     timezone: "IST (UTC+5:30)",
     editor: "VS Code",
     email: "raishivani1406@gmail.com",
+    resumeUrl:
+      "https://drive.google.com/file/d/1ZkeOxShgyUX_0iwb50j9cYS2JqU5EC_Q/view?usp=sharing",
     tagline: "software developer with a product brain",
     headline: "I design, build, and ship.",
     intro:

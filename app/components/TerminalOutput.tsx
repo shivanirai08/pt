@@ -25,7 +25,7 @@ export const helpRows: { cmd: string; key: string; desc: string }[] = [
   { cmd: ":experience", key: "3", desc: "changelog of roles" },
   { cmd: ":skills", key: "4", desc: "stack, by depth" },
   { cmd: ":contact", key: "5", desc: "email, socials, timezone" },
-  { cmd: ":resume", key: "r", desc: "download pdf" },
+  { cmd: ":resume", key: "r", desc: "open resume pdf" },
   { cmd: "whoami", key: "—", desc: "the one-line version" },
   { cmd: "ls ~/projects", key: "—", desc: "work as a directory listing" },
   { cmd: "wc --career", key: "—", desc: "the numbers" },
