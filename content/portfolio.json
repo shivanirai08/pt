@@ -247,9 +247,9 @@
       "role": "Software Engineer Intern",
       "company": "Hikigai Inc. (Internship · Remote)",
       "achievements": [
-        "Built Stripe subscription billing for two Health AI products: Checkout, a webhook handler for thin event payloads, a customer billing portal, and plan-based access gates that sign users out when a subscription ends, all backed by automated billing tests.",
-        "Wired 12 specialised AI agents (SOAP notes, ICD-10/CPT/E&M coding, medications, labs, vaccines, referrals) into one visit-report flow that runs them in parallel, with PubMed MCP evidence lookups and clinician-approved write-back to eClinicalWorks through FHIR and MCP.",
-        "Designed and built WebRTC audio consultation modules (peer connection lifecycles, Chrome/Safari/Firefox support) and a reusable React + TypeScript component library for the patient-doctor workflow, working across the full SDLC from design to deployment."
+        "Built and shipped three web apps on the Hikigai Health AI platform (AI Scribe Plus, CarePilot and Clinic Admin) in Next.js, React and TypeScript, covering live visit transcription, clinician workflows and appointment management.",
+        "Built Stripe subscription billing for two of the products: Checkout, a webhook handler for thin event payloads, a customer billing portal and plan-based access gates, backed by automated billing tests.",
+        "Ran 12 AI agents in parallel (SOAP notes, ICD-10/CPT coding, orders) with PubMed MCP lookups and clinician-approved eClinicalWorks write-back via FHIR and MCP; built WebRTC audio consultation modules and a reusable React + TypeScript component library."
       ]
     },
     {
