@@ -11,7 +11,7 @@
     "tagline": "software developer with a product brain",
     "headline": "I design, build, and ship.",
     "intro": "I turn ideas into complete products — interfaces, APIs, and everything in between.",
-    "synopsis": "shivani [--design] [--develop] [--deploy] <ideas>",
+    "synopsis": "shivani [--solve] [--shape] [--simplify] <ideas>",
     "description": "I build end to end react/next js on the surface, Node and Python underneath, and the data model holding it together. Two years of shipping real products taught me the job doesn't stop at the component boundary: why the API takes 800ms, how auth scales, what the user feels between click and render.",
     "bio": "I reach for Next.js and Express by default, open Figma when I need to think out loud, and reach for Python when the problem needs FastAPI or logic that shouldn't live in the browser. I obsess over the details most people ship past: the 200ms that feels slow, the schema that won't bend at scale, the motion that either earns its place or gets cut.",
     "role": "Software Developer · Product Designer",
@@ -23,32 +23,32 @@
   },
   "aboutStack": [
     {
-      "label": "core/",
-      "items": "react · typescript · next.js · javascript · python"
+      "label": "languages/",
+      "items": "javascript · typescript · python · java · c · c++ · go · sql"
     },
     {
-      "label": "styling/",
-      "items": "tailwind · css · framer-motion"
-    },
-    {
-      "label": "state/",
-      "items": "zustand · react-query · redux toolkit"
+      "label": "frontend/",
+      "items": "react · next.js · tailwind · redux toolkit · zustand · react-query · framer-motion"
     },
     {
       "label": "backend/",
-      "items": "node · express · fastapi · rest apis · jwt"
+      "items": "node · express · fastapi · rest apis · jwt · stripe · webhooks"
+    },
+    {
+      "label": "ai/",
+      "items": "llm agents · prompt engineering · mcp · fhir"
     },
     {
       "label": "data/",
-      "items": "mongodb · postgresql · redis · supabase"
+      "items": "postgresql · mongodb · redis · supabase · firebase"
     },
     {
       "label": "realtime/",
-      "items": "socket.io · webrtc · websockets"
+      "items": "webrtc · websockets · socket.io"
     },
     {
       "label": "tools/",
-      "items": "figma · git · docker · aws · vercel"
+      "items": "docker · aws · gcp · vercel · git · ci/cd · jest · eslint · vite · figma"
     },
     {
       "label": "exploring/",
@@ -243,54 +243,55 @@
   "experience": [
     {
       "version": "v5.0.0",
-      "range": "Jan 2026 – July 2026",
-      "role": "Software Developer",
-      "company": "Hikigai Inc. (Full-Time Remote)",
+      "range": "Nov 2025 – Nov 2026",
+      "role": "Software Engineer Intern",
+      "company": "Hikigai Inc. (Internship · Remote)",
       "achievements": [
-        "Designed and built WebRTC audio consultation modules for a Health AI platform, managing peer connection lifecycles and cross-browser compatibility across Chrome, Safari, and Firefox.",
-        "Collaborated across the full SDLC — design, frontend and backend integration, QA, and deployment — and built a reusable React + TypeScript component library for the patient-doctor workflow.",
-        "Integrated AI-generated SOAP summaries through REST APIs across five clinical modules."
+        "Built Stripe subscription billing for two Health AI products: Checkout, a webhook handler for thin event payloads, a customer billing portal, and plan-based access gates that sign users out when a subscription ends, all backed by automated billing tests.",
+        "Wired 12 specialised AI agents (SOAP notes, ICD-10/CPT/E&M coding, medications, labs, vaccines, referrals) into one visit-report flow that runs them in parallel, with PubMed MCP evidence lookups and clinician-approved write-back to eClinicalWorks through FHIR and MCP.",
+        "Designed and built WebRTC audio consultation modules (peer connection lifecycles, Chrome/Safari/Firefox support) and a reusable React + TypeScript component library for the patient-doctor workflow, working across the full SDLC from design to deployment."
       ]
     },
     {
       "version": "v4.0.0",
-      "range": "Nov 2025 – Jan 2026",
-      "role": "Software Developer Intern",
-      "company": "QuantumNXT · Quantum Leap Technology (Remote)",
+      "range": "Oct 2025 – Dec 2025",
+      "role": "Frontend Developer Intern",
+      "company": "QuantumNXT · Quantum Leap Technology (Part-time · Remote)",
       "achievements": [
-        "Developed 5+ end-to-end user flows and a dynamic emission calculator consuming REST APIs on a C# / ASP.NET backend for BOI, an enterprise sustainability platform.",
+        "Built 5+ end-to-end user flows and a dynamic emission calculator on REST APIs backed by C# / ASP.NET, for BOI, an enterprise sustainability platform.",
         "Fixed 15+ critical UI/UX bugs across four dashboard views in sprint-based development.",
         "Resolved cross-browser issues on Chrome, Firefox, and Edge while working inside an existing enterprise codebase."
       ]
     },
     {
       "version": "v3.0.0",
-      "range": "Jul 2025 – Oct 2025",
-      "role": "Product Designer",
-      "company": "HSLR Limited Technologies (Remote)",
+      "range": "Jun 2025 – Oct 2025",
+      "role": "UI/UX Design Research Intern",
+      "company": "HLSR Technologies Pvt Ltd (Internship · Remote)",
       "achievements": [
-        "Led UX research for Ask Ira using Jobs to be Done and Octalysis frameworks to map student motivation across grades 6 to 12.",
-        "Designed the full student query flow - mode selection, concept learning, quiz and practice follow-up screens."
+        "Led UX research for Ask Ira, an EdTech product, using Jobs to be Done and Octalysis frameworks to map student motivation across grades 6 to 12.",
+        "Designed the complete student query flow from scratch: mode selection, concept learning, quiz and practice follow-up screens."
       ]
     },
     {
       "version": "v2.0.0",
       "range": "Apr 2025 – Jul 2025",
-      "role": "Product Designer",
-      "company": "Algoroot Pvt. Limited (Remote)",
+      "role": "UI/UX Designer",
+      "company": "AlgoRoot Pvt. Ltd (Remote)",
       "achievements": [
-        "Owned end-to-end design for AlgoVox, an AI sales call agent - landing page, dashboard, and all core screens.",
-        "Delivered complete handoff with interactions, animations, and production-ready assets for the frontend team."
+        "Owned end-to-end design for AlgoVox, an AI sales call agent, including the landing page, dashboard and all core screens.",
+        "Delivered a complete developer handoff with interactions, animations and production-ready assets for the frontend team."
       ]
     },
     {
       "version": "v1.0.0",
-      "range": "Oct 2024 – Present",
-      "role": "Software Developer",
-      "company": "Software Incubator, SDC",
+      "range": "Dec 2024 – Present",
+      "role": "Product Engineer",
+      "company": "Software Incubator (SDC-SI)",
       "achievements": [
-        "Building platforms within a 45-person cross-functional team; developed reusable React and Tailwind CSS components alongside backend-integrated features under agile workflows.",
-        "Contributed to shared design system conventions and shipped zero regression defects across 4 sprints."
+        "Designer: started as the team's designer, creating UI designs and prototypes and handing specs and assets to developers across a 45-person cross-functional team.",
+        "Frontend Developer: moved into development, turning designs into reusable React and Tailwind CSS components and contributing to shared design system conventions.",
+        "Full-Stack Developer: now build backend-integrated features end to end (APIs, data and UI) under agile workflows, shipping zero regression defects across 4 sprints."
       ]
     }
   ],
@@ -454,14 +455,26 @@
   ],
   "secondaryTools": [
     "Git",
+    "CI/CD",
+    "Jest",
+    "ESLint",
+    "Vite",
     "Tailwind CSS",
+    "Redux Toolkit",
+    "WebRTC",
+    "WebSockets",
+    "REST APIs",
+    "Stripe",
+    "MCP",
+    "FHIR",
     "MongoDB",
     "Redis",
-    "WebRTC",
-    "Redux Toolkit",
-    "REST APIs",
+    "Supabase",
+    "Firebase",
     "Docker",
-    "AWS"
+    "AWS",
+    "GCP",
+    "Vercel"
   ],
   "certifications": [
     "Certified TypeScript Engineer",
@@ -501,7 +514,7 @@
       ]
     },
     {
-      "company": "HSLR Limited",
+      "company": "HLSR Technologies",
       "product": "EdTech Product",
       "points": [
         {

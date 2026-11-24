@@ -155,7 +155,7 @@ export default function Page() {
                   className="select-none whitespace-nowrap font-['Press_Start_2P',cursive] font-bold uppercase leading-none text-[#ffddc0]/[0.12]"
                   style={{ fontSize: "clamp(20px, 4vw - 5px, 72px)" }}
                 >
-                  Design.Develop.Deliver.
+                  Solve.Shape.Simplify.
                 </div>
               </div>
               <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 pb-16 text-center text-[13px] text-[#5b5b62] sm:px-8 lg:px-12 xl:px-16">

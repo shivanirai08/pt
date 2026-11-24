@@ -4,18 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import ProjectsLog from "../components/ProjectsLog";
 import { usePortfolio } from "../context/PortfolioContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ROLE_TAGS: Record<string, string[]> = {
-  "v5.0.0": ["react", "typescript", "webrtc", "rest apis"],
+  "v5.0.0": ["stripe", "ai agents", "mcp", "webrtc", "react", "typescript"],
   "v4.0.0": ["react", "typescript", "rest apis", "asp.net"],
   "v3.0.0": ["figma", "ux research", "product design"],
   "v2.0.0": ["figma", "prototyping", "handoff"],
-  "v1.0.0": ["react", "node.js", "tailwind", "components"],
+  "v1.0.0": ["figma", "react", "node.js", "tailwind", "design system"],
 };
 
 function careerStats(stats: { yearsActive: string; projectsShipped: string; yearsLed: number }) {
@@ -64,11 +64,8 @@ export default function GUIHome({
       : BOOT_WORDS.map((words) => words.length)
   );
   const [showBootOverlay, setShowBootOverlay] = useState(showBootSequence);
-  const [showEarlierRoles, setShowEarlierRoles] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
-  const primaryRoles = experience.slice(0, 2);
-  const earlierRoles = experience.slice(2);
 
   // Boot sequence
   useEffect(() => {
@@ -285,35 +282,35 @@ export default function GUIHome({
         innerClassName="mx-auto flex w-full max-w-[1440px] flex-col gap-8 md:gap-10 xl:gap-12 px-5 sm:px-8 lg:px-12 xl:px-16"
       >
         <div className="space-y-14">
-          {primaryRoles.map((role) => (
+          {experience.map((role) => (
             <div
               key={role.version}
-              className="reveal-item grid grid-cols-1 gap-6 border-b border-[#16161a] pb-14 md:grid-cols-[148px_1fr] md:gap-10"
+              className="reveal-item grid grid-cols-1 gap-6 border-b border-[#16161a] pb-14 md:grid-cols-[168px_1fr] md:gap-10"
             >
               <div className="space-y-1">
-                <div className="text-[13px] text-[#7c7c85]">{role.range.replace(" – ", " — ")}</div>
-                <div className="text-[11px] text-[#4a4a52]">{role.version}</div>
+                <div className="text-[14px] text-[#9a9aa3]">{role.range.replace(" – ", " — ")}</div>
+                <div className="text-[12px] text-[#6b6b74]">{role.version}</div>
               </div>
               <div>
                 <div className="mb-2 flex flex-wrap items-center gap-3">
-                  <h3 className="font-sans text-[26px] font-semibold leading-tight text-[#ffddc0]">
+                  <h3 className="font-sans text-[28px] font-semibold leading-tight text-[#ffddc0]">
                     {role.role}
                   </h3>
                   {role.version === "v5.0.0" && (
-                    <span className="border border-[#3fb95044] px-2 py-0.5 text-[10px] tracking-[0.12em] text-[#3fb950]">
+                    <span className="border border-[#3fb95044] px-2 py-0.5 text-[11px] tracking-[0.12em] text-[#3fb950]">
                       LATEST
                     </span>
                   )}
                 </div>
-                <p className="mb-5 font-sans text-[14px] text-[#7c7c85]">{role.company}</p>
-                <ul className="mb-6 space-y-3">
+                <p className="mb-5 font-sans text-[15px] text-[#9a9aa3]">{role.company}</p>
+                <ul className="mb-6 space-y-3.5">
                   {role.achievements.map((achievement) => (
                     <li
                       key={achievement}
-                      className="flex gap-3 font-sans text-[14px] leading-[1.75] text-[#a8a8ad]"
+                      className="flex gap-3 font-sans text-[16px] leading-[1.7] text-[#bdbdc2]"
                     >
                       <span className="shrink-0 text-[#3fb950]">›</span>
-                      <span className="max-w-[62ch]">{achievement}</span>
+                      <span className="max-w-[72ch]">{achievement}</span>
                     </li>
                   ))}
                 </ul>
@@ -321,7 +318,7 @@ export default function GUIHome({
                   {(ROLE_TAGS[role.version] ?? []).map((tag) => (
                     <span
                       key={tag}
-                      className="border border-[#242428] bg-[#111114] px-2.5 py-1 text-[11px] text-[#7c7c85]"
+                      className="border border-[#242428] bg-[#111114] px-2.5 py-1 text-[12px] text-[#9a9aa3]"
                     >
                       {tag}
                     </span>
@@ -330,69 +327,13 @@ export default function GUIHome({
               </div>
             </div>
           ))}
-
-          {earlierRoles.length > 0 && (
-            <div className="reveal-item">
-              <button
-                type="button"
-                onClick={() => setShowEarlierRoles((open) => !open)}
-                className="inline-flex items-center gap-2 border border-[#38322b] bg-[#151519] px-3 py-2 text-[13px] text-[#ffddc0] transition-colors hover:border-[#ffddc0] hover:bg-[#1a1a1f]"
-              >
-                <span>
-                  {earlierRoles.length} earlier roles · {showEarlierRoles ? "collapse" : "expand"}
-                </span>
-                <ChevronDown
-                  size={14}
-                  className={`transition-transform ${showEarlierRoles ? "rotate-180" : ""}`}
-                />
-              </button>
-
-              {showEarlierRoles && (
-                <div className="mt-10 space-y-12 border-l border-[#242428] pl-6">
-                  {earlierRoles.map((role) => (
-                    <div key={role.version} className="grid grid-cols-1 gap-4 md:grid-cols-[148px_1fr] md:gap-10">
-                      <div className="space-y-1">
-                        <div className="text-[13px] text-[#7c7c85]">{role.range.replace(" – ", " — ")}</div>
-                        <div className="text-[11px] text-[#4a4a52]">{role.version}</div>
-                      </div>
-                      <div>
-                        <h4 className="font-sans text-[18px] font-medium text-[#e8e8ea]">{role.role}</h4>
-                        <p className="mb-4 mt-1 font-sans text-[13px] text-[#7c7c85]">{role.company}</p>
-                        <ul className="mb-4 space-y-2">
-                          {role.achievements.map((achievement) => (
-                            <li
-                              key={achievement}
-                              className="flex gap-3 font-sans text-[13px] leading-[1.7] text-[#7c7c85]"
-                            >
-                              <span className="text-[#4a4a52]">›</span>
-                              <span>{achievement}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="flex flex-wrap gap-2">
-                          {(ROLE_TAGS[role.version] ?? []).map((tag) => (
-                            <span
-                              key={tag}
-                              className="border border-[#242428] bg-[#111114] px-2.5 py-1 text-[11px] text-[#7c7c85]"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         <div className="reveal-item mt-6 grid grid-cols-2 gap-8 border-t border-[#16161a] pt-10 md:grid-cols-4">
           {careerStats(stats).map((item) => (
             <div key={item.label}>
               <div className="text-[32px] font-bold leading-none text-[#ffddc0]">{item.value}</div>
-              <div className="mt-2 font-sans text-[13px] text-[#7c7c85]">{item.label}</div>
+              <div className="mt-2 font-sans text-[14px] text-[#9a9aa3]">{item.label}</div>
             </div>
           ))}
         </div>
