@@ -25,8 +25,11 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
 
   if (!content) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-[#0a0a0b] text-sm text-[#7c7c85]">
-        Loading portfolio…
+      <div className="boarding" role="status">
+        <div className="boarding-inner">
+          <div className="boarding-line" />
+          <p>Boarding…</p>
+        </div>
       </div>
     );
   }

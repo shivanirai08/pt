@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-26T00:00:00Z",
+  "title": "Design System: Shivani Rai Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "cream-ground": { "role": "neutral", "displayName": "Cream Ground", "canonical": "#faf4ec", "tonalRamp": ["#2e2a24", "#58503f", "#827660", "#ac9f82", "#d0c5ab", "#e6dcc8", "#f2eadc", "#faf4ec"] },
+      "soft-ink": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#262626", "tonalRamp": ["#262626", "#404040", "#595959", "#737373", "#999999", "#b8b8b8", "#d6d6d6", "#f0f0f0"] },
+      "paper-white": { "role": "neutral", "displayName": "Paper White", "canonical": "#fffdf9", "tonalRamp": ["#34312c", "#605b50", "#8d8574", "#b8b09c", "#d8d2c2", "#ebe6da", "#f6f2ea", "#fffdf9"] },
+      "card-cream": { "role": "secondary", "displayName": "Card Cream", "canonical": "#ffe3ac", "tonalRamp": ["#3d2e0f", "#6e5420", "#9c7a34", "#c9a050", "#e6c27e", "#f2d498", "#ffe3ac", "#fff4dc"] },
+      "card-pink": { "role": "secondary", "displayName": "Card Pink", "canonical": "#ffd3fe", "tonalRamp": ["#3d2b3d", "#6e4d6d", "#9c6f9b", "#c791c5", "#e3b1e1", "#f2c4f0", "#ffd3fe", "#fff0ff"] },
+      "card-lavender": { "role": "secondary", "displayName": "Card Lavender", "canonical": "#d3d3ff", "tonalRamp": ["#2b2b3d", "#4d4d6e", "#6f6f9c", "#9191c7", "#b1b1e3", "#c4c4f2", "#d3d3ff", "#f0f0ff"] },
+      "card-sky": { "role": "secondary", "displayName": "Card Sky", "canonical": "#b8e3e9", "tonalRamp": ["#1a2f32", "#2f5258", "#47777f", "#63a0a9", "#85c4cd", "#a0d6dd", "#b8e3e9", "#e4f4f6"] },
+      "card-mint": { "role": "secondary", "displayName": "Card Mint", "canonical": "#cfefe2", "tonalRamp": ["#1a2f27", "#2f5245", "#477763", "#63a085", "#8cc7ae", "#b0dcc9", "#cfefe2", "#eef9f4"] },
+      "signal-green": { "role": "primary", "displayName": "Signal Green", "canonical": "#33c791", "tonalRamp": ["#19342a", "#1a654a", "#248e68", "#2fb785", "#5dd5a9", "#8de2c3", "#beeedd", "#eaf5f1"] },
+      "reveal-block-grey": { "role": "neutral", "displayName": "Reveal Block Grey", "canonical": "rgb(191, 188, 180)", "tonalRamp": ["#282724", "#45423b", "#605c52", "#7c776a", "#a19d91", "#bdbab2", "#d9d8d3", "#f0f0ef"] },
+      "highlight-mint": { "role": "tertiary", "displayName": "Highlight Mint", "canonical": "#a8ebcf", "tonalRamp": ["#1a3328", "#2f5c47", "#478565", "#63ad85", "#85d1a9", "#a8ebcf", "#cdf4e3", "#eefaf4"] },
+      "highlight-coral": { "role": "tertiary", "displayName": "Highlight Coral", "canonical": "#ffb9b9", "tonalRamp": ["#3d1f1f", "#6e3a3a", "#9c5656", "#c77373", "#e69595", "#ffb9b9", "#ffd5d5", "#fff0f0"] },
+      "wordmark-tone": { "role": "neutral", "displayName": "Wordmark Tone", "canonical": "#efe5d7", "tonalRamp": ["#2e2a24", "#58503f", "#827660", "#ac9f82", "#cfc3ad", "#e0d5c2", "#efe5d7", "#faf4ec"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only; centered, sentence case, words rise from masks, some words muted." },
+      "headline": { "displayName": "Headline", "purpose": "Section h2, max 18ch, 600 with -0.035em tracking." },
+      "title": { "displayName": "Title", "purpose": "Project names, journey roles, contact names, email link." },
+      "story": { "displayName": "Story", "purpose": "Pinned block-to-text reveal in Geist 30px/600, 896px column." },
+      "lead": { "displayName": "Lead", "purpose": "Section lead copy, muted ink, 52ch." },
+      "body": { "displayName": "Body", "purpose": "Descriptions and list items." },
+      "label": { "displayName": "Label", "purpose": "Meta, footer headings, small pills; sentence case." }
+    },
+    "shadows": [
+      { "name": "ambient", "value": "0 18px 40px -22px rgba(38,38,38,0.22)", "purpose": "Nav pill, soft button, browser frame, certificate pills, cursor label." },
+      { "name": "reached-ring", "value": "0 0 0 5px rgba(51,199,145,0.28)", "purpose": "Journey card once the road reaches it (with a 4px lift)." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "CSS hover and rest transitions." },
+      { "name": "story-reveal", "value": "pinned scrub; blocks run 10 words ahead of the reading point", "purpose": "Block-to-text reveal." },
+      { "name": "hover-individual-props", "value": "scale / rotate / translate (never transform)", "purpose": "Hover effects that coexist with GSAP transforms." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "720px" },
+      { "name": "stack", "value": "960px (and 820px tall)" },
+      { "name": "two-col", "value": "1000px" },
+      { "name": "footer-grid", "value": "800px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ink pill with cream text; hover softens the fill.",
+      "html": "<button class=\"ds-btn\">See my work</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border:0;border-radius:999px;background:#262626;color:#faf4ec;font-weight:500;font-size:15px;cursor:pointer;transition:background .3s}.ds-btn:hover{background:rgba(38,38,38,.82)}.ds-btn:focus-visible{outline:2px solid rgba(38,38,38,.55);outline-offset:3px}"
+    },
+    {
+      "name": "Soft Button",
+      "kind": "button",
+      "refersTo": "button-soft",
+      "description": "Paper pill with ambient shadow; hover fills mint.",
+      "html": "<button class=\"ds-btn-soft\">Resume</button>",
+      "css": ".ds-btn-soft{padding:12px 22px;border:0;border-radius:999px;background:#fffdf9;color:#262626;font-weight:500;font-size:15px;cursor:pointer;box-shadow:0 18px 40px -22px rgba(38,38,38,.22);transition:background .3s}.ds-btn-soft:hover{background:#cfefe2}.ds-btn-soft:focus-visible{outline:2px solid rgba(38,38,38,.55);outline-offset:3px}"
+    },
+    {
+      "name": "Nav Pill",
+      "kind": "nav",
+      "refersTo": "nav-pill",
+      "description": "Floating paper pill with lavender roundel, muted labels, a cream active pill and a mint Resume button.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-home\">SR</span><button class=\"ds-on\">Story</button><button>Work</button><button>Journey</button><a class=\"ds-cta\" href=\"#\">Resume</a></nav>",
+      "css": ".ds-nav{display:inline-flex;align-items:center;gap:2px;padding:5px;background:#fffdf9;border-radius:999px;box-shadow:0 18px 40px -22px rgba(38,38,38,.22)}.ds-home{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#d3d3ff;color:#262626;font-weight:600;font-size:13px}.ds-nav button{padding:8px 14px;border:0;border-radius:999px;background:none;color:rgba(38,38,38,.6);font-weight:500;font-size:14px;cursor:pointer;transition:color .25s}.ds-nav button:hover{color:#262626}.ds-nav button.ds-on{background:#faf4ec;color:#262626}.ds-cta{margin-left:2px;padding:8px 14px;border-radius:999px;background:#cfefe2;color:#262626;font-weight:500;font-size:14px;text-decoration:none;transition:background .25s}.ds-cta:hover{background:#b8e3e9}.ds-nav button:focus-visible,.ds-cta:focus-visible{outline:2px solid rgba(38,38,38,.55);outline-offset:3px}"
+    },
+    {
+      "name": "Tool Card",
+      "kind": "card",
+      "refersTo": "tool-card",
+      "description": "Borderless pastel card, 28px radius, with paper-tint chips that lift on hover.",
+      "html": "<div class=\"ds-tcard\"><h3>Frontend</h3><ul><li>React</li><li>Next.js</li><li>GSAP</li></ul></div>",
+      "css": ".ds-tcard{width:280px;padding:26px 26px 30px;border-radius:28px;background:#ffe3ac;color:#262626}.ds-tcard h3{margin:0;font-weight:600;font-size:1.15rem;letter-spacing:-.02em}.ds-tcard ul{display:flex;flex-wrap:wrap;gap:7px;list-style:none;margin:16px 0 0;padding:0}.ds-tcard li{padding:5px 13px;border-radius:999px;background:rgba(255,253,249,.7);font-size:.9rem;transition:background .25s,translate .35s cubic-bezier(.16,1,.3,1)}.ds-tcard li:hover{background:#fffdf9;translate:0 -2px}"
+    },
+    {
+      "name": "Project Card with Browser Frame",
+      "kind": "card",
+      "refersTo": "project-card",
+      "description": "Large pastel stacking card with a borderless browser-frame screenshot and a paper info panel.",
+      "html": "<div class=\"ds-pcard\"><div class=\"ds-frame\"><div class=\"ds-bar\"><i></i><i></i><i></i><span>project.dev</span></div><div class=\"ds-shot\"></div></div><div class=\"ds-info\"><p>Short description of the project.</p><ul><li>Highlight one</li><li>Highlight two</li></ul></div></div>",
+      "css": ".ds-pcard{width:420px;padding:22px;border-radius:36px;background:#ffd3fe;color:#262626;display:grid;gap:18px}.ds-frame{border-radius:20px;overflow:hidden;background:#fffdf9;box-shadow:0 18px 40px -22px rgba(38,38,38,.22)}.ds-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#fffdf9}.ds-bar i{width:9px;height:9px;border-radius:50%;background:rgba(38,38,38,.14)}.ds-bar span{margin-left:10px;flex:1;padding:3px 14px;border-radius:999px;background:#faf4ec;font-size:.8rem;color:rgba(38,38,38,.6)}.ds-shot{aspect-ratio:16/9.4;background:#d9d4ca}.ds-info{padding:22px;border-radius:22px;background:#fffdf9}.ds-info p{margin:0 0 14px;font-size:.94rem}.ds-info ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}.ds-info li{position:relative;padding-left:18px;font-size:.88rem;color:rgba(38,38,38,.6)}.ds-info li::before{content:'';position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:#33c791}"
+    },
+    {
+      "name": "Story Highlight Chip",
+      "kind": "custom",
+      "refersTo": "story-highlight-mint",
+      "description": "Reveal word: grey 8px block ahead of the reading point, then a pastel chip with a 1px dashed ink outline on key words.",
+      "html": "<p class=\"ds-story\">A <span class=\"ds-w ds-g\">brain</span> for design and <span class=\"ds-w ds-c\">800ms</span> budgets, <span class=\"ds-w ds-b\">next</span>.</p>",
+      "css": ".ds-story{max-width:56rem;font-size:1.875rem;line-height:1.2;font-weight:600;letter-spacing:-.025em;color:#262626}.ds-w{display:inline-block;border-radius:8px;padding:.0533em .1067em;margin:0 .1067em .1067em 0}.ds-g{background:#a8ebcf;outline:1px dashed rgba(38,38,38,.55);outline-offset:-1px}.ds-c{background:#ffb9b9;outline:1px dashed rgba(38,38,38,.55);outline-offset:-1px}.ds-b{background:rgb(191,188,180)}"
+    },
+    {
+      "name": "Journey Card (reached)",
+      "kind": "card",
+      "refersTo": "job-card",
+      "description": "Career stop on the road; soft green ring and a 4px lift once reached.",
+      "html": "<div class=\"ds-jcard\"><p>2023 - 2024</p><h3>Role title</h3><p class=\"ds-co\">Company</p></div>",
+      "css": ".ds-jcard{width:320px;padding:26px 28px 30px;border-radius:28px;background:#d3d3ff;color:#262626;box-shadow:0 0 0 5px rgba(51,199,145,.28);translate:0 -4px}.ds-jcard p{margin:0;font-size:.88rem;color:rgba(38,38,38,.6)}.ds-jcard h3{margin:10px 0 0;font-weight:600;font-size:1.75rem;line-height:1.05;letter-spacing:-.035em}.ds-jcard .ds-co{margin-top:8px;font-size:1rem;font-weight:500;color:#262626}"
+    },
+    {
+      "name": "Contact Card",
+      "kind": "card",
+      "refersTo": "contact-card",
+      "description": "Sky card with monogram circle and an arrow circle that rotates on hover.",
+      "html": "<a class=\"ds-scard\" href=\"#\"><span class=\"ds-mono\">in</span><span class=\"ds-arrow\">&#8599;</span><span><b>LinkedIn</b><small>Say hello</small></span></a>",
+      "css": ".ds-scard{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:24px;width:300px;min-height:170px;padding:22px 24px;border-radius:28px;background:#b8e3e9;color:#262626;text-decoration:none;transition:translate .5s cubic-bezier(.16,1,.3,1)}.ds-scard:hover{translate:0 -5px}.ds-mono{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(255,253,249,.8);font-weight:600}.ds-arrow{position:absolute;right:20px;top:20px;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:rgba(255,253,249,.8);transition:rotate .4s cubic-bezier(.16,1,.3,1),background .25s}.ds-scard:hover .ds-arrow{rotate:45deg;background:#fffdf9}.ds-scard b{display:block;font-weight:600;font-size:1.6rem;letter-spacing:-.03em;line-height:1.1}.ds-scard small{display:block;margin-top:4px;color:rgba(38,38,38,.6);font-size:.92rem}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Pastel Paper Page",
+    "overview": "A single warm cream page on which soft pastel cards rest like cut paper, with no outlines drawn around anything. Structure comes from fill colour, generous radii and one diffuse ambient shadow. Everything is Geist at 600 weight with tight negative tracking, in sentence case; the voice is calm and plain, and the motion does the performing.\n\nThe page is told in order and scrolled: a centered headline whose words rise, with small muted project-image pills set inline; a pinned story that reveals as grey blocks turning into text; stacking project cards; a thin winding road of career stops; contact cards that arrive from the sides and then pop up; and a footer with a live IST clock above a huge tone-on-tone wordmark. The pinned story replicates the reference course page's block-to-text reveal.\n\nDensity is generous: 110px section padding, big type, few elements per viewport. Colour is quiet; the one saturated hue (green) appears only in tiny status and progress marks.",
+    "keyCharacteristics": [
+      "One cream ground (#faf4ec) top to bottom; soft ink (#262626) text; paper (#fffdf9) for inset panels.",
+      "Five pastel fills (cream, pink, lavender, sky, mint) cycle through cards; no dark outlines or borders anywhere.",
+      "Geist only, weight 600 for headings, tracking -0.035em, sentence case.",
+      "Pill controls, 20-36px card radii, one soft ambient shadow.",
+      "Hover uses individual CSS scale, rotate, translate so GSAP transforms are never fought.",
+      "Labelled lavender cursor circle on fine pointers."
+    ],
+    "rules": [
+      { "name": "The One Ground Rule", "body": "The page is a single cream. Sections are separated by spacing and cards, never by a change of background colour.", "section": "colors" },
+      { "name": "The Soft Ink Rule", "body": "Text is #262626, never pure black; text on a pastel is always ink.", "section": "colors" },
+      { "name": "The Green Is a Dot Rule", "body": "Signal green appears only as tiny status or progress marks (dots, road, ring, bullets). Cards and buttons take pastels.", "section": "colors" },
+      { "name": "The Sentence Case Rule", "body": "Nothing is uppercased or letterspaced open. Headings are 600 with negative tracking; labels are 500 at small size.", "section": "typography" },
+      { "name": "The Soft-Only Rule", "body": "Shadows are blurred, offset downward, negative spread. Pastel cards themselves carry no shadow.", "section": "elevation" },
+      { "name": "The No Outline Rule", "body": "No dark outlines or borders. Allowed hairlines: ink at 10-30% in road strokes and browser-frame dots, and the 1px dashed ink (55%) on revealed story highlight chips, which is part of the reference reveal.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep one cream page background (#faf4ec) and separate sections with spacing and cards.",
+      "Do fill cards from cream, pink, lavender, sky and mint, with text in soft ink.",
+      "Do separate surfaces by fill and the ambient shadow, using paper-white insets on pastel cards.",
+      "Do set every heading in Geist 600, -0.035em, sentence case.",
+      "Do keep controls as 999px pills and cards at 20-36px radii.",
+      "Do write hover states with scale, rotate and translate properties.",
+      "Do keep one scroll-driven idea per section: pinned reveal, sticky stack, winding road, side-in contact cards.",
+      "Do keep signal green to tiny status and progress marks."
+    ],
+    "donts": [
+      "Don't draw dark outlines or borders around cards, buttons, chips or frames.",
+      "Don't use hard offset or block shadows.",
+      "Don't alternate section background colours or add full-bleed colour bands.",
+      "Don't use green as a card, button or section fill.",
+      "Don't use transform in CSS hover rules on GSAP-animated elements.",
+      "Don't replace the winding road with a straight rail or the stacking cards with a plain grid."
+    ]
+  }
+}
